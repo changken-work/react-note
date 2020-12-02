@@ -21,7 +21,7 @@ export default function SignUp() {
         .auth()
         .createUserWithEmailAndPassword(email, password);
       res.user.updateProfile({
-        displayName,
+        displayName: displayName,
       });
       setDisplayName('');
       setEmail('');
@@ -55,7 +55,7 @@ export default function SignUp() {
         secureTextEntry={true}
       />
       <Button onPress={signUp} title="註冊" />
-      <Text>{message}</Text>
+      <Text>{message.toString()}</Text>
     </View>
   );
 }

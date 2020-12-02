@@ -1,14 +1,15 @@
-import React from 'react';
 import { StatusBar, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: StatusBar.currentHeight,
+    flex: 1,
+    justifyContent: 'center',
+    marginTop: StatusBar.currentHeight,
   },
   form: {
     flex: 1,
     justifyContent: 'center',
-    padding: '10',
+    padding: 10,
     marginTop: StatusBar.currentHeight || 0,
   },
   textInput: {

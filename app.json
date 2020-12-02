@@ -26,14 +26,16 @@
       }
     },
     "web": {
-      "firebase": {
-        "apiKey": "AIzaSyDdXobhnzoq_StSIuTuhguBbp_yI6K7yCw",
-        "authDomain": "react-note-a8642.firebaseapp.com",
-        "databaseURL": "https://react-note-a8642.firebaseio.com",
-        "projectId": "react-note-a8642",
-        "storageBucket": "react-note-a8642.appspot.com",
-        "messagingSenderId": "509958123985",
-        "appId": "1:509958123985:web:548d90af6e2a2b2c0fb0f0"
+      "config":{
+        "firebase": {
+          "apiKey": "AIzaSyDdXobhnzoq_StSIuTuhguBbp_yI6K7yCw",
+          "authDomain": "react-note-a8642.firebaseapp.com",
+          "databaseURL": "https://react-note-a8642.firebaseio.com",
+          "projectId": "react-note-a8642",
+          "storageBucket": "react-note-a8642.appspot.com",
+          "messagingSenderId": "509958123985",
+          "appId": "1:509958123985:web:548d90af6e2a2b2c0fb0f0"
+        }
       },
       "favicon": "./assets/favicon.png"
     }

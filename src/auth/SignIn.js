@@ -5,6 +5,9 @@ import * as FirebaseCore from 'expo-firebase-core';
 
 import styles from '../styles';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { login, logout } from '../store/actions';
+
 export default function SignIn() {
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseCore.DEFAULT_WEB_APP_OPTIONS);
@@ -14,15 +17,20 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
+  const state = useSelector(state => state);
+  const dispatch = useDispatch();
+
   const signIn = async () => {
     try {
       const res = await firebase
         .auth()
-        .createUserWithEmailAndPassword(email, password);
+        .signInWithEmailAndPassword(email, password);
+      dispatch(login(email));
       setEmail('');
       setPassword('');
       setMessage('');
     } catch (error) {
+      dispatch(logout());
       setMessage(error);
     }
   };
@@ -44,7 +52,8 @@ export default function SignIn() {
         secureTextEntry={true}
       />
       <Button onPress={signIn} title="登入" />
-      <Text>{message}</Text>
+      <Text>{message.toString()}</Text>
+      <Text>{state.email}</Text>
     </View>
   );
 }

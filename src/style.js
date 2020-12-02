@@ -1,18 +1,18 @@
-import { StatusBar, StyleSheet } from "react-native";
+import { StatusBar, StyleSheet } from 'react-native';
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   container: {
     //backgroundColor: '#00bfff',
     flex: 1,
     // margin: "auto",
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: StatusBar.currentHeight || 0,
   },
 
   item: {
     flex: 1,
-    flexDirection: "row",
-    backgroundColor: "#00ffff",
+    flexDirection: 'row',
+    backgroundColor: '#00ffff',
     padding: 8,
     marginVertical: 8,
     marginHorizontal: 16,
@@ -29,18 +29,18 @@ const styles = StyleSheet.create({
 
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 22,
   },
 
   modalView: {
     margin: 60,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 65,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -51,25 +51,25 @@ const styles = StyleSheet.create({
   },
 
   addButton: {
-    backgroundColor: "#4897C9",
+    backgroundColor: '#4897C9',
     borderRadius: 20,
     padding: 10,
     elevation: 2,
   },
   hideButton: {
-    backgroundColor: "#A7D7F5",
+    backgroundColor: '#A7D7F5',
     borderRadius: 20,
     padding: 10,
     elevation: 2,
   },
   textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   modalText: {
     marginBottom: 20,
-    textAlign: "center",
+    textAlign: 'center',
   },
   inputStyle: {
     height: 50,
@@ -77,10 +77,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   loading: {
-    flex:1,
-    flexDirection:"row",
+    flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   form: {
     flex: 1,
@@ -93,13 +93,13 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 15,
     paddingBottom: 15,
-    alignSelf: "center",
-    borderColor: "#ccc",
-    borderBottomWidth: 1
+    alignSelf: 'center',
+    borderColor: '#ccc',
+    borderBottomWidth: 1,
   },
   memocontainer: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: StatusBar.currentHeight || 0,
   },
   logo: {
@@ -109,4 +109,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default styles;
+export default style;
