@@ -7,6 +7,8 @@ import SignIn from './src/auth/SignIn';
 import SignUp from './src/auth/SignUp';
 import SignOut from './src/auth/SignOut';
 
+import NoteText from './src/note_text/MemoList';
+
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from './src/store/reducer';
@@ -41,6 +43,7 @@ export default function App() {
         <Drawer.Navigator initialRouteName="SignIn">
           <Drawer.Screen name="Home" component={HomeScreen} />
           <Drawer.Screen name="Notifications" component={NotificationsScreen} />
+          <Drawer.Screen name="NoteText" component={NoteText} />
           <Drawer.Screen name="SignIn" component={SignIn} />
           <Drawer.Screen name="SignUp" component={SignUp} />
           <Drawer.Screen name="SignOut" component={SignOut} />

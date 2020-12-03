@@ -20,6 +20,20 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderBottomWidth: 1,
   },
+  topicInput: {
+    width: '100%',
+    marginBottom: 15,
+    paddingBottom: 15,
+    alignSelf: 'center',
+    fontSize: 30,
+    borderColor: '#ccc',
+    borderBottomWidth: 1,
+  },
+  memocontainer: {
+    flex: 1,
+    flexDirection: 'row',
+    marginTop: StatusBar.currentHeight || 0,
+  },
 });
 
 export default styles;
