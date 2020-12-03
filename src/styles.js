@@ -29,10 +29,11 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderBottomWidth: 1,
   },
-  memocontainer: {
-    flex: 1,
-    flexDirection: 'row',
-    marginTop: StatusBar.currentHeight || 0,
+  noteInput: {
+    width: '100%',
+    marginBottom: 10,
+    paddingBottom: 15,
+    alignSelf: 'center',
   },
 });
 

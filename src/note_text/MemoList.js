@@ -11,7 +11,7 @@ export default function PersonList() {
       <View>
         <Header
           leftComponent={{ icon: 'arrow-back', color: '#fff' }}
-          centerComponent={{ text: 'MY TITLE', style: { color: '#fff' } }}
+          centerComponent={{ text: '記事', style: { color: '#fff', fontSize: 20 } }}
           rightComponent={{ icon: 'more-vert', color: '#fff' }}
         />
       </View>
@@ -21,7 +21,11 @@ export default function PersonList() {
           placeholder="標題"
           style={styles.topicInput}
         />
-        
+        <TextInput
+          placeholder="請輸入記事內容..."
+          style={styles.noteInput}
+          multiline={true}
+        />
       </View>
       
     </SafeAreaView>
