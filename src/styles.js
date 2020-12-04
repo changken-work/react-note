@@ -41,7 +41,11 @@ const styles = StyleSheet.create({
   memocontainer: {
     flex: 1,
     flexDirection: "row",
-    marginTop: StatusBar.currentHeight || 0,
+  },
+  btnIcon: {
+    height: 25,
+    width: 25,
+    color: '#fff'
   },
 });
 
