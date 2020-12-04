@@ -29,11 +29,19 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderBottomWidth: 1,
   },
+  titlefont: {
+    fontWeight:'bold',
+  },
   noteInput: {
     width: '100%',
     marginBottom: 10,
     paddingBottom: 15,
     alignSelf: 'center',
+  },
+  memocontainer: {
+    flex: 1,
+    flexDirection: "row",
+    marginTop: StatusBar.currentHeight || 0,
   },
 });
 

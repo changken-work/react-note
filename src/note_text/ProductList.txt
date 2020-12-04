@@ -80,7 +80,7 @@ export default function ProductList() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.memocontainer}>
       {isLoading ?
         <View style={styles.loading}>
           <ActivityIndicator color="red" size="large" animating={isLoading} />

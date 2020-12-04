@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Header, ListItem } from 'react-native-elements';
-import { SafeAreaView, TextInput, View, Text, FlatList } from "react-native";
+import { SafeAreaView, TextInput, View, Text, FlatList, Modal, TouchableHighlight } from "react-native";
+import { Icon, Fab } from "native-base";
 
 import styles from '../styles';
 
@@ -9,17 +10,21 @@ import firestore from 'firebase/firestore';
 import * as FirebaseCore from 'expo-firebase-core';
 
 const data =[
-  {title:"iPhone 7", content:'000000000000000000000000000>30'},
-  {title:"iPhone 8", content:'gjfyfftrsgdgdd'},
+  {title:"iPhone 7", content:'000000000000000000000000000=30'},
+  {title:"iPhone 8", content:'0123456789101112131415161718>30'},
+  {title:"iPhone X", content:'gjfyfftrsgdgdd'},
 ]
 
 export default function MemoList() { 
+  const [selected, setSelected] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [memos, setMemos] = useState([]);
 
   const renderItem = ({ item, index }) => {
     return (
       <ListItem bottomDivider>
         <ListItem.Content>
-          <ListItem.Title>{item.title}</ListItem.Title>
+          <ListItem.Title style={styles.titlefont}>{item.title}</ListItem.Title>
           {
             (item.content.length <= 30) 
             ? <Text>{item.content}</Text>
@@ -32,28 +37,42 @@ export default function MemoList() {
     );
   };
 
+  function hide(){
+    setSelectedId("");
+    setModalVisible(false);
+  }
+
   if (!firebase.apps.length) {
     firebase.initializeApp(config);
   }
 
   return (
-    <SafeAreaView>
-      <View>
-        <Header
-          leftComponent={{ icon: 'arrow-back', color: '#fff' }}
-          centerComponent={{ text: '記事', style: { color: '#fff', fontSize: 20 } }}
-          rightComponent={{ icon: 'more-vert', color: '#fff' }}
-        />
-      </View>
+    <SafeAreaView style={styles.memocontainer}>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.title}
+      />
 
-      <View>
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.title}
-        />
-      </View>
-      
+      <Modal animationType="slide" transparent={true} visible={modalVisible}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+
+            <TouchableHighlight
+              style={styles.hideButton}
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <Text style={styles.textStyle}>Hide Modal</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      </Modal>
+
+      <Fab onPress={() => setModalVisible(true)}>
+        <Icon ios="ios-add" android="md-add" />
+      </Fab> 
     </SafeAreaView>
 
       
