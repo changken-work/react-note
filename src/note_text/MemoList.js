@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import { Header, ListItem, Icon } from 'react-native-elements';
-import { StatusBar, SafeAreaView, TextInput, View, Text, FlatList, Modal, TouchableHighlight, TouchableOpacity } from "react-native";
+import { StatusBar, SafeAreaView, TextInput, View, Text, FlatList, Modal,  TouchableOpacity } from "react-native";
 import { Fab } from "native-base";
+import { Button, Menu, Divider, Provider } from 'react-native-paper';
 
 import styles from '../styles';
 
@@ -11,19 +12,13 @@ import * as FirebaseCore from 'expo-firebase-core';
 
 import MemoAdd from "./MemoAdd";
 
-// const data =[
-//   {title:"iPhone 7", content:'000000000000000000000000000=30'},
-//   {title:"iPhone 8", content:'0123456789101112131415161718>30'},
-//   {title:"iPhone X", content:'gjfyfftrsgdgdd'},
-// ]
-
 export default function MemoList() { 
   const [selected, setSelected] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [memos, setMemos] = useState([
-    {title:"iPhone 7", content:'000000000000000000000000000=30'},
-    {title:"iPhone 8", content:'0123456789101112131415161718>30'},
-    {title:"iPhone X", content:'gjfyfftrsgdgdd'},
+    // {title:"iPhone 7", content:'000000000000000000000000000=30'},
+    // {title:"iPhone 8", content:'0123456789101112131415161718>30'},
+    // {title:"iPhone X", content:'gjfyfftrsgdgdd'},
   ]);
 
   const renderItem = ({ item, index }) => {
@@ -47,6 +42,36 @@ export default function MemoList() {
     );
   };
 
+  if (!firebase.apps.length) {
+    firebase.initializeApp(FirebaseCore.DEFAULT_WEB_APP_OPTIONS);
+  }
+
+  const db = firebase.firestore();
+
+  async function readData(){
+    const newMemos=[];
+    try {
+      // "MeRcqDluKIWS1jjvmiN8"之後改成current user uid
+      const querySnapshot = await db.collection("users").doc("MeRcqDluKIWS1jjvmiN8").collection("notes").get();
+      querySnapshot.forEach((doc) => {
+        // console.log(doc.data().title);
+        // console.log(doc.data().content); 
+        const newMemo = {
+          title:doc.data().title,
+          content:doc.data().content,
+        }
+        newMemos.push(newMemo);       
+      });//foreach
+      setMemos(newMemos);
+    }//try
+  catch(e){console.log(e);}
+  }//readData
+
+  useEffect(()=>{
+    readData();}
+    ,[modalVisible]
+  );
+
   function update(newMemo){
     setMemos(oldMemos=>[...oldMemos, newMemo]);
     setModalVisible(false);
@@ -55,10 +80,6 @@ export default function MemoList() {
   function hide(){
     setSelectedId("");
     setModalVisible(false);
-  }
-
-  if (!firebase.apps.length) {
-    firebase.initializeApp(config);
   }
 
   return (
@@ -73,23 +94,23 @@ export default function MemoList() {
         <Header
           containerStyle={{height: 60}}
           leftComponent={
-            <TouchableHighlight
+            <TouchableOpacity
               onPress={() => {
                 setModalVisible(!modalVisible);
               }}
             >
               <Icon name="arrow-back" color='#fff' />
-            </TouchableHighlight>
+            </TouchableOpacity>
           }
           centerComponent={{ text: 'Memo', style: { color: '#fff', fontSize: 20 } }}
           rightComponent={
-            <TouchableHighlight
+            <TouchableOpacity
               onPress={() => {
-                
+                openmenu
               }}
             >
               <Icon name="more-vert" color='#fff' />
-            </TouchableHighlight>
+            </TouchableOpacity>
           }
         />
 
