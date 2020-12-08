@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Header, ListItem, Icon } from 'react-native-elements';
-import { StatusBar, SafeAreaView, TextInput, View, Text, FlatList, Modal,  TouchableOpacity } from "react-native";
+import { StatusBar, SafeAreaView, TextInput, View, Text, FlatList, Modal,  TouchableOpacity, LogBox } from "react-native";
 import { Fab } from "native-base";
 import { Button, Menu, Divider, Provider } from 'react-native-paper';
 
@@ -13,6 +13,8 @@ import * as FirebaseCore from 'expo-firebase-core';
 import MemoAdd from "./MemoAdd";
 
 export default function MemoList() { 
+  LogBox.ignoreLogs(['Setting a timer']);
+
   const [selected, setSelected] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [memos, setMemos] = useState([
@@ -73,12 +75,6 @@ export default function MemoList() {
   );
 
   function update(newMemo){
-    setMemos(oldMemos=>[...oldMemos, newMemo]);
-    setModalVisible(false);
-  }
-
-  function hide(){
-    setSelectedId("");
     setModalVisible(false);
   }
 
@@ -90,37 +86,10 @@ export default function MemoList() {
         keyExtractor={(item) => item.title}
       />
 
-      <Modal animationType="slide" visible={modalVisible}>
-        <Header
-          containerStyle={{height: 60}}
-          leftComponent={
-            <TouchableOpacity
-              onPress={() => {
-                setModalVisible(!modalVisible);
-              }}
-            >
-              <Icon name="arrow-back" color='#fff' />
-            </TouchableOpacity>
-          }
-          centerComponent={{ text: 'Memo', style: { color: '#fff', fontSize: 20 } }}
-          rightComponent={
-            <TouchableOpacity
-              onPress={() => {
-                openmenu
-              }}
-            >
-              <Icon name="more-vert" color='#fff' />
-            </TouchableOpacity>
-          }
-        />
-
-        <MemoAdd update={update}/>
-        
-      </Modal>
-
       <Fab onPress={() => setModalVisible(true)}>
         <Icon name="add" color='#fff'/>
-      </Fab> 
+      </Fab>
+      <MemoAdd modalVisible = {modalVisible} update={update}/>
     </SafeAreaView>
 
       
