@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Header, ListItem, Icon } from 'react-native-elements';
 import { SafeAreaView, TextInput, View, Button, TouchableOpacity, Modal, LogBox } from "react-native";
+import { Menu, Divider, Provider } from 'react-native-paper';
 
 import styles from '../styles';
 
@@ -14,10 +15,29 @@ export default function MemoAdd(props) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
+  useEffect(()=>{
+    setTitle(props.memo.title);
+    setContent(props.memo.content);
+  },[props.id]);
+
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseCore.DEFAULT_WEB_APP_OPTIONS);
   }
   const db = firebase.firestore();
+
+  function renew() {
+    async function sendData () {
+      try {    
+      const result = props.id
+        ? update(props.id)
+        : add()
+      props.hide();}
+      catch (e){
+        console.log("error:"+e);
+      }
+    }
+    sendData();
+  }
 
   async function add() {
     try {
@@ -28,17 +48,39 @@ export default function MemoAdd(props) {
       console.log(docRef.id);
       setTitle("");
       setContent("");
-      props.update();
+      props.hide();
     }
     catch(error) {
       console.error("Error adding document: ", error);
     }
   }
 
+  async function update(id) {
+    try {
+      const docRef = await db.collection("users").doc("MeRcqDluKIWS1jjvmiN8").collection("notes").doc(id).set({
+        title: title,
+        content: content
+      }).then(function() {
+          console.log("Document successfully written!");
+      })
+      .catch(function(error) {
+          console.error("Error writing document: ", error);
+      });
+
+      console.log(docRef.id);
+      setTitle(props.memo.title);
+      setContent(props.memo.content);
+      props.hide();
+    }
+    catch(error) {
+      console.error("Error updatinging document: ", error);
+    }
+  }
+
   function cancel(){
     setTitle("");
     setContent("");
-    props.update();
+    props.hide();
   }
 
   return (
@@ -84,7 +126,7 @@ export default function MemoAdd(props) {
             onChangeText={text=>setContent(text)}
           />
         </View>
-        <Button style={{flex: 1}} onPress={add} title="新增"/>
+        <Button style={{flex: 1}} onPress={renew} title="確定"/>
       </Modal>
     </SafeAreaView>
 
