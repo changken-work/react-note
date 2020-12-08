@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Header, ListItem, Icon } from 'react-native-elements';
-import { StatusBar, SafeAreaView, TextInput, View, Text, FlatList, Modal,  TouchableOpacity, LogBox } from "react-native";
+import { StatusBar, SafeAreaView, TextInput, View, Text, FlatList, Modal,  TouchableOpacity, LogBox, ActivityIndicator } from "react-native";
 import { Fab } from "native-base";
 import { Button, Menu, Divider, Provider } from 'react-native-paper';
 
@@ -17,11 +17,8 @@ export default function MemoList() {
 
   const [selected, setSelected] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [memos, setMemos] = useState([
-    // {title:"iPhone 7", content:'000000000000000000000000000=30'},
-    // {title:"iPhone 8", content:'0123456789101112131415161718>30'},
-    // {title:"iPhone X", content:'gjfyfftrsgdgdd'},
-  ]);
+  const [memos, setMemos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const renderItem = ({ item, index }) => {
     return (
@@ -65,6 +62,7 @@ export default function MemoList() {
         newMemos.push(newMemo);       
       });//foreach
       setMemos(newMemos);
+      setIsLoading(false);
     }//try
   catch(e){console.log(e);}
   }//readData
@@ -80,11 +78,17 @@ export default function MemoList() {
 
   return (
     <SafeAreaView style={styles.memocontainer}>
-      <FlatList
-        data={memos}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.title}
-      />
+      {!isLoading?
+        <FlatList
+          data={memos}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.title}
+        />
+        :
+        <View style={styles.loading}>
+        <ActivityIndicator color="red" size="large" animating={isLoading} />
+        </View>
+      }
 
       <Fab onPress={() => setModalVisible(true)}>
         <Icon name="add" color='#fff'/>

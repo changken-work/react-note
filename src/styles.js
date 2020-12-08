@@ -48,6 +48,12 @@ const styles = StyleSheet.create({
     width: 25,
     color: '#fff'
   },
+  loading: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
 export default styles;

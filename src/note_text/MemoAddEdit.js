@@ -14,10 +14,6 @@ export default function MemoAdd(props) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  // function update(){
-  //   props.update({title, content});
-  // }
-
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseCore.DEFAULT_WEB_APP_OPTIONS);
   }
