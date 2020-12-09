@@ -29,6 +29,7 @@ export default function MemoAdd(props) {
     async function sendData () {
       try {    
       const result = props.id
+      // console.log(result);
         ? update(props.id)
         : add()
       props.hide();}
@@ -56,25 +57,8 @@ export default function MemoAdd(props) {
   }
 
   async function update(id) {
-    try {
-      const docRef = await db.collection("users").doc("MeRcqDluKIWS1jjvmiN8").collection("notes").doc(id).set({
-        title: title,
-        content: content
-      }).then(function() {
-          console.log("Document successfully written!");
-      })
-      .catch(function(error) {
-          console.error("Error writing document: ", error);
-      });
-
-      console.log(docRef.id);
-      setTitle(props.memo.title);
-      setContent(props.memo.content);
-      props.hide();
-    }
-    catch(error) {
-      console.error("Error updatinging document: ", error);
-    }
+    //未成功
+    console.log("success!" + id);
   }
 
   function cancel(){

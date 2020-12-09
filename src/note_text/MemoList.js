@@ -17,10 +17,7 @@ export default function MemoList() {
   const [selectedId, setSelectedId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [memos, setMemos] = useState({
-    title:"",
-    content:"",
-  });
+  const [memos, setMemos] = useState([]);
 
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseCore.DEFAULT_WEB_APP_OPTIONS);
@@ -40,7 +37,7 @@ export default function MemoList() {
             title:doc.data().title,
             content:doc.data().content,
           }
-          newMemos.push(newMemo);       
+          newMemos.push(newMemo);
         });//foreach
         setMemos(newMemos);
         setIsLoading(false);
@@ -58,11 +55,12 @@ export default function MemoList() {
   }
 
   function add(){
-    setMemos({
-      title: null,
-      content: null,
-    });
-    setSelectedId(null);
+    console.log("add");
+    // setMemos({
+    //   title: "",
+    //   content: ""
+    // });
+    setSelectedId("");
     setModalVisible(true);
   }
 
@@ -71,15 +69,24 @@ export default function MemoList() {
 
     async function getMemoId(index){
       // console.log(index);
+      const newMemos=[];
       try {
         const ref = await db.collection("users").doc("MeRcqDluKIWS1jjvmiN8").collection("notes").get();
+        // setMemos({
+        //   title:ref.docs[index].data().title,
+        //   content:ref.docs[index].data().content,
+        // });
+        const newMemo = {
+          title:ref.docs[index].data().title,
+          content:ref.docs[index].data().content,
+        }
+        newMemos.push(newMemo);
+        console.log(newMemos);
+        setMemos(newMemos);
+
         const docRefId = ref.docs[index].id;
         // console.log(docRefId);
         
-        setMemos({
-          title:ref.docs[index].data().title,
-          content:ref.docs[index].data().content,
-        });
         setSelectedId(docRefId);
         setModalVisible(true);
       }
@@ -114,7 +121,7 @@ export default function MemoList() {
         <FlatList
           data={memos}
           renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor = {(item, index) => "" + index}
         />
         :
         <View style={styles.loading}>
