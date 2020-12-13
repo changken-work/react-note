@@ -9,13 +9,14 @@ import * as firebase from 'firebase';
 import firestore from 'firebase/firestore';
 import * as FirebaseCore from 'expo-firebase-core';
 
-export default function MemoAdd(props) {  
+export default function MemoAddEdit(props) {  
   LogBox.ignoreLogs(['Setting a timer']);
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
   useEffect(()=>{
+    // console.log(props.memo);
     setTitle(props.memo.title);
     setContent(props.memo.content);
   },[props.id]);
@@ -30,7 +31,7 @@ export default function MemoAdd(props) {
       try {    
       const result = props.id
       // console.log(result);
-        ? update(props.id)
+        ? console.log("update")
         : add()
       props.hide();}
       catch (e){
@@ -56,10 +57,15 @@ export default function MemoAdd(props) {
     }
   }
 
-  async function update(id) {
-    //未成功
-    console.log("success!" + id);
-  }
+  // async function update(id) {
+  //   //未成功
+  //   // const docRef = await db.collection("users").doc("MeRcqDluKIWS1jjvmiN8").collection("notes").doc(id).set({
+  //   //   title: title,
+  //   //   content: content
+  //   // });
+  //   // setTitle(props.memo.title);
+  //   console.log("success!");
+  // }
 
   function cancel(){
     setTitle("");

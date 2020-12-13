@@ -17,7 +17,10 @@ export default function MemoList() {
   const [selectedId, setSelectedId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [memos, setMemos] = useState([]);
+  const [memos, setMemos] = useState({
+    title:"",
+    content:"",
+  });
 
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseCore.DEFAULT_WEB_APP_OPTIONS);
@@ -56,10 +59,10 @@ export default function MemoList() {
 
   function add(){
     console.log("add");
-    // setMemos({
-    //   title: "",
-    //   content: ""
-    // });
+    setMemos({
+      title: "",
+      content: ""
+    });
     setSelectedId("");
     setModalVisible(true);
   }
@@ -68,25 +71,24 @@ export default function MemoList() {
     console.log("update index:" + id);
 
     async function getMemoId(index){
-      // console.log(index);
-      const newMemos=[];
+      // console.log(memos[index]); // object
+
+      setMemos({
+        title:memos[index].title,
+        content:memos[index].content,
+      });
+      
       try {
         const ref = await db.collection("users").doc("MeRcqDluKIWS1jjvmiN8").collection("notes").get();
-        // setMemos({
-        //   title:ref.docs[index].data().title,
-        //   content:ref.docs[index].data().content,
-        // });
-        const newMemo = {
-          title:ref.docs[index].data().title,
-          content:ref.docs[index].data().content,
-        }
-        newMemos.push(newMemo);
-        console.log(newMemos);
-        setMemos(newMemos);
-
+       
         const docRefId = ref.docs[index].id;
         // console.log(docRefId);
-        
+
+      //   setMemos({
+      //     title:memos[index].title,
+      //     content:memos[index].content,
+      //   });
+
         setSelectedId(docRefId);
         setModalVisible(true);
       }
