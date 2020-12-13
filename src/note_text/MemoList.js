@@ -59,10 +59,10 @@ export default function MemoList() {
 
   function add(){
     console.log("add");
-    setMemos({
-      title: "",
-      content: ""
-    });
+    // setMemos({
+    //   title: "",
+    //   content: ""
+    // });
     setSelectedId("");
     setModalVisible(true);
   }

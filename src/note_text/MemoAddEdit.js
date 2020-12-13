@@ -59,7 +59,6 @@ export default function MemoAddEdit(props) {
 
   async function update(id) {
     // console.log("success!" + id);
-
     const docRef = await db.collection("users").doc("MeRcqDluKIWS1jjvmiN8").collection("notes").doc(id).set({
       title: title,
       content: content
@@ -69,23 +68,22 @@ export default function MemoAddEdit(props) {
     })
     .catch(function(error) {
         console.error("Error writing document: ", error);
-    });    
+    });
+  }
+
+  async function deleteMemo(id){
+    // console.log(id + " delete");
+    await db.collection("users").doc("MeRcqDluKIWS1jjvmiN8").collection("notes").doc(id).delete()
+    .then(function() {
+      props.hide();
+      console.log("delete success!");
+    })
   }
 
   function cancel(){
     setTitle("");
     setContent("");
     props.hide();
-  }
-
-  async function deleteMemo(id){
-    // console.log(id + " delete");
-    const docRef = await db.collection("users").doc("MeRcqDluKIWS1jjvmiN8").collection("notes").doc(id).delete().then(function() {
-        console.log(id + " successfully deleted!");
-        props.hide();
-    }).catch(function(error) {
-        console.error("Error removing document: ", error);
-    });
   }
 
   return (
@@ -109,7 +107,7 @@ export default function MemoAddEdit(props) {
             // checkActions()
             <TouchableOpacity
               onPress={() => {
-                deleteMemo(props.id)
+                deleteMemo(props.id);
               }}
             >
               <Icon name="more-vert" color='#fff' />
