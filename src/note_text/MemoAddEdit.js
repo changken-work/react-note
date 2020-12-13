@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { Header, ListItem, Icon } from 'react-native-elements';
-import { SafeAreaView, TextInput, View, Button, TouchableOpacity, Modal, LogBox, Text } from "react-native";
+import { Header, ListItem, Icon, Button, Card } from 'react-native-elements';
+import { SafeAreaView, TextInput, View, TouchableOpacity, Modal, LogBox, Text } from "react-native";
 import { Menu, Divider, Provider } from 'react-native-paper';
 
 import styles from '../styles';
@@ -9,12 +9,15 @@ import * as firebase from 'firebase';
 import firestore from 'firebase/firestore';
 import * as FirebaseCore from 'expo-firebase-core';
 
-import DeleteMenu from "./DeleteMenu";
+// import DeleteMenu from "./DeleteMenu";
 
 export default function MemoAddEdit(props) {  
   LogBox.ignoreLogs(['Setting a timer']);
 
   const [menuVisible, setMenuVisible] = useState(false);
+  const openMenu = () => setMenuVisible(true);
+  const closeMenu = () => setMenuVisible(false);
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
@@ -78,6 +81,9 @@ export default function MemoAddEdit(props) {
       props.hide();
       console.log("delete success!");
     })
+    .catch(function(error) {
+        console.error("Error removing document: ", error);
+    });
   }
 
   function cancel(){
@@ -103,14 +109,13 @@ export default function MemoAddEdit(props) {
             </TouchableOpacity>
           }
           centerComponent={{ text: 'Memo', style: { color: '#fff', fontSize: 20 } }}
-          rightComponent={
-            // checkActions()
+          rightComponent={  
             <TouchableOpacity
               onPress={() => {
                 deleteMemo(props.id);
               }}
             >
-              <Icon name="more-vert" color='#fff' />
+              <Icon name="delete" color='#fff' />
             </TouchableOpacity>
           }
         />
