@@ -29,11 +29,11 @@ export default function MemoAddEdit(props) {
   function renew() {
     async function sendData () {
       try {    
-      const result = props.id
-      // console.log(result);
-        ? console.log("update")
-        : add()
-      props.hide();}
+        const result = props.id
+        // console.log(result);
+          ? update(props.id)
+          : add()
+        props.hide();}
       catch (e){
         console.log("error:"+e);
       }
@@ -48,24 +48,21 @@ export default function MemoAddEdit(props) {
         content: content
       });
       console.log(docRef.id);
-      setTitle("");
-      setContent("");
-      props.hide();
     }
     catch(error) {
       console.error("Error adding document: ", error);
     }
   }
 
-  // async function update(id) {
-  //   //未成功
-  //   // const docRef = await db.collection("users").doc("MeRcqDluKIWS1jjvmiN8").collection("notes").doc(id).set({
-  //   //   title: title,
-  //   //   content: content
-  //   // });
-  //   // setTitle(props.memo.title);
-  //   console.log("success!");
-  // }
+  async function update(id) {
+    // console.log("success!" + id);
+
+    const docRef = await db.collection("users").doc("MeRcqDluKIWS1jjvmiN8").collection("notes").doc(id).set({
+      title: title,
+      content: content
+    });
+    console.log("update success!");
+  }
 
   function cancel(){
     setTitle("");
