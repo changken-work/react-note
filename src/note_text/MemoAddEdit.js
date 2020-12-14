@@ -92,6 +92,22 @@ export default function MemoAddEdit(props) {
     props.hide();
   }
 
+  function showDeleteButton(){
+    if (props.id) {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            deleteMemo(props.id);
+          }}
+        >
+          <Icon name="delete" color='#fff' />
+        </TouchableOpacity>
+      )
+    }else{
+      // console.log("no id");
+    }
+  }
+
   return (
     <SafeAreaView>
       <Modal animationType="slide" visible={props.modalVisible}>
@@ -110,13 +126,14 @@ export default function MemoAddEdit(props) {
           }
           centerComponent={{ text: 'Memo', style: { color: '#fff', fontSize: 20 } }}
           rightComponent={  
-            <TouchableOpacity
-              onPress={() => {
-                deleteMemo(props.id);
-              }}
-            >
-              <Icon name="delete" color='#fff' />
-            </TouchableOpacity>
+            showDeleteButton()
+            // <TouchableOpacity
+            //   onPress={() => {
+            //     deleteMemo(props.id);
+            //   }}
+            // >
+            //   <Icon name="delete" color='#fff' />
+            // </TouchableOpacity>
           }
         />
 
