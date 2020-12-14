@@ -1,23 +1,24 @@
-import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import React from "react";
+import { StyleSheet, Text, View, Button } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
-import SignIn from './src/auth/SignIn';
-import SignUp from './src/auth/SignUp';
-import SignOut from './src/auth/SignOut';
+import SignIn from "./src/auth/SignIn";
+import SignUp from "./src/auth/SignUp";
+import SignOut from "./src/auth/SignOut";
 
-import NoteText from './src/note_text/MemoList';
+import NoteText from "./src/note_text/MemoList";
+import NoteCheckbox from "./src/note_checkbox/checkbox";
 
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import reducer from './src/store/reducer';
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import reducer from "./src/store/reducer";
 
 function HomeScreen({ navigation }) {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Button
-        onPress={() => navigation.navigate('Notifications')}
+        onPress={() => navigation.navigate("Notifications")}
         title="Go to lists"
       />
     </View>
@@ -26,7 +27,7 @@ function HomeScreen({ navigation }) {
 
 function NotificationsScreen({ navigation }) {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Button onPress={() => navigation.goBack()} title="Go back home" />
     </View>
   );
@@ -44,6 +45,7 @@ export default function App() {
           <Drawer.Screen name="Home" component={HomeScreen} />
           <Drawer.Screen name="Notifications" component={NotificationsScreen} />
           <Drawer.Screen name="NoteText" component={NoteText} />
+          <Drawer.Screen name="NoteCheckbox" component={NoteCheckbox} />
           <Drawer.Screen name="SignIn" component={SignIn} />
           <Drawer.Screen name="SignUp" component={SignUp} />
           <Drawer.Screen name="SignOut" component={SignOut} />
