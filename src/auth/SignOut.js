@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Button } from 'react-native';
 import * as firebase from 'firebase';
 import * as FirebaseCore from 'expo-firebase-core';
+import * as SecureStore from 'expo-secure-store';
 
 import styles from '../styles';
 
@@ -21,6 +22,7 @@ export default function SignOut() {
     try {
       const res = await firebase.auth().signOut();
       dispatch(logout());
+      await SecureStore.deleteItemAsync('account');
     } catch (error) {
       setMessage(error);
     }
@@ -28,6 +30,7 @@ export default function SignOut() {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.formTitle}>SignOut</Text>
       <Button onPress={signOut} title="登出" />
       <Text>{message.toString()}</Text>
       <Text>{state.email}</Text>

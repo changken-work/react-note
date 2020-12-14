@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import * as firebase from 'firebase';
 import * as FirebaseCore from 'expo-firebase-core';
+import * as SecureStore from 'expo-secure-store';
 
 import styles from '../styles';
 
@@ -26,6 +27,9 @@ export default function SignIn() {
         .auth()
         .signInWithEmailAndPassword(email, password);
       dispatch(login(email));
+      const account = { email, password };
+      const accountString = JSON.stringify(account);
+      await SecureStore.setItemAsync('account', accountString);
       setEmail('');
       setPassword('');
       setMessage('');
@@ -35,9 +39,23 @@ export default function SignIn() {
     }
   };
 
+  const retrieveAccount = async () => {
+    const accountString = await SecureStore.getItemAsync('account');
+    const { email, password } = JSON.parse(accountString);
+
+    setEmail(email);
+    setPassword(password);
+
+    dispatch(login(email));
+  };
+
+  useEffect(() => {
+    retrieveAccount();
+  }, []);
+
   return (
     <View style={styles.form}>
-      <Text>SignIn</Text>
+      <Text style={styles.formTitle}>SignIn</Text>
       <TextInput
         style={styles.textInput}
         placeholder="請輸入Email"
