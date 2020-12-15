@@ -9,11 +9,13 @@ import { FlatGrid } from 'react-native-super-grid';
 import SignIn from '../auth/SignIn';
 import SignUp from '../auth/SignUp';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import PressMenu from "./onLongPressMenu";
+import LongPressMenu from "./onLongPressMenu";
+import PressMenu from "./onPressMenu";
 
 export default function App() {
     const [isLoading, setIsLoading] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisible_s, setModalVisible_s] = useState(false);
     const [memos, setMemos] = useState([]);
 
     function _onPressButton() {
@@ -34,6 +36,16 @@ export default function App() {
     function hide() {
         setModalVisible(false);
         console.log(modalVisible)
+    }
+
+    function show_s() {
+        setModalVisible_s(true);
+        console.log("s",modalVisible_s)
+    }
+
+    function hide_s() {
+        setModalVisible_s(false);
+        console.log("s",modalVisible_s)
     }
 
 
@@ -76,8 +88,8 @@ export default function App() {
 
     const renderItem = ({ item}) => {
         return (
-            <TouchableHighlight onPress={_onPressButton} onLongPress={() => show()}>
-                <View style={[styles.itemContainer, { backgroundColor: '#2ecc71' }]}>
+            <TouchableHighlight onPress={() => show_s()} onLongPress={() => show()}>
+                <View style={[styles.itemContainer, { backgroundColor: '#7f8fa6' }]}>
                     <Text style={styles.itemName}>{item.title}</Text>
                     <Text style={styles.itemCode}>{item.content}</Text>
                 </View>
@@ -100,7 +112,8 @@ export default function App() {
                 spacing={10}
                 renderItem={renderItem}
             />
-            <PressMenu modalVisible={modalVisible} hide={hide} />
+            <LongPressMenu modalVisible={modalVisible} hide={hide} />
+            <PressMenu modalVisible={modalVisible_s} hide={hide_s}/>
         </>
         :
         <>
@@ -115,24 +128,25 @@ export default function App() {
 
 const styles = StyleSheet.create({
     gridView: {
-        marginTop: 2,
+        marginTop: 15,
         flex: 1,
     },
     itemContainer: {
-        justifyContent: 'flex-end',
+        justifyContent: 'flex-start',
         borderRadius: 5,
         padding: 10,
         height: 150,
     },
     itemName: {
-        fontSize: 16,
+        fontSize: 20,
         color: '#fff',
-        fontWeight: '600',
+        fontWeight: '900',
     },
     itemCode: {
         fontWeight: '600',
         fontSize: 12,
         color: '#fff',
+        marginTop:50,
     },
     loading: {
         flex: 1,
@@ -143,6 +157,7 @@ const styles = StyleSheet.create({
     memocontainer: {
         flex: 1,
         flexDirection: "row",
-        marginTop: StatusBar.currentHeight || 0,
+        // marginTop: StatusBar.currentHeight || 0,
+        backgroundColor:"#ced6e0",
     },
 });

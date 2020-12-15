@@ -46,7 +46,7 @@ function INDEX(navigation) {
     <Stack.Navigator independent={true}>
       <Stack.Screen name="Profile" component={Index} options={{
         headerTitle: "HOME",
-        headerStyle: { backgroundColor: '#ffffff'},
+        headerStyle: { backgroundColor: '#d1d8e0'},
         headerLeft: () => (
           <Icon name='menu' size={24} color='black' containerStyle={{marginLeft:10}}
             onPress={() => navigation.navigation.toggleDrawer()}
