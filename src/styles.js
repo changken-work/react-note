@@ -12,6 +12,12 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: StatusBar.currentHeight || 0,
   },
+  formTitle: {
+    fontSize: 30,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginBottom: 30,
+  },
   textInput: {
     width: '100%',
     marginBottom: 10,
@@ -30,7 +36,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   titlefont: {
-    fontWeight:'bold',
+    fontWeight: 'bold',
   },
   noteInput: {
     width: '100%',
@@ -40,13 +46,13 @@ const styles = StyleSheet.create({
   },
   memocontainer: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: StatusBar.currentHeight || 0,
   },
   btnIcon: {
     height: 25,
     width: 25,
-    color: '#fff'
+    color: '#fff',
   },
   loading: {
     flex: 1,
