@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Header, ListItem, Icon, Button, Card } from 'react-native-elements';
 import { SafeAreaView, TextInput, View, TouchableOpacity, Modal, LogBox, Text } from "react-native";
-import { Menu, Divider, Provider } from 'react-native-paper';
 
 import styles from '../styles';
 
