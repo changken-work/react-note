@@ -33,6 +33,7 @@ export default function SignOut() {
       <Text style={styles.formTitle}>SignOut</Text>
       <Button onPress={signOut} title="登出" />
       <Text>{message.toString()}</Text>
+      <Text>{state.uid}</Text>
       <Text>{state.email}</Text>
     </View>
   );

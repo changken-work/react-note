@@ -26,8 +26,8 @@ export default function SignIn() {
       const res = await firebase
         .auth()
         .signInWithEmailAndPassword(email, password);
-      dispatch(login(email));
-      const account = { email, password };
+      dispatch(login(res.user.uid, email));
+      const account = { uid: res.user.uid, email, password };
       const accountString = JSON.stringify(account);
       await SecureStore.setItemAsync('account', accountString);
       setEmail('');
@@ -41,12 +41,12 @@ export default function SignIn() {
 
   const retrieveAccount = async () => {
     const accountString = await SecureStore.getItemAsync('account');
-    const { email, password } = JSON.parse(accountString);
+    const { uid, email, password } = JSON.parse(accountString);
 
     setEmail(email);
     setPassword(password);
 
-    dispatch(login(email));
+    dispatch(login(uid, email));
   };
 
   useEffect(() => {
@@ -71,6 +71,7 @@ export default function SignIn() {
       />
       <Button onPress={signIn} title="登入" />
       <Text>{message.toString()}</Text>
+      <Text>{state.uid}</Text>
       <Text>{state.email}</Text>
     </View>
   );

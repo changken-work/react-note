@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import * as firebase from 'firebase';
 import * as FirebaseCore from 'expo-firebase-core';
@@ -31,6 +31,11 @@ export default function SignUp() {
       setMessage(error);
     }
   };
+
+  useEffect(() => {
+    if (firebase.auth().currentUser !== null)
+      console.log(firebase.auth().currentUser.uid);
+  }, []);
 
   return (
     <View style={styles.form}>
