@@ -1,25 +1,33 @@
-import React, {useState, useEffect} from 'react';
-import { ListItem, Icon } from 'react-native-elements';
-import { SafeAreaView, View, Text, FlatList, TouchableOpacity, LogBox, ActivityIndicator } from "react-native";
+import React, { useState, useEffect } from "react";
+import { ListItem, Icon } from "react-native-elements";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  LogBox,
+  ActivityIndicator,
+} from "react-native";
 import { Fab } from "native-base";
 
-import styles from '../styles';
+import styles from "../styles";
 
-import * as firebase from 'firebase';
-import firestore from 'firebase/firestore';
-import * as FirebaseCore from 'expo-firebase-core';
+import * as firebase from "firebase";
+import firestore from "firebase/firestore";
+import * as FirebaseCore from "expo-firebase-core";
 
 import MemoAdd from "./MemoAddEdit";
 
-export default function MemoList() { 
-  LogBox.ignoreLogs(['Setting a timer']);
+export default function MemoList() {
+  LogBox.ignoreLogs(["Setting a timer"]);
 
   const [selectedId, setSelectedId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [memos, setMemos] = useState({
-    title:"",
-    content:"",
+    title: "",
+    content: "",
   });
 
   if (!firebase.apps.length) {
@@ -28,36 +36,41 @@ export default function MemoList() {
 
   const db = firebase.firestore();
 
-  useEffect(()=>{
-    async function readData(){
-      const newMemos=[];
+  useEffect(() => {
+    async function readData() {
+      const newMemos = [];
       try {
         // "MeRcqDluKIWS1jjvmiN8"之後改成current user uid
-        const querySnapshot = await db.collection("users").doc("MeRcqDluKIWS1jjvmiN8").collection("notes").get();
+        const querySnapshot = await db
+          .collection("users")
+          .doc("MeRcqDluKIWS1jjvmiN8")
+          .collection("notes")
+          .get();
         querySnapshot.forEach((doc) => {
           // console.log(doc.data().title);
           const newMemo = {
-            title:doc.data().title,
-            content:doc.data().content,
-          }
+            title: doc.data().title,
+            content: doc.data().content,
+          };
           newMemos.push(newMemo);
-        });//foreach
+        }); //foreach
         setMemos(newMemos);
         setIsLoading(false);
-      }//try
-    catch(e){console.log(e);}
-    }//readData
+      } catch (e) {
+        //try
+        console.log(e);
+      }
+    } //readData
 
-    readData();}
-    ,[modalVisible]
-  );
+    readData();
+  }, [modalVisible]);
 
-  function hide(){
+  function hide() {
     setSelectedId("");
     setModalVisible(false);
   }
 
-  function add(){
+  function add() {
     console.log("add");
     // setMemos({
     //   title: "",
@@ -67,50 +80,54 @@ export default function MemoList() {
     setModalVisible(true);
   }
 
-  function update(id){
+  function update(id) {
     console.log("update index:" + id);
 
-    async function getMemoId(index){
+    async function getMemoId(index) {
       // console.log(memos[index]); // object
 
       setMemos({
-        title:memos[index].title,
-        content:memos[index].content,
+        title: memos[index].title,
+        content: memos[index].content,
       });
-      
+
       try {
-        const ref = await db.collection("users").doc("MeRcqDluKIWS1jjvmiN8").collection("notes").get();
-       
+        const ref = await db
+          .collection("users")
+          .doc("MeRcqDluKIWS1jjvmiN8")
+          .collection("notes")
+          .get();
+
         const docRefId = ref.docs[index].id;
         // console.log(docRefId);
 
-      //   setMemos({
-      //     title:memos[index].title,
-      //     content:memos[index].content,
-      //   });
+        //   setMemos({
+        //     title:memos[index].title,
+        //     content:memos[index].content,
+        //   });
 
         setSelectedId(docRefId);
         setModalVisible(true);
+      } catch (e) {
+        console.log(e);
       }
-      catch(e){console.log(e);}
-    }getMemoId(id);
+    }
+    getMemoId(id);
   }
 
   const renderItem = ({ item, index }) => {
     return (
       <ListItem bottomDivider>
         <ListItem.Content>
-          <TouchableOpacity
-            onPress={() => update(index)}
-          >
-            <ListItem.Title style={styles.titlefont}>{item.title}</ListItem.Title>
-            {
-              (item.content.length <= 30) 
-              ? <Text>{item.content}</Text>
-              : <Text>
-                  {item.content.substring(0,30)}...
-                </Text>
-            }
+          <TouchableOpacity onPress={() => update(index)}>
+            <ListItem.Title style={styles.titlefont}>
+              {item.title}
+            </ListItem.Title>
+            {item.content.length <= 30 ? (
+              <Text>{item.content}</Text>
+            ) : (
+              <Text>{item.content.substring(0, 30)}...</Text>
+            )}
           </TouchableOpacity>
         </ListItem.Content>
       </ListItem>
@@ -119,24 +136,27 @@ export default function MemoList() {
 
   return (
     <SafeAreaView style={styles.memocontainer}>
-      {!isLoading?
+      {!isLoading ? (
         <FlatList
           data={memos}
           renderItem={renderItem}
-          keyExtractor = {(item, index) => "" + index}
+          keyExtractor={(item, index) => "" + index}
         />
-        :
+      ) : (
         <View style={styles.loading}>
-        <ActivityIndicator color="red" size="large" animating={isLoading} />
+          <ActivityIndicator color="red" size="large" animating={isLoading} />
         </View>
-      }
+      )}
 
       <Fab onPress={() => add()}>
-        <Icon name="add" color='#fff'/>
+        <Icon name="add" color="#fff" />
       </Fab>
-      <MemoAdd modalVisible={modalVisible} memo={memos} id={selectedId} hide={hide}/>
+      <MemoAdd
+        modalVisible={modalVisible}
+        memo={memos}
+        id={selectedId}
+        hide={hide}
+      />
     </SafeAreaView>
-
-      
   );
 }
