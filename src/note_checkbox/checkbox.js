@@ -33,9 +33,47 @@ export default function checkbox() {
     },
   ];
   const [check, setCheck] = useState(false);
+  const [checkboxes, setCheckboxes] = useState({
+    title: "",
+    list: "",
+  });
+  if (!firebase.apps.length) {
+    firebase.initializeApp(FirebaseCore.DEFAULT_WEB_APP_OPTIONS);
+  }
+  const db = firebase.firestore();
+
+  async function readData() {
+    const newCheckbox1 = [];
+    try {
+      // "MeRcqDluKIWS1jjvmiN8"之後改成current user uid
+      const querySnapshot = await db
+        .collection("users")
+        .doc("MeRcqDluKIWS1jjvmiN8")
+        .collection("checkboxes")
+        .get();
+      querySnapshot.forEach((doc) => {
+        // console.log(doc.data().list);
+        const newCheckbox = {
+          title: doc.data().title,
+          list: doc.data().list,
+        };
+        console.log("each newcheckboxes",newCheckbox)
+
+        newCheckbox1.push(newCheckbox);
+      }); //foreach
+      setCheckboxes(newCheckbox1);
+      // console.log(checkboxes1)
+      // setIsLoading(false);
+    } catch (e) {
+      //try
+      // console.log(e);
+    }
+  } //readData
 
   function add() {
-    console.log("add");
+    readData();
+    
+    // console.log("add");
     // setMemos({
     //   title: "",
     //   content: ""
@@ -50,14 +88,14 @@ export default function checkbox() {
 
   const renderItem = ({ item, index }) => {
     return (
-      <ListItem key={item} bottomDivider>
+      <ListItem key={index} bottomDivider>
         {/* <Avatar source={{ uri: l.avatar_url }} /> */}
         <ListItem.Content>
-          <ListItem.Title>{item.name}</ListItem.Title>
-          <ListItem.Subtitle>{item.subtitle}</ListItem.Subtitle>
+          <ListItem.Title>{item.title}</ListItem.Title>
+          {/* <ListItem.Subtitle>{item.list}</ListItem.Subtitle> */}
           <CheckBox
             center
-            title="Click Here"
+            title={item.list[0]}
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
             onPress={() => fsetCheck()}
@@ -70,7 +108,7 @@ export default function checkbox() {
   return (
     <SafeAreaView style={styles.memocontainer}>
       <FlatList
-        data={list}
+        data={checkboxes}
         renderItem={renderItem}
         keyExtractor={(item, index) => "" + index}
       />
