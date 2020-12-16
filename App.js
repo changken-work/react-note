@@ -10,6 +10,7 @@ import SignOut from "./src/auth/SignOut";
 import Index from "./src/note_index/index";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import NoteCheckbox from "./src/note_checkbox/checkbox";
+
 import NoteText from "./src/note_text/MemoList";
 
 import { createStore } from "redux";
@@ -105,7 +106,7 @@ export default function App() {
           <Drawer.Screen name="Notifications" component={NotificationsScreen} />
           <Drawer.Screen name="NoteText" component={NoteText} />
           <Drawer.Screen name="NoteCheckbox" component={NoteCheckbox} />
-          <Drawer.Screen name="SignIn" component={SIGNIN} />
+          <Drawer.Screen name="SignIn" component={SignIn} />
           <Drawer.Screen name="SignUp" component={SignUp} />
           <Drawer.Screen name="SignOut" component={SignOut} />
           <Drawer.Screen name="Index" component={INDEX} />

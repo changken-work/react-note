@@ -34,7 +34,7 @@ export default function SignUp() {
 
   return (
     <View style={styles.form}>
-      <Text>SignUp</Text>
+      <Text style={styles.formTitle}>SignUp</Text>
       <TextInput
         style={styles.textInput}
         placeholder="請輸入姓名"
