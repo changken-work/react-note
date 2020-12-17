@@ -12,10 +12,13 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import NoteCheckbox from "./src/note_checkbox/checkbox";
 
 import NoteText from "./src/note_text/MemoList";
-
+import TodoList from "./src/note_label/TodoList";
+// redux
 import { createStore } from "redux";
 import { Provider } from "react-redux";
-import reducer from "./src/store/reducer";
+import rootReducer from "./src/store/reducers";
+const store = createStore(rootReducer);
+//
 
 function HomeScreen({ navigation }) {
   return (
@@ -37,8 +40,6 @@ function NotificationsScreen({ navigation }) {
 }
 
 const Drawer = createDrawerNavigator();
-
-const store = createStore(reducer);
 
 const Stack = createStackNavigator();
 
@@ -111,6 +112,7 @@ export default function App() {
           <Drawer.Screen name="SignOut" component={SignOut} />
           <Drawer.Screen name="Index" component={INDEX} />
           <Drawer.Screen name="Home2" component={TabsScreen} />
+          <Drawer.Screen name="label" component={TodoList} />
         </Drawer.Navigator>
       </NavigationContainer>
     </Provider>
