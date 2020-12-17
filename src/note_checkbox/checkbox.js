@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { ListItem, Icon, CheckBox, Avatar } from "react-native-elements";
+import { ListItem, CheckBox, Icon, Avatar } from "react-native-elements";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCoffee } from "@fortawesome/free-solid-svg-icons";
 import {
   SafeAreaView,
   View,
@@ -18,20 +21,8 @@ import firestore from "firebase/firestore";
 import * as FirebaseCore from "expo-firebase-core";
 
 export default function checkbox() {
-  const list = [
-    {
-      name: "Amy Farha",
-      avatar_url:
-        "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-      subtitle: "Vice President",
-    },
-    {
-      name: "Chris Jackson",
-      avatar_url:
-        "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
-      subtitle: "Vice Chairman",
-    },
-  ];
+  const [modalVisible, setModalVisible] = useState(false);
+
   const [check, setCheck] = useState(false);
   const [checkboxes, setCheckboxes] = useState({
     title: "",
@@ -41,38 +32,76 @@ export default function checkbox() {
     firebase.initializeApp(FirebaseCore.DEFAULT_WEB_APP_OPTIONS);
   }
   const db = firebase.firestore();
+  useEffect(() => {
+    async function readData() {
+      const newCheckbox1 = [];
+      try {
+        // "MeRcqDluKIWS1jjvmiN8"之後改成current user uid
+        const querySnapshot = await db
+          .collection("users")
+          .doc("MeRcqDluKIWS1jjvmiN8")
+          .collection("checkboxes")
+          .get();
 
-  async function readData() {
-    const newCheckbox1 = [];
-    try {
-      // "MeRcqDluKIWS1jjvmiN8"之後改成current user uid
-      const querySnapshot = await db
-        .collection("users")
-        .doc("MeRcqDluKIWS1jjvmiN8")
-        .collection("checkboxes")
-        .get();
-      querySnapshot.forEach((doc) => {
-        // console.log(doc.data().list);
-        const newCheckbox = {
-          title: doc.data().title,
-          list: doc.data().list,
-        };
-        console.log("each newcheckboxes",newCheckbox)
+        querySnapshot.forEach((doc) => {
+          let i = 0;
+          // console.log(doc.data().list1[0].checkDone);
+          const newCheckbox = {
+            title: doc.data().title,
+            list: doc.data().list,
+          };
+          console.log("each newcheckboxes", newCheckbox);
+          console.log("i:", i++);
+          newCheckbox1.push(newCheckbox);
+        }); //foreach
+        setCheckboxes(newCheckbox1);
+        // console.log(checkboxes1)
+        // setIsLoading(false);
+      } catch (e) {
+        //try
+        // console.log(e);
+      }
+    } //readData
+    readData();
+  }, [modalVisible]);
+  function update(id) {
+    console.log("update index:" + id);
 
-        newCheckbox1.push(newCheckbox);
-      }); //foreach
-      setCheckboxes(newCheckbox1);
-      // console.log(checkboxes1)
-      // setIsLoading(false);
-    } catch (e) {
-      //try
-      // console.log(e);
+    async function getCheckListId(index) {
+      // console.log(memos[index]); // object
+
+      // setCheckboxes({
+      //   title: memos[index].title,
+      //   list: memos[index].content,
+      // });
+
+      try {
+        const ref = await db
+          .collection("users")
+          .doc("MeRcqDluKIWS1jjvmiN8")
+          .collection("checkboxes")
+          .get();
+        // 每筆list的ID
+        const docRefId = ref.docs[index].id;
+        console.log("docRefId", docRefId);
+
+        // setMemos({
+        //   title: memos[index].title,
+        //   content: memos[index].content,
+        // });
+
+        setSelectedId(docRefId);
+        setModalVisible(true);
+      } catch (e) {
+        console.log(e);
+      }
     }
-  } //readData
+    getCheckListId(id);
+  }
 
   function add() {
     readData();
-    
+
     // console.log("add");
     // setMemos({
     //   title: "",
@@ -81,6 +110,7 @@ export default function checkbox() {
     // setSelectedId("");
     // setModalVisible(true);
   }
+  // checkbox布林值
   function fsetCheck() {
     setCheck(!check);
     console.log(check);
@@ -91,16 +121,19 @@ export default function checkbox() {
       <ListItem key={index} bottomDivider>
         {/* <Avatar source={{ uri: l.avatar_url }} /> */}
         <ListItem.Content>
-          <ListItem.Title>{item.title}</ListItem.Title>
-          {/* <ListItem.Subtitle>{item.list}</ListItem.Subtitle> */}
-          <CheckBox
-            center
-            title={item.list[0]}
-            checkedIcon="dot-circle-o"
-            uncheckedIcon="circle-o"
-            onPress={() => fsetCheck()}
-            checked={check}
-          />
+          <TouchableOpacity onPress={() => update(index)}>
+            <ListItem.Title>{item.title}</ListItem.Title>
+            {/* <ListItem.Subtitle>{item.list}</ListItem.Subtitle> */}
+
+            {item.list.map((item) => (
+              <CheckBox
+                center
+                title={item}
+                onPress={() => fsetCheck()}
+                checked={check}
+              />
+            ))}
+          </TouchableOpacity>
         </ListItem.Content>
       </ListItem>
     );
@@ -112,6 +145,7 @@ export default function checkbox() {
         renderItem={renderItem}
         keyExtractor={(item, index) => "" + index}
       />
+
       <Fab onPress={() => add()}>
         <Icon name="add" color="#fff" />
       </Fab>
