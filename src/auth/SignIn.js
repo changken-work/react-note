@@ -7,7 +7,7 @@ import * as SecureStore from 'expo-secure-store';
 import styles from '../styles';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { login, logout } from '../store/actions';
+import { login, logout } from '../store/actions/authAction';
 
 export default function SignIn() {
   if (!firebase.apps.length) {
@@ -18,7 +18,7 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
-  const state = useSelector(state => state);
+  const state = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
   const signIn = async () => {
