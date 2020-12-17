@@ -21,7 +21,7 @@ import {
 
 function TodoList() {
   const [todoDec, setTodoDec] = useState("");
-  // useSelector 來抓取(select)reducer裡的state
+  // useSelector 來抓取(select)labelReducer裡的state
   const todoList = useSelector((state) => state.label.todoList);
   const finishList = useSelector((state) => state.label.finishList);
 

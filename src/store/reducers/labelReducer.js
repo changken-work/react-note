@@ -2,11 +2,14 @@ import {
   ADD_TODOLIST,
   DELETE_TODOLIST,
   FINISH_TODOLIST,
+  ADD_LABEL,
+  DEL_LABEL,
 } from "../actions/labelAction";
 
 const initState = {
   todoList: [],
   finishList: [],
+  label: "初始值",
 };
 
 const labelReducer = (state = initState, action) => {
@@ -34,6 +37,16 @@ const labelReducer = (state = initState, action) => {
       return {
         ...state,
         finishList: TempFinish,
+      };
+    }
+    case ADD_LABEL: {
+      return {
+        label: action.payload.label,
+      };
+    }
+    case DEL_LABEL: {
+      return {
+        label: action.payload,
       };
     }
     default:
