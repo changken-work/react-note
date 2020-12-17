@@ -1,10 +1,10 @@
-import { LOGIN, LOGOUT } from './actions';
+import { LOGIN, LOGOUT } from "../actions/authAction";
 
 const initState = {
-  email: '',
+  email: "",
 };
 
-const reducer = (state = initState, action) => {
+const authReducer = (state = initState, action) => {
   switch (action.type) {
     case LOGIN:
       return {
@@ -14,9 +14,10 @@ const reducer = (state = initState, action) => {
       return {
         email: action.payload.email,
       };
+
     default:
       return state;
   }
 };
 
-export default reducer;
+export default authReducer;
