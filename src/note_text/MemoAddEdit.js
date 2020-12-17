@@ -1,6 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import { Header, ListItem, Icon, Button, Card } from 'react-native-elements';
-import { SafeAreaView, TextInput, View, TouchableOpacity, Modal, LogBox, Text } from "react-native";
+import { Header, ListItem, Icon, Button } from 'react-native-elements';
+import { 
+  SafeAreaView, 
+  TextInput, 
+  View, 
+  TouchableOpacity, 
+  Modal, 
+  LogBox, 
+  StatusBar 
+} from "react-native";
 
 import styles from '../styles';
 
@@ -111,7 +119,7 @@ export default function MemoAddEdit(props) {
     <SafeAreaView>
       <Modal animationType="slide" visible={props.modalVisible}>
         <Header
-          style={{flex: 1}}
+          style={{flex: 1, marginTop: StatusBar.currentHeight || 0,}}
           containerStyle={{height: 60}}
           leftComponent={
             <TouchableOpacity
@@ -126,13 +134,6 @@ export default function MemoAddEdit(props) {
           centerComponent={{ text: 'Memo', style: { color: '#fff', fontSize: 20 } }}
           rightComponent={  
             showDeleteButton()
-            // <TouchableOpacity
-            //   onPress={() => {
-            //     deleteMemo(props.id);
-            //   }}
-            // >
-            //   <Icon name="delete" color='#fff' />
-            // </TouchableOpacity>
           }
         />
 
