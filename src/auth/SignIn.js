@@ -3,11 +3,12 @@ import { View, Text, TextInput, Button } from 'react-native';
 import * as firebase from 'firebase';
 import * as FirebaseCore from 'expo-firebase-core';
 import * as SecureStore from 'expo-secure-store';
+import * as LocalAuthentication from 'expo-local-authentication';
 
 import styles from '../styles';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { login, logout } from '../store/actions';
+import { login, logout } from '../store/actions/authAction';
 
 export default function SignIn() {
   if (!firebase.apps.length) {
@@ -18,7 +19,7 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
-  const state = useSelector(state => state);
+  const state = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
   const signIn = async () => {
@@ -26,8 +27,8 @@ export default function SignIn() {
       const res = await firebase
         .auth()
         .signInWithEmailAndPassword(email, password);
-      dispatch(login(email));
-      const account = { email, password };
+      dispatch(login(res.user.uid, email));
+      const account = { uid: res.user.uid, email, password };
       const accountString = JSON.stringify(account);
       await SecureStore.setItemAsync('account', accountString);
       setEmail('');
@@ -41,16 +42,56 @@ export default function SignIn() {
 
   const retrieveAccount = async () => {
     const accountString = await SecureStore.getItemAsync('account');
-    const { email, password } = JSON.parse(accountString);
+    const { uid, email, password } = JSON.parse(accountString);
 
     setEmail(email);
     setPassword(password);
 
-    dispatch(login(email));
+    dispatch(login(uid, email));
+  };
+
+  /**
+   * 生物辨識處理函數
+   * @param function successCallback 在生物辨識成功之下所要執行的函數
+   * @param function failureCallback 在生物辨識失敗之下所要執行的函數
+   * @param function notSupportedCallback 在不支持生物辨識設備之下所要執行的函數
+   */
+  const handleBiometric = async (
+    successCallback,
+    failureCallback,
+    notSupportedCallback
+  ) => {
+    const types = await LocalAuthentication.supportedAuthenticationTypesAsync();
+    const hasHardWare = await LocalAuthentication.hasHardwareAsync();
+    const biometricRecords = await LocalAuthentication.isEnrolledAsync();
+
+    if (types.length > 0 && hasHardWare && biometricRecords) {
+      const res = await LocalAuthentication.authenticateAsync({
+        promptMessage: '請做生物辨識認證',
+        cancelLabel: '取消生物辨識',
+        fallbackLabel: '生物辨識失敗!',
+        disableDeviceFallback: false,
+      });
+
+      if (res.success) {
+        successCallback();
+      } else {
+        LocalAuthentication.cancelAuthenticate();
+        failureCallback();
+      }
+    } else {
+      notSupportedCallback();
+    }
   };
 
   useEffect(() => {
-    retrieveAccount();
+    handleBiometric(
+      retrieveAccount,
+      () => {
+        alert('有些地方有問題!');
+      },
+      retrieveAccount
+    );
   }, []);
 
   return (
@@ -71,6 +112,7 @@ export default function SignIn() {
       />
       <Button onPress={signIn} title="登入" />
       <Text>{message.toString()}</Text>
+      <Text>{state.uid}</Text>
       <Text>{state.email}</Text>
     </View>
   );
