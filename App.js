@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, Button, LogBox } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -18,7 +18,6 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import rootReducer from "./src/store/reducers";
 const store = createStore(rootReducer);
-//
 
 function HomeScreen({ navigation }) {
   return (
@@ -99,6 +98,8 @@ function SIGNIN(navigation) {
 }
 
 export default function App() {
+  LogBox.ignoreLogs(["Setting a timer"]);
+
   return (
     <Provider store={store}>
       <NavigationContainer>

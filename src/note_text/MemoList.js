@@ -10,18 +10,17 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Fab } from "native-base";
-
 import styles from "../styles";
 
 import * as firebase from "firebase";
 import firestore from "firebase/firestore";
 import * as FirebaseCore from "expo-firebase-core";
 
+import { useSelector, useDispatch } from 'react-redux';
+
 import MemoAdd from "./MemoAddEdit";
 
 export default function MemoList() {
-  LogBox.ignoreLogs(["Setting a timer"]);
-
   const [selectedId, setSelectedId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,6 +28,8 @@ export default function MemoList() {
     title: "",
     content: "",
   });
+
+  const uid = useSelector(state => state.auth.uid);
 
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseCore.DEFAULT_WEB_APP_OPTIONS);
@@ -43,7 +44,7 @@ export default function MemoList() {
         // "MeRcqDluKIWS1jjvmiN8"之後改成current user uid
         const querySnapshot = await db
           .collection("users")
-          .doc("MeRcqDluKIWS1jjvmiN8")
+          .doc(uid)
           .collection("notes")
           .get();
         querySnapshot.forEach((doc) => {
@@ -94,7 +95,7 @@ export default function MemoList() {
       try {
         const ref = await db
           .collection("users")
-          .doc("MeRcqDluKIWS1jjvmiN8")
+          .doc(uid)
           .collection("notes")
           .get();
 
