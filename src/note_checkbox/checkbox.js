@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   LogBox,
   ActivityIndicator,
+  Button,
 } from "react-native";
 import { Fab } from "native-base";
 
@@ -19,9 +20,16 @@ import styles from "../styles";
 import * as firebase from "firebase";
 import firestore from "firebase/firestore";
 import * as FirebaseCore from "expo-firebase-core";
+import { useSelector, useDispatch } from "react-redux";
+import { readList, changeModalVisible } from "../store/actions/checkboxAction";
+// import ListAdd from "./checkboxAdd";
+import CheckTest from "./checkTest";
 
 export default function checkbox() {
+  const state = useSelector((state) => state.checkbox);
+  const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   const [check, setCheck] = useState(false);
   const [checkboxes, setCheckboxes] = useState({
@@ -44,19 +52,24 @@ export default function checkbox() {
           .get();
 
         querySnapshot.forEach((doc) => {
-          let i = 0;
           // console.log(doc.data().list1[0].checkDone);
           const newCheckbox = {
+            id: doc.id,
             title: doc.data().title,
             list: doc.data().list,
           };
+          // const docRefId = ref.docs[index].id;
+          console.log("doc:", doc.id, doc.data().title, doc.data().list);
+          dispatch(readList(doc.id, doc.data().title, doc.data().list));
+
           console.log("each newcheckboxes", newCheckbox);
-          console.log("i:", i++);
+
           newCheckbox1.push(newCheckbox);
-        }); //foreach
+        });
+
         setCheckboxes(newCheckbox1);
         // console.log(checkboxes1)
-        // setIsLoading(false);
+        // setIsLoading(false); //foreach
       } catch (e) {
         //try
         // console.log(e);
@@ -64,43 +77,50 @@ export default function checkbox() {
     } //readData
     readData();
   }, [modalVisible]);
+  async function dataCheck() {
+    console.log("state.checkList", state.checkList[0]["title"]);
+  }
   function update(id) {
     console.log("update index:" + id);
 
-    async function getCheckListId(index) {
-      // console.log(memos[index]); // object
+    // async function getCheckListId(index) {
+    //   // console.log(memos[index]); // object
 
-      // setCheckboxes({
-      //   title: memos[index].title,
-      //   list: memos[index].content,
-      // });
+    //   // setCheckboxes({
+    //   //   title: memos[index].title,
+    //   //   list: memos[index].content,
+    //   // });
 
-      try {
-        const ref = await db
-          .collection("users")
-          .doc("MeRcqDluKIWS1jjvmiN8")
-          .collection("checkboxes")
-          .get();
-        // 每筆list的ID
-        const docRefId = ref.docs[index].id;
-        console.log("docRefId", docRefId);
+    //   try {
+    //     const ref = await db
+    //       .collection("users")
+    //       .doc("MeRcqDluKIWS1jjvmiN8")
+    //       .collection("checkboxes")
+    //       .get();
+    //     // 每筆list的ID
+    //     const docRefId = ref.docs[index].id;
+    //     console.log("docRefId", docRefId);
+    //     dispatch(readList(docRefId));
+    //     // setMemos({
+    //     //   title: memos[index].title,
+    //     //   content: memos[index].content,
+    //     // });
 
-        // setMemos({
-        //   title: memos[index].title,
-        //   content: memos[index].content,
-        // });
-
-        setSelectedId(docRefId);
-        setModalVisible(true);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    getCheckListId(id);
+    //     setSelectedId(docRefId);
+    //     setModalVisible(true);
+    //     console.log("update modal", modalVisible);
+    //     dispatch(changeModalVisible(modalVisible));
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // }
+    setSelectedId(id);
+    dispatch(changeModalVisible(modalVisible));
+    // getCheckListId(id);
   }
 
-  function add() {
-    readData();
+  add = async () => {
+    // readData();
 
     // console.log("add");
     // setMemos({
@@ -108,7 +128,16 @@ export default function checkbox() {
     //   content: ""
     // });
     // setSelectedId("");
+    // setSelectedId("");
+    setModalVisible(true);
+    console.log("modal", modalVisible);
+    dispatch(changeModalVisible(modalVisible));
+
     // setModalVisible(true);
+  };
+  function hide() {
+    setSelectedId("");
+    setModalVisible(false);
   }
   // checkbox布林值
   function fsetCheck() {
@@ -149,6 +178,13 @@ export default function checkbox() {
       <Fab onPress={() => add()}>
         <Icon name="add" color="#fff" />
       </Fab>
+      <Button onPress={() => dataCheck()} title="test" color="green" />
+      <CheckTest
+        modalVisible={modalVisible}
+        // memo={memos}
+        id={selectedId}
+        // hide={hide}
+      />
     </SafeAreaView>
   );
 }
