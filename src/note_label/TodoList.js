@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -28,7 +28,15 @@ function TodoList() {
   // useDispatch 可以幫將我們想要做的action傳遞到reducer
   const dispatch = useDispatch();
 
-  // 判斷是否已經完成
+  useEffect(() => {
+    console.log("==========");
+    console.log("監聽(id):" + todoList.map((item) => Object.values(item)[0]));
+    console.log(
+      "監聽(todoDec):" + todoList.map((item) => Object.values(item)[1])
+    );
+  }, [todoList]);
+
+  // 判斷是否已經完成(includes)
   function isFinish(id) {
     return finishList.includes(id);
   }

@@ -3,6 +3,7 @@ export const DELETE_TODOLIST = "DELETE_TODOLIST";
 export const FINISH_TODOLIST = "FINISH_TODOLIST";
 export const ADD_LABEL = "ADD_LABEL";
 export const DEL_LABEL = "DEL_LABEL";
+export const DEL_LABEL_ALL = "DEL_LABEL_ALL";
 
 function ID() {
   return "_" + Math.random().toString(36).substr(2, 9);
@@ -35,13 +36,21 @@ export const finishTodo = (id) => {
 export const addLabel = (label) => {
   return {
     type: ADD_LABEL,
-    payload: { label },
+    payload: {
+      id: ID(),
+      label,
+    },
   };
 };
-
-export const delLabel = () => {
+export const delLabel = (index) => {
   return {
     type: DEL_LABEL,
+    payload: index,
+  };
+};
+export const delAllLabel = () => {
+  return {
+    type: DEL_LABEL_ALL,
     payload: "",
   };
 };

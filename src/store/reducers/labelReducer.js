@@ -4,12 +4,13 @@ import {
   FINISH_TODOLIST,
   ADD_LABEL,
   DEL_LABEL,
+  DEL_LABEL_ALL,
 } from "../actions/labelAction";
 
 const initState = {
   todoList: [],
   finishList: [],
-  label: "初始值",
+  label: [{ id: "001", label: "初始值" }],
 };
 
 const labelReducer = (state = initState, action) => {
@@ -39,14 +40,29 @@ const labelReducer = (state = initState, action) => {
         finishList: TempFinish,
       };
     }
+    // label新增
     case ADD_LABEL: {
+      const Temp = [...state.label];
+      Temp.push(action.payload);
       return {
-        label: action.payload.label,
+        ...state,
+        label: Temp,
       };
     }
+    // label刪除單一
     case DEL_LABEL: {
+      const Temp = [...state.label];
+      Temp.splice(action.payload, 1);
       return {
-        label: action.payload,
+        ...state,
+        label: Temp,
+      };
+    }
+    // label刪除全部
+    case DEL_LABEL_ALL: {
+      const tempTodo = [];
+      return {
+        label: tempTodo,
       };
     }
     default:

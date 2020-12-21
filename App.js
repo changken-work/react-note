@@ -113,7 +113,7 @@ export default function App() {
           <Drawer.Screen name="SignOut" component={SignOut} />
           <Drawer.Screen name="Index" component={INDEX} />
           <Drawer.Screen name="Home2" component={TabsScreen} />
-          <Drawer.Screen name="Label" component={TodoList} />
+          {/* <Drawer.Screen name="Label" component={TodoList} /> */}
           <Drawer.Screen name="LabelDemo" component={LabelDemo} />
         </Drawer.Navigator>
       </NavigationContainer>
