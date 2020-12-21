@@ -10,7 +10,7 @@ export const addTodoList = (todoDec) => {
   return {
     type: ADD_TODOLIST,
     payload: {
-      // id: ID(),
+      id: ID(),
       todoDec,
     },
   };
@@ -27,10 +27,5 @@ export const finishTodo = (id) => {
   return {
     type: FINISH_TODOLIST,
     payload: id,
-  };
-};
-export const refreshTodo = () => {
-  return {
-    type: FINISH_TODOLIST,
   };
 };

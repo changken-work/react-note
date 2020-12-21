@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -26,7 +26,9 @@ import {
   finishTodo,
 } from "../store/actions/labelAction";
 import { readList, changeModalVisible } from "../store/actions/checkboxAction";
-
+import * as firebase from "firebase";
+import firestore from "firebase/firestore";
+import * as FirebaseCore from "expo-firebase-core";
 function checkTest(props) {
   const [todoDec, setTodoDec] = useState("");
   // useSelector 來抓取(select)reducer裡的state
@@ -35,11 +37,73 @@ function checkTest(props) {
   const checkList = useSelector((state) => state.checkbox.checkList);
   const modalVisible = useSelector((state) => state.checkbox.modalVisible);
 
+  //
   const [title, setTitle] = useState("");
+  const [list, setList] = useState("");
+  const [id, setId] = useState("");
 
+  useEffect(() => {
+    // console.log(props.memo);
+    setId(props.id);
+    setTitle(props.checkbox.title);
+    setList(props.checkbox.list);
+  }, [props.id]);
   // useDispatch 可以幫將我們想要做的action傳遞到reducer
   const dispatch = useDispatch();
+  if (!firebase.apps.length) {
+    firebase.initializeApp(FirebaseCore.DEFAULT_WEB_APP_OPTIONS);
+  }
+  const db = firebase.firestore();
+  function renew() {
+    async function sendData() {
+      try {
+        const result = props.id
+          ? // console.log(result);
+            update(props.id)
+          : add();
+        props.hide();
+      } catch (e) {
+        console.log("error:" + e);
+      }
+    }
+    sendData();
+  }
 
+  async function add() {
+    try {
+      const docRef = await db
+        .collection("users")
+        .doc("MeRcqDluKIWS1jjvmiN8")
+        .collection("checkboxes")
+        .add({
+          title: title,
+          list: todoList,
+        });
+      console.log(docRef.id);
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+    dispatch(changeModalVisible(false));
+    console.log("todoList", todoList);
+  }
+  async function update(id) {
+    // console.log("success!" + id);
+    const docRef = await db
+      .collection("users")
+      .doc("MeRcqDluKIWS1jjvmiN8")
+      .collection("checkboxes")
+      .doc(id)
+      .set({
+        title: title,
+        list: list,
+      })
+      .then(function () {
+        console.log("update success!");
+      })
+      .catch(function (error) {
+        console.error("Error writing document: ", error);
+      });
+  }
   // 判斷是否已經完成
   function isFinish(id) {
     return finishList.includes(id);
@@ -49,6 +113,7 @@ function checkTest(props) {
   function handleAddTodo() {
     dispatch(addTodoList(todoDec));
     setTodoDec("");
+    console.log("dispatch todoDec:", todoDec);
   }
 
   // 刪除
@@ -67,9 +132,48 @@ function checkTest(props) {
     // props.update();
   }
   function dataCheck() {
+    async function readData() {
+      const newCheckbox1 = [];
+      try {
+        // console.log("props.id:", props.id);
+        // "MeRcqDluKIWS1jjvmiN8"之後改成current user uid
+        const querySnapshot = await db
+          .collection("users")
+          .doc("MeRcqDluKIWS1jjvmiN8")
+          .collection("checkboxes")
+          .doc(props.id)
+          .get();
+        let title = querySnapshot.data()["title"];
+        let eachCheckbox = querySnapshot.data()["list"];
+        console.log("checkTest Data:", eachCheckbox);
+        dispatch(readList(props.id, title, eachCheckbox));
+        console.log("checkLIst state:", checkList);
+        querySnapshot.forEach((doc) => {
+          // const newCheckbox = {
+          //   id: doc.id,
+          //   title: doc.data().title,
+          //   list: doc.data().list,
+          // };
+          // // const docRefId = ref.docs[index].id;
+          // console.log("doc:", doc.id, doc.data().title, doc.data().list);
+          // console.log("each newcheckboxes", newCheckbox);
+          // newCheckbox1.push(newCheckbox);
+        });
+
+        // setCheckboxes(newCheckbox1);
+        // console.log(checkboxes1)
+        // setIsLoading(false); //foreach
+      } catch (e) {
+        //try
+        // console.log(e);
+      }
+    } //readData
+    readData();
+
     // console.log(checkbox[props.id]["title"]);
     // console.log(checkbox);
-    console.log("dataCheck:", checkList);
+    // console.log("dataCheck:", checkList);
+    // console.log(props.id);
   }
 
   return (
@@ -95,7 +199,7 @@ function checkTest(props) {
               <TextInput
                 placeholder="標題"
                 style={styles.topicInput}
-                value={"title"}
+                value={title}
                 color="white"
                 onChangeText={(text) => setTitle(text)}
               />
@@ -117,8 +221,8 @@ function checkTest(props) {
                 return (
                   <View key={`todo-${index}`} style={styles.todoItem}>
                     {/* 如果這條todo是完成的(回傳true)，那就套用styles.finishText */}
-                    <Text style={isFinish(todo.id) && styles.finishText}>
-                      {index + 1} / {todo.todoDec}
+                    <Text style={isFinish(index) && styles.finishText}>
+                      {index + 1} / {todo}/{todo.id}
                     </Text>
                     <View style={{ flexDirection: "row" }}>
                       <Button
@@ -127,10 +231,10 @@ function checkTest(props) {
                         color="red"
                       />
                       <Button
-                        onPress={() => handleFinishTodo(todo.id)}
+                        onPress={() => handleFinishTodo(index)}
                         title="FINISH"
                         color="green"
-                        disabled={isFinish(todo.id)}
+                        disabled={isFinish(index)}
                       />
                     </View>
                   </View>
@@ -144,7 +248,7 @@ function checkTest(props) {
             behavior={Platform.OS == "ios" ? "padding" : "height"}
           >
             <View style={styles.footer}>
-              <Button onPress={() => dataCheck()} title="test" color="red" />
+              <Button onPress={() => add()} title="save" color="red" />
 
               <Item regular>
                 <Input
