@@ -29,6 +29,7 @@ import { readList, changeModalVisible } from "../store/actions/checkboxAction";
 import * as firebase from "firebase";
 import firestore from "firebase/firestore";
 import * as FirebaseCore from "expo-firebase-core";
+// 資料儲存格式待思考
 function checkTest(props) {
   const [todoDec, setTodoDec] = useState("");
   // useSelector 來抓取(select)reducer裡的state
