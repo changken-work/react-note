@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Alert,
   Modal,
@@ -14,6 +14,8 @@ import TagInput from "react-native-tags-input";
 export default function ProductAdd(props) {
   // useState
   const [desc, setDesc] = useState("");
+  const [show, setShow] = useState(false);
+  const [color, setColor] = useState("#2196F3");
 
   // tag data
   const [tags, setTags] = useState({ tag: "", tagsArray: [] });
@@ -21,6 +23,17 @@ export default function ProductAdd(props) {
   const updateTagState = (state) => {
     setTags(state);
   };
+
+  useEffect(() => {
+    if (tags.tagsArray.length === 0) {
+      setColor("#cccccc");
+      setShow(true);
+    } else {
+      setColor("#2196F3");
+      setShow(false);
+    }
+  }, [tags]);
+
   // 按下確定後關閉用(更新)
   const update = () => {
     let tag = tags.tagsArray[0];
@@ -39,7 +52,7 @@ export default function ProductAdd(props) {
       >
         <View style={modal.centeredView}>
           <View style={modal.modalView}>
-            {/* <Text style={{ fontSize: 23 }}>id:{props.modelIndex}</Text> */}
+            <Text style={{ fontSize: 23 }}>id:{props.modelIndex}</Text>
             {/* <TextInput
               style={styles.input}
               placeholder="輸入Tag"
@@ -48,8 +61,8 @@ export default function ProductAdd(props) {
             /> */}
             <View style={modal.input}>
               <TagInput
-                placeholder="標籤..."
-                label="enter以新增標籤"
+                placeholder="新增標籤..."
+                label="Enter以新增標籤"
                 labelStyle={{ color: "#000", fontSize: 12 }}
                 updateState={updateTagState}
                 tags={tags}
@@ -60,13 +73,14 @@ export default function ProductAdd(props) {
               <TouchableHighlight
                 style={{
                   ...modal.openButton,
-                  backgroundColor: "#2196F3",
+                  backgroundColor: color,
                   flexDirection: "row",
                   margin: 10,
                 }}
                 onPress={() => {
                   update();
                 }}
+                disabled={show}
               >
                 <Text style={modal.textStyle}>確定</Text>
               </TouchableHighlight>
