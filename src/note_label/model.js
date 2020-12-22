@@ -8,20 +8,27 @@ import {
 } from "react-native";
 import { Button, Text, TextInput, View } from "react-native";
 import styles from "../styles";
+// tag
+import TagInput from "react-native-tags-input";
 
 export default function ProductAdd(props) {
   // useState
   const [desc, setDesc] = useState("");
 
+  // tag data
+  const [tags, setTags] = useState({ tag: "", tagsArray: [] });
+  // tags更新
+  const updateTagState = (state) => {
+    setTags(state);
+  };
   // 按下確定後關閉用(更新)
-  function update() {
-    props.updateInAdd({ desc });
+  const update = () => {
+    let tag = tags.tagsArray[0];
+    let index = props.modelIndex;
+
+    props.updateInAdd(index, tag);
     props.setModalVisible(false);
-  }
-  // 打開modal用
-  function visable() {
-    props.setModalVisible(true);
-  }
+  };
 
   return (
     <View>
@@ -32,18 +39,22 @@ export default function ProductAdd(props) {
       >
         <View style={modal.centeredView}>
           <View style={modal.modalView}>
-            <TextInput
-              style={styles.index}
-              placeholder="產品說明"
+            {/* <Text style={{ fontSize: 23 }}>id:{props.modelIndex}</Text> */}
+            {/* <TextInput
+              style={styles.input}
+              placeholder="輸入Tag"
               value={desc}
               onChangeText={(text) => setDesc(text)}
-            />
-            <TextInput
-              style={styles.index}
-              placeholder="價格"
-              value={price}
-              onChangeText={(text) => setPrice(text)}
-            />
+            /> */}
+            <View style={modal.input}>
+              <TagInput
+                placeholder="標籤..."
+                label="enter以新增標籤"
+                labelStyle={{ color: "#000", fontSize: 12 }}
+                updateState={updateTagState}
+                tags={tags}
+              />
+            </View>
 
             <View style={{ flexDirection: "row" }}>
               <TouchableHighlight
@@ -94,7 +105,7 @@ const modal = StyleSheet.create({
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
+    padding: 50,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -108,7 +119,7 @@ const modal = StyleSheet.create({
   openButton: {
     backgroundColor: "#F194FF",
     borderRadius: 20,
-    padding: 10,
+    padding: 15,
     elevation: 2,
   },
   textStyle: {
@@ -119,5 +130,8 @@ const modal = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center",
+  },
+  input: {
+    width: 200,
   },
 });

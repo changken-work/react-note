@@ -1,45 +1,18 @@
 import {
-  ADD_TODOLIST,
-  DELETE_TODOLIST,
-  FINISH_TODOLIST,
   ADD_LABEL,
   DEL_LABEL,
   DEL_LABEL_ALL,
+  EDIT_TAG,
 } from "../actions/labelAction";
 
 const initState = {
   todoList: [],
   finishList: [],
-  label: [{ id: "001", label: "初始值" }],
+  label: [{ id: "001", label: "初始值", tag: "初始值" }],
 };
 
 const labelReducer = (state = initState, action) => {
   switch (action.type) {
-    case ADD_TODOLIST: {
-      const tempTodo = [...state.todoList];
-      tempTodo.push(action.payload);
-      return {
-        ...state,
-        todoList: tempTodo,
-      };
-    }
-    case DELETE_TODOLIST: {
-      const tempTodo = [...state.todoList];
-      // 將傳進來的Index位置刪除掉
-      tempTodo.splice(action.payload, 1);
-      return {
-        ...state,
-        todoList: tempTodo,
-      };
-    }
-    case FINISH_TODOLIST: {
-      const TempFinish = [...state.finishList];
-      TempFinish.push(action.payload);
-      return {
-        ...state,
-        finishList: TempFinish,
-      };
-    }
     // label新增
     case ADD_LABEL: {
       const Temp = [...state.label];
@@ -52,6 +25,7 @@ const labelReducer = (state = initState, action) => {
     // label刪除單一
     case DEL_LABEL: {
       const Temp = [...state.label];
+      // 將傳進來的Index位置刪除掉
       Temp.splice(action.payload, 1);
       return {
         ...state,
@@ -65,6 +39,14 @@ const labelReducer = (state = initState, action) => {
         label: tempTodo,
       };
     }
+    // 修改tag
+    case EDIT_TAG: {
+      const foundIndex = state.label.findIndex(
+        (x) => x.id == action.payload.index
+      );
+      state.label[foundIndex].tag = action.payload.tag;
+    }
+
     default:
       return state;
   }
