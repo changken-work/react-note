@@ -17,11 +17,12 @@ const checkboxReducer = (state = initState, action) => {
         checkList: tempList,
       };
     }
-    case SETMODALVISIBLE:
+    case SETMODALVISIBLE: {
+      console.log("modalVisible-state:", state.modalVisible);
       return {
         modalVisible: action.payload.TORF,
       };
-
+    }
     default:
       return state;
   }

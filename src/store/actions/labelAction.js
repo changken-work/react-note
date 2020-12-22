@@ -1,6 +1,7 @@
 export const ADD_TODOLIST = "ADD_TODOLIST";
 export const DELETE_TODOLIST = "DELETE_TODOLIST";
 export const FINISH_TODOLIST = "FINISH_TODOLIST";
+export const REFRESH_TODOLIST = "REFRESH_TODOLIST";
 
 function ID() {
   return "_" + Math.random().toString(36).substr(2, 9);
@@ -10,7 +11,7 @@ export const addTodoList = (todoDec) => {
   return {
     type: ADD_TODOLIST,
     payload: {
-      // id: ID(),
+      id: ID(),
       todoDec,
     },
   };
@@ -31,6 +32,6 @@ export const finishTodo = (id) => {
 };
 export const refreshTodo = () => {
   return {
-    type: FINISH_TODOLIST,
+    type: REFRESH_TODOLIST,
   };
 };

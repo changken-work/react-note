@@ -123,6 +123,7 @@ function checkTest(props) {
 
   // 完成
   function handleFinishTodo(id) {
+    console.log("handleFinishTodo-id:", id);
     dispatch(finishTodo(id));
   }
   function cancel() {
@@ -221,7 +222,8 @@ function checkTest(props) {
                 return (
                   <View key={`todo-${index}`} style={styles.todoItem}>
                     {/* 如果這條todo是完成的(回傳true)，那就套用styles.finishText */}
-                    <Text style={isFinish(index) && styles.finishText}>
+                    {/* <Text style={isFinish(index) && styles.finishText}> */}
+                    <Text>
                       {index + 1} / {todo}/{todo.id}
                     </Text>
                     <View style={{ flexDirection: "row" }}>

@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { ListItem, CheckBox, Icon, Avatar } from "react-native-elements";
+import {
+  ListItem,
+  CheckBox,
+  Icon,
+  Avatar,
+  Badge,
+  Image,
+} from "react-native-elements";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCoffee } from "@fortawesome/free-solid-svg-icons";
 import {
   SafeAreaView,
@@ -85,14 +91,17 @@ export default function checkbox() {
     console.log("state.checkList");
   }
   function update(id) {
-    // dispatch(refreshTodo());
     console.log("update index:" + id);
     async function getCheckListId(index) {
+      dispatch(refreshTodo());
+
       setUpdateBox({
         title: checkboxes[index].title,
         list: checkboxes[index].list,
       });
-      dispatch(addTodoList(checkboxes[index].list));
+      checkboxes[index].list.forEach((item, index) => {
+        dispatch(addTodoList(item));
+      });
 
       console.log("title:", checkboxes[index].title);
       console.log("list:", checkboxes[index].list);
@@ -105,8 +114,8 @@ export default function checkbox() {
         // 每筆list的ID
         const docRefId = ref.docs[index].id;
         setSelectedId(docRefId);
-        console.log("selectID:", setSelectedId);
-        setModalVisible(true);
+        console.log("selectID:", docRefId);
+        setModalVisible(!modalVisible);
         dispatch(changeModalVisible(modalVisible));
       } catch (e) {
         console.log(e);
@@ -117,6 +126,7 @@ export default function checkbox() {
 
   add = async () => {
     // readData();
+    dispatch(refreshTodo());
 
     // console.log("add");
     setUpdateBox({
@@ -155,6 +165,10 @@ export default function checkbox() {
         console.error("Error removing document: ", error);
       });
   }
+  function refresh() {
+    console.log("refresh");
+    dispatch(refreshTodo());
+  }
   function hide() {
     setSelectedId("");
     setModalVisible(false);
@@ -189,12 +203,23 @@ export default function checkbox() {
             </ListItem.Title>
             {/* <ListItem.Subtitle>{item.list}</ListItem.Subtitle> */}
 
-            {item.list.map((item) => (
+            {item.list.map((item, i) => (
+              // <Badge
+              //   value={item}
+              //   status="success"
+              //   containerStyle={{ position: "absolute", top: 30, right: -4 }}
+              // />
+
               <CheckBox
                 center
                 title={item}
+                // checkedIcon={
+                //   <Image source={require("..../assets/rubik.png")} />
+                // }
+                // uncheckedIcon={
+                //   <Image source={require("..../assets/rubik.png")} />
+                // }
                 onPress={() => fsetCheck()}
-                checked={check}
               />
             ))}
           </TouchableOpacity>
@@ -213,7 +238,7 @@ export default function checkbox() {
       <Fab onPress={() => add()}>
         <Icon name="add" color="#fff" />
       </Fab>
-      {/* <Button onPress={() => dataCheck()} title="test" color="green" /> */}
+      {/* <Button onPress={() => refresh()} title="test" color="green" /> */}
       <CheckTest
         modalVisible={checkbox.modalVisible}
         checkbox={updateBox}

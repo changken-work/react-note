@@ -31,21 +31,25 @@ const labelReducer = (state = initState, action) => {
         todoList: tempTodo,
       };
     }
-    case REFRESH_TODOLIST: {
-      const tempTodo = [...state.todoList];
-      // 將傳進來的Index位置刪除掉
-      tempTodo.splice(0, tempTodo.length);
-      return {
-        ...state,
-        todoList: tempTodo,
-      };
-    }
+
     case FINISH_TODOLIST: {
       const TempFinish = [...state.finishList];
       TempFinish.push(action.payload);
       return {
         ...state,
         finishList: TempFinish,
+      };
+    }
+    case REFRESH_TODOLIST: {
+      const tempTodo = [...state.todoList];
+      console.log("state-refresh");
+      // 將傳進來的Index位置刪除掉
+      tempTodo.splice(0, tempTodo.length);
+      // console.log("...state.todoList:", state.todoList);
+
+      return {
+        ...state,
+        todoList: tempTodo,
       };
     }
     default:
