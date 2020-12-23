@@ -9,11 +9,10 @@ import styles from '../styles';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { login, loginAsync, loginAutoAsync } from '../store/actions/authAction';
+import useFirebase from '../hooks/useFirebase';
 
 export default function SignIn() {
-  if (!firebase.apps.length) {
-    firebase.initializeApp(FirebaseCore.DEFAULT_WEB_APP_OPTIONS);
-  }
+  const db = useFirebase();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
