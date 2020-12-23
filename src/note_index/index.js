@@ -113,7 +113,7 @@ export default function App() {
                 renderItem={renderItem}
             />
             <LongPressMenu modalVisible={modalVisible} hide={hide} />
-            <PressMenu modalVisible={modalVisible_s} hide={hide_s}/>
+            <PressMenu modalVisible={modalVisible_s} hide={hide_s} memo={memos}/>
         </>
         :
         <>

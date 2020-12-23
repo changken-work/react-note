@@ -108,7 +108,7 @@ export default function App() {
           <Drawer.Screen name="Notifications" component={NotificationsScreen} />
           <Drawer.Screen name="NoteText" component={NoteText} />
           <Drawer.Screen name="NoteCheckbox" component={NoteCheckbox} />
-          <Drawer.Screen name="SignIn" component={SignIn} />
+          <Drawer.Screen name="SignIn" component={SIGNIN} />
           <Drawer.Screen name="SignUp" component={SignUp} />
           <Drawer.Screen name="SignOut" component={SignOut} />
           <Drawer.Screen name="Index" component={INDEX} />
