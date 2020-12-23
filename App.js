@@ -1,30 +1,31 @@
-import React from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { createStackNavigator } from "@react-navigation/stack";
-import { Icon } from "react-native-elements";
-import SignIn from "./src/auth/SignIn";
-import SignUp from "./src/auth/SignUp";
-import SignOut from "./src/auth/SignOut";
-import Index from "./src/note_index/index";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import NoteCheckbox from "./src/note_checkbox/checkbox";
+import React from 'react';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
+import { Icon } from 'react-native-elements';
+import SignIn from './src/auth/SignIn';
+import SignUp from './src/auth/SignUp';
+import SignOut from './src/auth/SignOut';
+import Index from './src/note_index/index';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import NoteCheckbox from './src/note_checkbox/checkbox';
 
-import NoteText from "./src/note_text/MemoList";
-import TodoList from "./src/note_label/TodoList";
+import NoteText from './src/note_text/MemoList';
+import TodoList from './src/note_label/TodoList';
 // redux
-import { createStore } from "redux";
-import { Provider } from "react-redux";
-import rootReducer from "./src/store/reducers";
-const store = createStore(rootReducer);
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import ReduxThunk from 'redux-thunk';
+import rootReducer from './src/store/reducers';
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 //
 
 function HomeScreen({ navigation }) {
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Button
-        onPress={() => navigation.navigate("Notifications")}
+        onPress={() => navigation.navigate('Notifications')}
         title="Go to lists"
       />
     </View>
@@ -33,7 +34,7 @@ function HomeScreen({ navigation }) {
 
 function NotificationsScreen({ navigation }) {
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Button onPress={() => navigation.goBack()} title="Go back home" />
     </View>
   );
@@ -50,8 +51,8 @@ function INDEX(navigation) {
         name="Profile"
         component={Index}
         options={{
-          headerTitle: "HOME",
-          headerStyle: { backgroundColor: "#d1d8e0" },
+          headerTitle: 'HOME',
+          headerStyle: { backgroundColor: '#d1d8e0' },
           headerLeft: () => (
             <Icon
               name="menu"
@@ -81,8 +82,8 @@ function SIGNIN(navigation) {
         name="Profile"
         component={SignIn}
         options={{
-          headerTitle: "SIGN-IN",
-          headerStyle: { backgroundColor: "#ffffff" },
+          headerTitle: 'SIGN-IN',
+          headerStyle: { backgroundColor: '#ffffff' },
           headerLeft: () => (
             <Icon
               name="menu"

@@ -8,7 +8,7 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import styles from '../styles';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { login, logout } from '../store/actions/authAction';
+import { login, loginAsync, loginAutoAsync } from '../store/actions/authAction';
 
 export default function SignIn() {
   if (!firebase.apps.length) {
@@ -24,30 +24,22 @@ export default function SignIn() {
 
   const signIn = async () => {
     try {
-      const res = await firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password);
-      dispatch(login(res.user.uid, email));
-      const account = { uid: res.user.uid, email, password };
-      const accountString = JSON.stringify(account);
-      await SecureStore.setItemAsync('account', accountString);
+      dispatch(loginAsync(email, password));
       setEmail('');
       setPassword('');
       setMessage('');
     } catch (error) {
-      dispatch(logout());
       setMessage(error);
     }
   };
 
-  const retrieveAccount = async () => {
-    const accountString = await SecureStore.getItemAsync('account');
-    const { uid, email, password } = JSON.parse(accountString);
-
-    setEmail(email);
-    setPassword(password);
-
-    dispatch(login(uid, email));
+  const retrieveAccount = () => {
+    dispatch(
+      loginAutoAsync((email, password) => {
+        setEmail(email);
+        setPassword(password);
+      })
+    );
   };
 
   /**
