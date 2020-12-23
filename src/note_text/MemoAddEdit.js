@@ -1,6 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import { Header, ListItem, Icon, Button, Card } from 'react-native-elements';
-import { SafeAreaView, TextInput, View, TouchableOpacity, Modal, LogBox, Text } from "react-native";
+import { Header, ListItem, Icon, Button } from 'react-native-elements';
+import { 
+  SafeAreaView, 
+  TextInput, 
+  View, 
+  TouchableOpacity, 
+  Modal, 
+  LogBox, 
+  StatusBar 
+} from "react-native";
 
 import styles from '../styles';
 
@@ -8,17 +16,13 @@ import * as firebase from 'firebase';
 import firestore from 'firebase/firestore';
 import * as FirebaseCore from 'expo-firebase-core';
 
-// import DeleteMenu from "./DeleteMenu";
+import { useSelector, useDispatch } from 'react-redux';
 
-export default function MemoAddEdit(props) {  
-  LogBox.ignoreLogs(['Setting a timer']);
-
-  const [menuVisible, setMenuVisible] = useState(false);
-  const openMenu = () => setMenuVisible(true);
-  const closeMenu = () => setMenuVisible(false);
-
+export default function MemoAddEdit(props) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+
+  const uid = useSelector(state => state.auth.uid);
 
   useEffect(()=>{
     // console.log(props.memo);
@@ -48,7 +52,7 @@ export default function MemoAddEdit(props) {
 
   async function add() {
     try {
-      const docRef = await db.collection("users").doc("MeRcqDluKIWS1jjvmiN8").collection("notes").add({
+      const docRef = await db.collection("users").doc(uid).collection("notes").add({
         title: title,
         content: content
       });
@@ -61,7 +65,7 @@ export default function MemoAddEdit(props) {
 
   async function update(id) {
     // console.log("success!" + id);
-    const docRef = await db.collection("users").doc("MeRcqDluKIWS1jjvmiN8").collection("notes").doc(id).set({
+    const docRef = await db.collection("users").doc(uid).collection("notes").doc(id).set({
       title: title,
       content: content
     })
@@ -75,7 +79,7 @@ export default function MemoAddEdit(props) {
 
   async function deleteMemo(id){
     // console.log(id + " delete");
-    await db.collection("users").doc("MeRcqDluKIWS1jjvmiN8").collection("notes").doc(id).delete()
+    await db.collection("users").doc(uid).collection("notes").doc(id).delete()
     .then(function() {
       props.hide();
       console.log("delete success!");
@@ -111,7 +115,7 @@ export default function MemoAddEdit(props) {
     <SafeAreaView>
       <Modal animationType="slide" visible={props.modalVisible}>
         <Header
-          style={{flex: 1}}
+          style={{flex: 1, marginTop: StatusBar.currentHeight || 0,}}
           containerStyle={{height: 60}}
           leftComponent={
             <TouchableOpacity
@@ -126,13 +130,6 @@ export default function MemoAddEdit(props) {
           centerComponent={{ text: 'Memo', style: { color: '#fff', fontSize: 20 } }}
           rightComponent={  
             showDeleteButton()
-            // <TouchableOpacity
-            //   onPress={() => {
-            //     deleteMemo(props.id);
-            //   }}
-            // >
-            //   <Icon name="delete" color='#fff' />
-            // </TouchableOpacity>
           }
         />
 
