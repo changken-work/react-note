@@ -1,37 +1,40 @@
-export const ADD_TODOLIST = "ADD_TODOLIST";
-export const DELETE_TODOLIST = "DELETE_TODOLIST";
-export const FINISH_TODOLIST = "FINISH_TODOLIST";
-export const REFRESH_TODOLIST = "REFRESH_TODOLIST";
+export const ADD_LABEL = 'ADD_LABEL';
+export const DEL_LABEL = 'DEL_LABEL';
+export const DEL_LABEL_ALL = 'DEL_LABEL_ALL';
+export const EDIT_TAG = 'EDIT_TAG';
 
 function ID() {
-  return "_" + Math.random().toString(36).substr(2, 9);
+  return '_' + Math.random().toString(36).substr(2, 9);
 }
 
-export const addTodoList = (todoDec) => {
+// label_demo
+export const add = (label, tag) => {
   return {
-    type: ADD_TODOLIST,
+    type: ADD_LABEL,
     payload: {
       id: ID(),
-      todoDec,
+      label,
+      tag,
     },
   };
 };
 
-export const deleteTodo = (todoIndex) => {
+export const delLabel = index => {
   return {
-    type: DELETE_TODOLIST,
-    payload: todoIndex,
+    type: DEL_LABEL,
+    payload: index,
+  };
+};
+export const delAllLabel = () => {
+  return {
+    type: DEL_LABEL_ALL,
+    payload: '',
   };
 };
 
-export const finishTodo = (id) => {
+export const editTag = (index, tag) => {
   return {
-    type: FINISH_TODOLIST,
-    payload: id,
-  };
-};
-export const refreshTodo = () => {
-  return {
-    type: REFRESH_TODOLIST,
+    type: EDIT_TAG,
+    payload: { index, tag },
   };
 };

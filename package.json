@@ -35,6 +35,7 @@
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
     "react-native-super-grid": "^4.0.3",
+    "react-native-tags-input": "^1.0.10",
     "react-native-web": "~0.13.12",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
