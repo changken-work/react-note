@@ -19,6 +19,7 @@ const checkboxReducer = (state = initState, action) => {
     }
     case SETMODALVISIBLE: {
       console.log("modalVisible-state:", state.modalVisible);
+      console.log("paayload:", action.payload.TORF);
       return {
         modalVisible: action.payload.TORF,
       };

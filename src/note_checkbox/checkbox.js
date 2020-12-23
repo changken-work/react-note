@@ -33,7 +33,7 @@ import {
   deleteTodo,
   finishTodo,
   refreshTodo,
-} from "../store/actions/labelAction";
+} from "../store/actions/checkListAction";
 // import ListAdd from "./checkboxAdd";
 import CheckTest from "./checkTest";
 
@@ -116,7 +116,7 @@ export default function checkbox() {
         setSelectedId(docRefId);
         console.log("selectID:", docRefId);
         setModalVisible(!modalVisible);
-        dispatch(changeModalVisible(modalVisible));
+        dispatch(changeModalVisible(!modalVisible));
       } catch (e) {
         console.log(e);
       }
@@ -214,10 +214,10 @@ export default function checkbox() {
                 center
                 title={item}
                 // checkedIcon={
-                //   <Image source={require("..../assets/rubik.png")} />
+                //   <Image source={require("@assets/rubik.png")} />
                 // }
                 // uncheckedIcon={
-                //   <Image source={require("..../assets/rubik.png")} />
+                //   <Image source={require("@assets/rubik.png")} />
                 // }
                 onPress={() => fsetCheck()}
               />

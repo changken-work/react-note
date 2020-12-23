@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import { Header, ListItem, Icon } from "react-native-elements";
+import { Header, ListItem, Icon,  CheckBox} from "react-native-elements";
 
 import { Item, Input } from "native-base";
 
@@ -25,7 +25,7 @@ import {
   deleteTodo,
   finishTodo,
 } from "../store/actions/labelAction";
-import { readList, changeModalVisible } from "../store/actions/checkboxAction";
+import { readList, changeModalVisible } from "../store/actions/checkListAction";
 import * as firebase from "firebase";
 import firestore from "firebase/firestore";
 import * as FirebaseCore from "expo-firebase-core";
@@ -42,6 +42,7 @@ function checkTest(props) {
   const [title, setTitle] = useState("");
   const [list, setList] = useState("");
   const [id, setId] = useState("");
+  const [check, setCheck] = useState(false);
 
   useEffect(() => {
     // console.log(props.memo);
@@ -177,6 +178,11 @@ function checkTest(props) {
     // console.log("dataCheck:", checkList);
     // console.log(props.id);
   }
+  function fsetCheck(id) {
+    setCheck(!check);
+    console.log(check);
+    handleFinishTodo(id)
+  }
 
   return (
     <>
@@ -224,20 +230,27 @@ function checkTest(props) {
                   <View key={`todo-${index}`} style={styles.todoItem}>
                     {/* 如果這條todo是完成的(回傳true)，那就套用styles.finishText */}
                     {/* <Text style={isFinish(index) && styles.finishText}> */}
-                    <Text>
+                    {/* <Text>
                       {index + 1} / {todo}/{todo.id}
-                    </Text>
+                    </Text> */}
                     <View style={{ flexDirection: "row" }}>
                       <Button
                         onPress={() => handleDeleteTodo(index)}
                         title="DELETE"
                         color="red"
                       />
-                      <Button
+                      {/* <Button
                         onPress={() => handleFinishTodo(index)}
                         title="FINISH"
                         color="green"
                         disabled={isFinish(index)}
+                      /> */}
+                      <CheckBox
+                      onPress={() => fsetCheck(index)}
+                      title={todo}
+                      color="green"
+                      checked={check}
+
                       />
                     </View>
                   </View>
