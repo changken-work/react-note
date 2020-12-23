@@ -24,8 +24,8 @@ import {
   addTodoList,
   deleteTodo,
   finishTodo,
-} from "../store/actions/labelAction";
-import { readList, changeModalVisible } from "../store/actions/checkListAction";
+} from "../store/actions/checkListAction";
+import { readList, changeModalVisible } from "../store/actions/checkboxAction";
 import * as firebase from "firebase";
 import firestore from "firebase/firestore";
 import * as FirebaseCore from "expo-firebase-core";
@@ -218,7 +218,7 @@ function checkTest(props) {
                   console.log("Open menu");
                 }}
               >
-                <Icon name="more-vert" color="#fff" />
+                <Icon name="delete" color="#fff" />
               </TouchableOpacity>
             }
           />

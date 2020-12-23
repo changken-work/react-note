@@ -40,8 +40,9 @@ import CheckTest from "./checkTest";
 export default function checkbox() {
   const checkbox = useSelector((state) => state.checkbox);
   const dispatch = useDispatch();
-  const [modalVisible, setModalVisible] = useState(false);
+  // const [modalVisible, setModalVisible] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const modalVisible = useSelector((state) => state.checkbox.modalVisible);
 
   const [check, setCheck] = useState(false);
   const [checkboxes, setCheckboxes] = useState({
@@ -115,8 +116,8 @@ export default function checkbox() {
         const docRefId = ref.docs[index].id;
         setSelectedId(docRefId);
         console.log("selectID:", docRefId);
-        setModalVisible(!modalVisible);
-        dispatch(changeModalVisible(!modalVisible));
+        // setModalVisible(!modalVisible);
+        dispatch(changeModalVisible(true));
       } catch (e) {
         console.log(e);
       }
@@ -135,9 +136,9 @@ export default function checkbox() {
     });
     setSelectedId("");
     // setSelectedId("");
-    setModalVisible(true);
+    // setModalVisible(true);
     console.log("modal", modalVisible);
-    dispatch(changeModalVisible(modalVisible));
+    dispatch(changeModalVisible(true));
 
     // setModalVisible(true);
   };
@@ -157,8 +158,8 @@ export default function checkbox() {
       .doc(docRefId)
       .delete()
       .then(function () {
-        setModalVisible(false);
-        dispatch(changeModalVisible(modalVisible));
+        // setModalVisible(false);
+        dispatch(changeModalVisible(false));
         console.log("delete success!");
       })
       .catch(function (error) {
@@ -171,7 +172,9 @@ export default function checkbox() {
   }
   function hide() {
     setSelectedId("");
-    setModalVisible(false);
+    dispatch(changeModalVisible(false));
+
+    // setModalVisible(false);
   }
   // checkbox布林值
   function fsetCheck() {
@@ -180,8 +183,8 @@ export default function checkbox() {
   }
   function hide() {
     setSelectedId("");
-    setModalVisible(false);
-    dispatch(changeModalVisible(modalVisible));
+    // setModalVisible(false);
+    dispatch(changeModalVisible(false));
   }
 
   const renderItem = ({ item, index }) => {
