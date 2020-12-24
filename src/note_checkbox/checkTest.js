@@ -74,13 +74,19 @@ function checkTest(props) {
 
   async function add() {
     try {
+      const eachList = [];
+      todoList.forEach((item) => {
+        console.log("item.todoDec:", item.todoDec);
+        eachList.push(item.todoDec);
+      });
+      // console.log("add()-todoList:", todoList);
       const docRef = await db
         .collection("users")
         .doc(uid)
         .collection("checkboxes")
         .add({
           title: title,
-          list: todoList,
+          list: eachList,
         });
       console.log(docRef.id);
     } catch (error) {
