@@ -32,6 +32,7 @@ import {
   addTodoList,
   deleteTodo,
   finishTodo,
+  refreshFinish,
   refreshTodo,
 } from "../store/actions/checkListAction";
 // import ListAdd from "./checkboxAdd";
@@ -97,6 +98,7 @@ export default function checkbox() {
     console.log("update index:" + id);
     async function getCheckListId(index) {
       dispatch(refreshTodo());
+      dispatch(refreshFinish());
 
       setUpdateBox({
         title: checkboxes[index].title,

@@ -230,7 +230,7 @@ function checkTest(props) {
                 return (
                   <View key={`todo-${index}`} style={styles.todoItem}>
                     {/* 如果這條todo是完成的(回傳true)，那就套用styles.finishText */}
-                    {/* <Text style={isFinish(index) && styles.finishText}> */}
+                    {/* <Text style={isFinish(index) && styles.finishText} /> */}
                     {/* <Text>
                       {index + 1} / {todo}/{todo.id}
                     </Text> */}
@@ -240,17 +240,17 @@ function checkTest(props) {
                         title="DELETE"
                         color="red"
                       />
-                      {/* <Button
-                        onPress={() => handleFinishTodo(index)}
+                      <Button
+                        onPress={() => handleFinishTodo(todo.id)}
                         title="FINISH"
                         color="green"
-                        disabled={isFinish(index)}
-                      /> */}
+                        disabled={isFinish(todo.id)}
+                      />
                       <CheckBox
-                        onPress={() => fsetCheck(index)}
-                        title={todo}
+                        onPress={() => handleFinishTodo(todo.id)}
+                        title={todo.todoDec + "/" + todo.id}
                         color="green"
-                        checked={check}
+                        checked={isFinish(todo.id)}
                       />
                     </View>
                   </View>
