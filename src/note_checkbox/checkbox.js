@@ -39,6 +39,8 @@ import CheckTest from "./checkTest";
 
 export default function checkbox() {
   const checkbox = useSelector((state) => state.checkbox);
+  const uid = useSelector((state) => state.auth.uid);
+
   const dispatch = useDispatch();
   // const [modalVisible, setModalVisible] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
@@ -66,7 +68,7 @@ export default function checkbox() {
         // "MeRcqDluKIWS1jjvmiN8"之後改成current user uid
         const querySnapshot = await db
           .collection("users")
-          .doc("MeRcqDluKIWS1jjvmiN8")
+          .doc(uid)
           .collection("checkboxes")
           .get();
 
@@ -109,7 +111,7 @@ export default function checkbox() {
       try {
         const ref = await db
           .collection("users")
-          .doc("MeRcqDluKIWS1jjvmiN8")
+          .doc(uid)
           .collection("checkboxes")
           .get();
         // 每筆list的ID
@@ -145,7 +147,7 @@ export default function checkbox() {
   async function deleteMemo(index) {
     const ref = await db
       .collection("users")
-      .doc("MeRcqDluKIWS1jjvmiN8")
+      .doc(uid)
       .collection("checkboxes")
       .get();
     // 每筆list的ID
@@ -153,7 +155,7 @@ export default function checkbox() {
     // console.log(id + " delete");
     await db
       .collection("users")
-      .doc("MeRcqDluKIWS1jjvmiN8")
+      .doc(uid)
       .collection("checkboxes")
       .doc(docRefId)
       .delete()

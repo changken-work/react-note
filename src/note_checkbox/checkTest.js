@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import { Header, ListItem, Icon,  CheckBox} from "react-native-elements";
+import { Header, ListItem, Icon, CheckBox } from "react-native-elements";
 
 import { Item, Input } from "native-base";
 
@@ -33,10 +33,11 @@ import * as FirebaseCore from "expo-firebase-core";
 function checkTest(props) {
   const [todoDec, setTodoDec] = useState("");
   // useSelector 來抓取(select)reducer裡的state
-  const todoList = useSelector((state) => state.label.todoList);
-  const finishList = useSelector((state) => state.label.finishList);
+  const todoList = useSelector((state) => state.checkList.todoList);
+  const finishList = useSelector((state) => state.checkList.finishList);
   const checkList = useSelector((state) => state.checkbox.checkList);
   const modalVisible = useSelector((state) => state.checkbox.modalVisible);
+  const uid = useSelector((state) => state.auth.uid);
 
   //
   const [title, setTitle] = useState("");
@@ -75,7 +76,7 @@ function checkTest(props) {
     try {
       const docRef = await db
         .collection("users")
-        .doc("MeRcqDluKIWS1jjvmiN8")
+        .doc(uid)
         .collection("checkboxes")
         .add({
           title: title,
@@ -92,7 +93,7 @@ function checkTest(props) {
     // console.log("success!" + id);
     const docRef = await db
       .collection("users")
-      .doc("MeRcqDluKIWS1jjvmiN8")
+      .doc(uid)
       .collection("checkboxes")
       .doc(id)
       .set({
@@ -181,7 +182,7 @@ function checkTest(props) {
   function fsetCheck(id) {
     setCheck(!check);
     console.log(check);
-    handleFinishTodo(id)
+    handleFinishTodo(id);
   }
 
   return (
@@ -246,11 +247,10 @@ function checkTest(props) {
                         disabled={isFinish(index)}
                       /> */}
                       <CheckBox
-                      onPress={() => fsetCheck(index)}
-                      title={todo}
-                      color="green"
-                      checked={check}
-
+                        onPress={() => fsetCheck(index)}
+                        title={todo}
+                        color="green"
+                        checked={check}
                       />
                     </View>
                   </View>
