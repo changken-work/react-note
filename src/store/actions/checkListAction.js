@@ -1,5 +1,6 @@
 export const ADD_TODOLIST = "ADD_TODOLIST";
 export const DELETE_TODOLIST = "DELETE_TODOLIST";
+export const DELETE_FINISHLIST = "DELETE_FINISHLIST";
 export const FINISH_TODOLIST = "FINISH_TODOLIST";
 export const REFRESH_TODOLIST = "REFRESH_TODOLIST";
 export const REFRESH_FINISHLIST = "REFRESH_FINISHLIST";
@@ -19,17 +20,25 @@ export const addTodoList = (todoDec) => {
   };
 };
 
+export const finishTodo = (finishDec) => {
+  return {
+    type: FINISH_TODOLIST,
+    payload: {
+      id: ID(),
+      finishDec,
+    },
+  };
+};
 export const deleteTodo = (todoIndex) => {
   return {
     type: DELETE_TODOLIST,
     payload: todoIndex,
   };
 };
-
-export const finishTodo = (id) => {
+export const deleteFinish = (finishIndex) => {
   return {
-    type: FINISH_TODOLIST,
-    payload: id,
+    type: DELETE_FINISHLIST,
+    payload: finishIndex,
   };
 };
 export const refreshTodo = () => {

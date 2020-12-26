@@ -1,6 +1,7 @@
 import {
   ADD_TODOLIST,
   DELETE_TODOLIST,
+  DELETE_FINISHLIST,
   FINISH_TODOLIST,
   REFRESH_TODOLIST,
   REFRESH_FINISHLIST,
@@ -22,6 +23,17 @@ const checkListReducer = (state = initState, action) => {
         todoList: tempTodo,
       };
     }
+
+    case FINISH_TODOLIST: {
+      const TempFinish = [...state.finishList];
+      TempFinish.push(action.payload);
+      console.log("reducer- FINISH_TODOLIST:", TempFinish);
+
+      return {
+        ...state,
+        finishList: TempFinish,
+      };
+    }
     case DELETE_TODOLIST: {
       const tempTodo = [...state.todoList];
       // 將傳進來的Index位置刪除掉
@@ -33,15 +45,15 @@ const checkListReducer = (state = initState, action) => {
         todoList: tempTodo,
       };
     }
-
-    case FINISH_TODOLIST: {
-      const TempFinish = [...state.finishList];
-      TempFinish.push(action.payload);
-      console.log("finish state finishList:", TempFinish);
+    case DELETE_FINISHLIST: {
+      const tempFinish = [...state.finishList];
+      // 將傳進來的Index位置刪除掉
+      tempFinish.splice(action.payload, 1);
+      console.log("delete state tempFinish:", tempFinish);
 
       return {
         ...state,
-        finishList: TempFinish,
+        finishList: tempFinish,
       };
     }
     case REFRESH_TODOLIST: {
