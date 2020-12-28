@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Button, TextInput, StyleSheet } from "react-native";
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { add, del, delAll, editTag } from "../store/actions/labelAction";
+import {
+  add,
+  del,
+  delAll,
+  editTag,
+  addAsync,
+} from "../store/actions/labelAction";
 // model
 import Model from "./model";
 // tag
@@ -17,6 +23,8 @@ export default function label_demo() {
   // redux
   const dispatch = useDispatch();
   const label = useSelector((state) => state.label.label);
+  const uid = useSelector((state) => state.auth.uid);
+
   // model data
   const [modalVisible, setModalVisible] = useState(false);
   // model index
@@ -44,11 +52,13 @@ export default function label_demo() {
             "\n"
         )
     );
+    console.log("==========");
+    // dispatch(addAsync());
   }, [label]);
 
-  useEffect(() => {
-    console.log(tags);
-  }, [tags]);
+  // useEffect(() => {
+  //   console.log(tags);
+  // }, [tags]);
 
   const addTodo = () => {
     let TagsArray = tags.tagsArray;
