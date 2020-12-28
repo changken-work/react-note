@@ -8,36 +8,44 @@ function ID() {
 }
 
 // label_demo
-export const add = (label, tag) => {
+export const add = (label, TagsArray) => {
+  let finalTags = [];
+  TagsArray.map((obj) => {
+    finalTags.push({ id: ID(), data: obj });
+  });
   return {
     type: ADD_LABEL,
     payload: {
       id: ID(),
       label,
-      tag,
+      tag: finalTags,
     },
   };
 };
 
-export const delLabel = (index) => {
+export const del = (index) => {
   return {
     type: DEL_LABEL,
     payload: index,
   };
 };
-export const delAllLabel = () => {
+export const delAll = () => {
   return {
     type: DEL_LABEL_ALL,
     payload: "",
   };
 };
 
-export const editTag = (index, tag) => {
+export const editTag = (index, TagsArray) => {
+  let finalTags = [];
+  TagsArray.map((obj) => {
+    finalTags.push({ id: ID(), data: obj });
+  });
   return {
     type: EDIT_TAG,
     payload: {
       index,
-      tag,
+      finalTags,
     },
   };
 };

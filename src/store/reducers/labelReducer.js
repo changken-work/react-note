@@ -3,12 +3,29 @@ import {
   DEL_LABEL,
   DEL_LABEL_ALL,
   EDIT_TAG,
-} from '../actions/labelAction';
+} from "../actions/labelAction";
 
 const initState = {
   todoList: [],
   finishList: [],
-  label: [{ id: '001', label: '初始值', tag: '初始值' }],
+  label: [
+    {
+      id: "001",
+      label: "初始值",
+      tag: [
+        { id: "t01", data: "學校" },
+        { id: "t02", data: "健身" },
+      ],
+    },
+    {
+      id: "002",
+      label: "初始值",
+      tag: [
+        { id: "t01", data: "家人" },
+        { id: "t02", data: "健身" },
+      ],
+    },
+  ],
 };
 
 const labelReducer = (state = initState, action) => {
@@ -42,12 +59,12 @@ const labelReducer = (state = initState, action) => {
       };
     }
 
-    // 修改tag
+    // 修改該index之tag
     case EDIT_TAG: {
       const foundIndex = state.label.findIndex(
-        x => x.id == action.payload.index
+        (x) => x.id == action.payload.index
       );
-      state.label[foundIndex].tag = action.payload.tag;
+      state.label[foundIndex].tag = action.payload.finalTags;
     }
 
     default:
