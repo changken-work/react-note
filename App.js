@@ -19,6 +19,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import ReduxThunk from 'redux-thunk';
 import rootReducer from './src/store/reducers';
+import M_Icon from 'react-native-vector-icons/MaterialIcons';
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 //
 
@@ -45,15 +46,15 @@ const Drawer = createDrawerNavigator();
 
 const Stack = createStackNavigator();
 
-function INDEX(navigation) {
+function rootStack(navigation) {
   return (
     <Stack.Navigator independent={true}>
       <Stack.Screen
-        name="Profile"
+        name="HOME"
         component={Index}
         options={{
           headerTitle: 'HOME',
-          headerStyle: { backgroundColor: '#d1d8e0' },
+          headerStyle: { backgroundColor: '#fff' },
           headerLeft: () => (
             <Icon
               name="menu"
@@ -69,11 +70,30 @@ function INDEX(navigation) {
   );
 }
 const Tab = createBottomTabNavigator();
+
 const TabsScreen = () => (
-  <Tab.Navigator>
-    <Tab.Screen name="SignOut" component={SignOut} />
-    <Tab.Screen name="SignIn" component={SignIn} />
-    <Tab.Screen name="SignUp" component={SignUp} />
+  <Tab.Navigator 
+  tabBarOptions={{
+    // labelPosition: "beside-icon",
+    activeTintColor: "black",
+    style: {
+      backgroundColor: "white",
+    },
+    labelStyle: {
+      fontSize: 12,
+    },
+    tabStyle: {
+        width: 100,
+    },
+  }}>
+    <Tab.Screen name="HOME" component={rootStack} options={{
+      tabBarLabel: 'HOME',
+      tabBarIcon: () => <M_Icon name="home" color="#333" size={24} />,
+    }}/>
+    <Tab.Screen name="ADD" component={NoteText} options={{
+      tabBarLabel: 'ADD',
+      tabBarIcon: () => <M_Icon name="add" color="#333" size={24} />,
+    }}/>
   </Tab.Navigator>
 );
 function SIGNIN(navigation) {
@@ -114,7 +134,7 @@ export default function App() {
           <Drawer.Screen name="SignIn" component={SIGNIN} />
           <Drawer.Screen name="SignUp" component={SignUp} />
           <Drawer.Screen name="SignOut" component={SignOut} />
-          <Drawer.Screen name="Index" component={INDEX} />
+          <Drawer.Screen name="Index" component={TabsScreen} />
           <Drawer.Screen name="Home2" component={TabsScreen} />
           {/* <Drawer.Screen name="Label" component={TodoList} /> */}
           <Drawer.Screen name="LabelDemo" component={LabelDemo} />
