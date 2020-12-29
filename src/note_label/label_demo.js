@@ -3,6 +3,7 @@ import { View, Text, Button, TextInput, StyleSheet } from "react-native";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import {
+  getAsync,
   delAll,
   addAsync,
   editTagAsync,
@@ -59,11 +60,9 @@ export default function label_demo() {
   //   console.log(tags);
   // }, [tags]);
 
-  // useEffect(() => {
-  //   if(user_id.length) {
-
-  //   }
-  // }, [user_id]);
+  useEffect(() => {
+    dispatch(getAsync());
+  }, []);
 
   const addTodo = () => {
     let TagsArray = tags.tagsArray;

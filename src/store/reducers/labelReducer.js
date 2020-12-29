@@ -1,4 +1,5 @@
 import {
+  GET_LABEL,
   ADD_LABEL,
   DEL_LABEL,
   DEL_LABEL_ALL,
@@ -9,27 +10,29 @@ const initState = {
   todoList: [],
   finishList: [],
   label: [
-    {
-      id: "001",
-      label: "初始值",
-      tag: [
-        { id: "t01", data: "學校" },
-        { id: "t02", data: "健身" },
-      ],
-    },
-    {
-      id: "002",
-      label: "初始值",
-      tag: [
-        { id: "t01", data: "家人" },
-        { id: "t02", data: "健身" },
-      ],
-    },
+    // {
+    //   // id: "001",
+    //   // label: "載入中",
+    //   // tag: [
+    //   //   { id: "t01", data: "學校" },
+    //   //   { id: "t02", data: "健身" },
+    //   // ],
+    // },
   ],
 };
 
 const labelReducer = (state = initState, action) => {
   switch (action.type) {
+    // label Get
+    case GET_LABEL: {
+      let Temp = [...state.label];
+      Temp = action.payload.label;
+      return {
+        ...state,
+        label: Temp,
+      };
+    }
+
     // label新增
     case ADD_LABEL: {
       const Temp = [...state.label];
@@ -61,10 +64,15 @@ const labelReducer = (state = initState, action) => {
 
     // 修改該index之tag
     case EDIT_TAG: {
+      const label = [...state.label];
       const foundIndex = state.label.findIndex(
         (x) => x.id == action.payload.index
       );
       state.label[foundIndex].tag = action.payload.finalTags;
+      return {
+        ...state,
+        label,
+      };
     }
 
     default:

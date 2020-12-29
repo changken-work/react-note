@@ -1,7 +1,7 @@
 import * as firebase from "firebase";
 import * as FirebaseCore from "expo-firebase-core";
-import * as SecureStore from "expo-secure-store";
 
+export const GET_LABEL = "GET_LABEL";
 export const ADD_LABEL = "ADD_LABEL";
 export const DEL_LABEL = "DEL_LABEL";
 export const DEL_LABEL_ALL = "DEL_LABEL_ALL";
@@ -20,6 +20,15 @@ function ID() {
 }
 
 // label_demo
+export const get = (label) => {
+  return {
+    type: GET_LABEL,
+    payload: {
+      label: label,
+    },
+  };
+};
+
 export const add = (id, label, finalTags) => {
   return {
     type: ADD_LABEL,
@@ -52,6 +61,16 @@ export const editTag = (index, finalTags) => {
       finalTags,
     },
   };
+};
+export const getAsync = () => async (dispatch) => {
+  const newLabel = [];
+  await checkboxes.get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      // console.log(`${doc.id} => ${doc.data()}`);
+      newLabel.push(doc.data());
+    });
+  });
+  dispatch(get(newLabel));
 };
 
 export const addAsync = (label, TagsArray) => async (dispatch) => {

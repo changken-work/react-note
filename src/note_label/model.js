@@ -18,7 +18,7 @@ export default function ProductAdd(props) {
 
   const label = useSelector((state) => state.label.label);
   // useState
-  const [desc, setDesc] = useState("");
+  // const [desc, setDesc] = useState("");
   const [show, setShow] = useState(false);
   const [color, setColor] = useState("#2196F3");
 
@@ -35,6 +35,7 @@ export default function ProductAdd(props) {
       let temp = [];
       let finalTags = [];
       let arr = label[foundIndex].tag;
+      // 轉為無id之Tags
       arr.map((obj) => {
         temp.push(obj.data);
       });
@@ -56,11 +57,10 @@ export default function ProductAdd(props) {
   }, [tags]);
 
   // 按下確定後關閉(並更新)
-  const update = () => {
+  const update = async () => {
     let tag = tags.tagsArray;
-    let index = props.modelIndex;
-
-    props.updateInAdd(index, tag);
+    let index = await props.modelIndex;
+    await props.updateInAdd(index, tag);
     props.setModalVisible(false);
   };
 
