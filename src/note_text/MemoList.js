@@ -17,6 +17,7 @@ import firestore from "firebase/firestore";
 import * as FirebaseCore from "expo-firebase-core";
 
 import { useSelector, useDispatch } from 'react-redux';
+import { readMemoAsync } from '../store/actions/authAction';
 
 import MemoAdd from "./MemoAddEdit";
 
@@ -24,10 +25,10 @@ export default function MemoList() {
   const [selectedId, setSelectedId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [memos, setMemos] = useState({
-    title: "",
-    content: "",
-  });
+  // const [memos, setMemos] = useState({
+  //   title: "",
+  //   content: "",
+  // });
 
   const uid = useSelector(state => state.auth.uid);
 
@@ -38,32 +39,40 @@ export default function MemoList() {
   const db = firebase.firestore();
 
   useEffect(() => {
-    async function readData() {
-      const newMemos = [];
+    const readData = async () => {
       try {
-        // "MeRcqDluKIWS1jjvmiN8"之後改成current user uid
-        const querySnapshot = await db
-          .collection("users")
-          .doc(uid)
-          .collection("notes")
-          .get();
-        querySnapshot.forEach((doc) => {
-          // console.log(doc.data().title);
-          const newMemo = {
-            title: doc.data().title,
-            content: doc.data().content,
-          };
-          newMemos.push(newMemo);
-        }); //foreach
-        setMemos(newMemos);
+        dispatch(readMemoAsync());
         setIsLoading(false);
-      } catch (e) {
-        //try
-        console.log(e);
+      } catch (error) {
+        console.log(error);
       }
-    } //readData
+    };
+    // async function readData() {
+    //   const newMemos = [];
+    //   try {
+    //     // "MeRcqDluKIWS1jjvmiN8"之後改成current user uid
+    //     const querySnapshot = await db
+    //       .collection("users")
+    //       .doc(uid)
+    //       .collection("notes")
+    //       .get();
+    //     querySnapshot.forEach((doc) => {
+    //       // console.log(doc.data().title);
+    //       const newMemo = {
+    //         title: doc.data().title,
+    //         content: doc.data().content,
+    //       };
+    //       newMemos.push(newMemo);
+    //     }); //foreach
+    //     setMemos(newMemos);
+    //     setIsLoading(false);
+    //   } catch (e) {
+    //     //try
+    //     console.log(e);
+    //   }
+    // } //readData
 
-    readData();
+    readData;
   }, [modalVisible]);
 
   function hide() {
