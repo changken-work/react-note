@@ -2,29 +2,29 @@ import * as firebase from "firebase";
 import * as FirebaseCore from "expo-firebase-core";
 import * as SecureStore from "expo-secure-store";
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(FirebaseCore.DEFAULT_WEB_APP_OPTIONS);
-}
-
 export const ADD_LABEL = "ADD_LABEL";
 export const DEL_LABEL = "DEL_LABEL";
 export const DEL_LABEL_ALL = "DEL_LABEL_ALL";
 export const EDIT_TAG = "EDIT_TAG";
+
+// firebase
+if (!firebase.apps.length) {
+  firebase.initializeApp(FirebaseCore.DEFAULT_WEB_APP_OPTIONS);
+}
+const db = firebase.firestore();
+const usersDb = db.collection("users").doc("5M0z9HKOTghNOGxEDl8CKrWuQh43");
+const checkboxes = usersDb.collection("label");
 
 function ID() {
   return "_" + Math.random().toString(36).substr(2, 9);
 }
 
 // label_demo
-export const add = (label, TagsArray) => {
-  let finalTags = [];
-  TagsArray.map((obj) => {
-    finalTags.push({ id: ID(), data: obj });
-  });
+export const add = (id, label, finalTags) => {
   return {
     type: ADD_LABEL,
     payload: {
-      id: ID(),
+      id,
       label,
       tag: finalTags,
     },
@@ -44,11 +44,7 @@ export const delAll = () => {
   };
 };
 
-export const editTag = (index, TagsArray) => {
-  let finalTags = [];
-  TagsArray.map((obj) => {
-    finalTags.push({ id: ID(), data: obj });
-  });
+export const editTag = (index, finalTags) => {
   return {
     type: EDIT_TAG,
     payload: {
@@ -58,35 +54,45 @@ export const editTag = (index, TagsArray) => {
   };
 };
 
-export const addAsync = () => async (dispatch) => {
-  const db = firebase.firestore();
-  const usersDb = db.collection("users").doc("5M0z9HKOTghNOGxEDl8CKrWuQh43");
-  const checkboxes = usersDb.collection("checkboxes");
-  // C set()
-  // await checkboxes.doc("test").set({ married: false });
-
-  // R get()
-  var docRef = checkboxes.doc("test");
-  await docRef
-    .get()
-    .then((doc) => {
-      if (doc.exists) {
-        console.log("doc data:", doc.data());
-      } else {
-        console.log("無此資料夾");
-      }
-    })
-    .catch((error) => {
-      console.log("Errir getting document:", error);
-    });
-
-  // U update()
-  await checkboxes.doc("test").update({
-    tag: [
-      { id: "t01", data: "健身" },
-      { id: "t02", data: "健身2" },
-    ],
+export const addAsync = (label, TagsArray) => async (dispatch) => {
+  // 修改格式
+  let finalTags = [];
+  TagsArray.map((obj) => {
+    finalTags.push({ id: ID(), data: obj });
   });
 
-  // D delete()
+  // set()
+  const id = ID();
+  var docRef = checkboxes.doc(id);
+  await docRef.set({ id: id, label, tag: finalTags }).catch((error) => {
+    console.log("Error in set():", error);
+  });
+  dispatch(add(id, label, finalTags));
+};
+
+export const editTagAsync = (index, TagsArray) => async (dispatch) => {
+  // 修改格式
+  let finalTags = [];
+  TagsArray.map((obj) => {
+    finalTags.push({ id: ID(), data: obj });
+  });
+  // update()
+  var docRef = checkboxes.doc(index);
+  await docRef
+    .update({
+      tag: finalTags,
+    })
+    .catch((error) => {
+      console.log("Error in Update():", error);
+    });
+  dispatch(editTag(index, finalTags));
+};
+
+export const deleteAsync = (index, uid) => async (dispatch) => {
+  // delete doc by index
+  var docRef = checkboxes.doc(uid);
+  await docRef.delete().catch((error) => {
+    console.log("Error in Delete():", error);
+  });
+  dispatch(del(index));
 };

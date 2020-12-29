@@ -9,14 +9,13 @@ import {
 import { Button, Text, TextInput, View } from "react-native";
 import styles from "../styles";
 // redux
-import { useSelector, useDispatch } from "react-redux";
-import { add, del, delAll, editTag } from "../store/actions/labelAction";
+import { useSelector } from "react-redux";
 // tag
 import TagInput from "react-native-tags-input";
 
 export default function ProductAdd(props) {
   // redux
-  const dispatch = useDispatch();
+
   const label = useSelector((state) => state.label.label);
   // useState
   const [desc, setDesc] = useState("");
@@ -29,26 +28,7 @@ export default function ProductAdd(props) {
   const updateTagState = (state) => {
     setTags(state);
   };
-
-  useEffect(() => {
-    if (tags.tagsArray.length === 0) {
-      setColor("#cccccc");
-      setShow(true);
-    } else {
-      setColor("#2196F3");
-      setShow(false);
-    }
-  }, [tags]);
-
-  // 按下確定後關閉用(更新)
-  const update = () => {
-    let tag = tags.tagsArray;
-    let index = props.modelIndex;
-
-    props.updateInAdd(index, tag);
-    props.setModalVisible(false);
-  };
-
+  // 更新此筆id之tagsArray
   useEffect(() => {
     if (props.modalVisible) {
       const foundIndex = label.findIndex((x) => x.id == props.modelIndex);
@@ -59,10 +39,30 @@ export default function ProductAdd(props) {
         temp.push(obj.data);
       });
       finalTags = { tag: "", tagsArray: temp };
-      console.log(finalTags);
+      // console.log(finalTags);
       setTags(finalTags);
     }
   }, [props.modalVisible]);
+
+  // 防呆
+  useEffect(() => {
+    if (tags.tagsArray.length === 0) {
+      setColor("#cccccc");
+      setShow(true);
+    } else {
+      setColor("#2196F3");
+      setShow(false);
+    }
+  }, [tags]);
+
+  // 按下確定後關閉(並更新)
+  const update = () => {
+    let tag = tags.tagsArray;
+    let index = props.modelIndex;
+
+    props.updateInAdd(index, tag);
+    props.setModalVisible(false);
+  };
 
   return (
     <View>

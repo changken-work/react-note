@@ -3,11 +3,10 @@ import { View, Text, Button, TextInput, StyleSheet } from "react-native";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import {
-  add,
-  del,
   delAll,
-  editTag,
   addAsync,
+  editTagAsync,
+  deleteAsync,
 } from "../store/actions/labelAction";
 // model
 import Model from "./model";
@@ -23,7 +22,7 @@ export default function label_demo() {
   // redux
   const dispatch = useDispatch();
   const label = useSelector((state) => state.label.label);
-  const uid = useSelector((state) => state.auth.uid);
+  const user_id = useSelector((state) => state.auth.uid);
 
   // model data
   const [modalVisible, setModalVisible] = useState(false);
@@ -60,13 +59,19 @@ export default function label_demo() {
   //   console.log(tags);
   // }, [tags]);
 
+  // useEffect(() => {
+  //   if(user_id.length) {
+
+  //   }
+  // }, [user_id]);
+
   const addTodo = () => {
     let TagsArray = tags.tagsArray;
-    dispatch(add(inputtxt, TagsArray));
+    dispatch(addAsync(inputtxt, TagsArray));
   };
 
-  const delTodo = (id) => {
-    dispatch(del(id));
+  const delTodo = (id, uid) => {
+    dispatch(deleteAsync(id, uid));
   };
 
   const delAllTodo = () => {
@@ -75,7 +80,7 @@ export default function label_demo() {
 
   // model接資料
   const updatedata = (index, modaltagsArray) => {
-    dispatch(editTag(index, modaltagsArray));
+    dispatch(editTagAsync(index, modaltagsArray));
   };
   // model開啟
   const visable = () => {
@@ -112,7 +117,7 @@ export default function label_demo() {
                   title="修改"
                 ></Button>
                 <Button
-                  onPress={() => delTodo(index)}
+                  onPress={() => delTodo(index, data.id)}
                   title="刪除紀事"
                 ></Button>
               </View>
