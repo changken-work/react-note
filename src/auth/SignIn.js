@@ -103,8 +103,8 @@ export default function SignIn() {
       />
       <Button onPress={signIn} title="登入" />
       <Text>{message.toString()}</Text>
-      <Text>{state.uid}</Text>
-      <Text>{state.email}</Text>
+      {/* <Text>{state.uid}</Text>
+      <Text>{state.email}</Text> */}
     </View>
   );
 }

@@ -27,12 +27,12 @@ export default function SignOut() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.form}>
       <Text style={styles.formTitle}>SignOut</Text>
       <Button onPress={signOut} title="登出" />
       <Text>{message.toString()}</Text>
-      <Text>{state.uid}</Text>
-      <Text>{state.email}</Text>
+      {/* <Text>{state.uid}</Text>
+      <Text>{state.email}</Text> */}
     </View>
   );
 }
