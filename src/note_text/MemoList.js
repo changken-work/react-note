@@ -17,6 +17,7 @@ import firestore from "firebase/firestore";
 import * as FirebaseCore from "expo-firebase-core";
 
 import { useSelector, useDispatch } from 'react-redux';
+import { readMemoAsync } from '../store/actions/authAction';
 
 import MemoAdd from "./MemoAddEdit";
 
@@ -38,6 +39,14 @@ export default function MemoList() {
   const db = firebase.firestore();
 
   useEffect(() => {
+    // const readData = async () => {
+    //   try {
+    //     dispatch(readMemoAsync());
+    //     setIsLoading(false);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
     async function readData() {
       const newMemos = [];
       try {
