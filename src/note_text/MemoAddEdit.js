@@ -17,7 +17,7 @@ import firestore from 'firebase/firestore';
 import * as FirebaseCore from 'expo-firebase-core';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { addMemoAsync } from '../store/actions/memoAction';
+import { addMemoAsync, updateMemoAsync } from '../store/actions/memoAction';
 
 export default function MemoAddEdit(props) {
   const [title, setTitle] = useState("");
@@ -25,9 +25,10 @@ export default function MemoAddEdit(props) {
 
   const uid = useSelector(state => state.auth.uid);
   const dispatch = useDispatch();
+  const notes = useSelector(state => state.memo.notes);
 
   useEffect(()=>{
-    // console.log(props.memo);
+    // console.log(notes[props.id]);
     setTitle(props.memo.title);
     setContent(props.memo.content);
   },[props.id]);
@@ -60,16 +61,9 @@ export default function MemoAddEdit(props) {
 
   async function update(id) {
     // console.log("success!" + id);
-    const docRef = await db.collection("users").doc(uid).collection("notes").doc(id).set({
-      title: title,
-      content: content
-    })
-    .then(function() {
-        console.log("update success!");
-    })
-    .catch(function(error) {
-        console.error("Error writing document: ", error);
-    });
+    const docRefId = notes[id].id;
+    console.log("doc.id: " + docRefId);
+    dispatch(updateMemoAsync(uid, docRefId, title, content));
   }
 
   async function deleteMemo(id){

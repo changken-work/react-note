@@ -2,6 +2,7 @@ import * as firebase from 'firebase';
 
 export const READ_MEMO = 'READ_MEMO';
 export const ADD_MEMO = 'ADD_MEMO';
+export const UPDATE_MEMO = 'UPDATE_MEMO';
 
 export const readMemo = (notes) => {
   return {
@@ -16,6 +17,17 @@ export const readMemo = (notes) => {
 export const addMemo = (title, content) => {
   return {
     type: ADD_MEMO,
+    payload: {
+      title,
+      content
+    },
+  };
+};
+
+// 修改
+export const updateMemo = (title, content) => {
+  return {
+    type: UPDATE_MEMO,
     payload: {
       title,
       content
@@ -57,4 +69,19 @@ export const addMemoAsync = (uid, title, content) => async dispatch => {
     console.error("Error adding document: ", error);
   }
   dispatch(addMemo(title, content));
+};
+
+export const updateMemoAsync = (uid, docRefId, title, content) => async dispatch => {
+  const db = firebase.firestore();
+  const docRef = await db.collection("users").doc(uid).collection("notes").doc(docRefId).set({
+    title: title,
+    content: content
+  })
+  .then(function() {
+      console.log("update success!");
+  })
+  .catch(function(error) {
+      console.error("Error writing document: ", error);
+  });
+  dispatch(updateMemo(title, content));
 };

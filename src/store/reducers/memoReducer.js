@@ -1,9 +1,7 @@
-import { READ_MEMO, ADD_MEMO } from '../actions/memoAction';
+import { READ_MEMO, ADD_MEMO, UPDATE_MEMO } from '../actions/memoAction';
 
 const initState = {
   notes: [],
-  title: '', 
-  content: ''
 };
 
 const memoReducer = (state = initState, action) => {
@@ -25,6 +23,15 @@ const memoReducer = (state = initState, action) => {
         notes: Temp,
       };
     }
+    case UPDATE_MEMO: {
+      const Temp = [...state.notes];
+      Temp = action.payload.notes;
+      return {
+        ...state,
+        notes: Temp,
+      };
+    }
+
     default:
         return state;
   }

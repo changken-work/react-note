@@ -25,6 +25,10 @@ export default function MemoList() {
   const [selectedId, setSelectedId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [memos, setMemos] = useState({
+    title: "",
+    content: "",
+  });
 
   const uid = useSelector(state => state.auth.uid);
   const dispatch = useDispatch();
@@ -40,7 +44,6 @@ export default function MemoList() {
     //讀取資料
     async function readData() {
         try {
-            // "MeRcqDluKIWS1jjvmiN8"之後改成current user uid
             // console.log('uid', uid);
             dispatch(readMemoAsync(uid));
             // console.log("note", notes);
@@ -52,6 +55,11 @@ export default function MemoList() {
   }, [modalVisible]);
 
   function hide() {
+    setSelectedId("");
+    setMemos({
+      title: "",
+      content: "",
+    });
     setModalVisible(false);
   }
 
@@ -63,6 +71,11 @@ export default function MemoList() {
 
   function update(id) {
     console.log("update index:" + id);
+    setMemos({
+      title: notes[id].title,
+      content: notes[id].content,
+    });
+    setSelectedId(id);
     setModalVisible(true);
   }
 
@@ -104,7 +117,7 @@ export default function MemoList() {
       </Fab>
       <MemoAdd
         modalVisible={modalVisible}
-        memo={notes}
+        memo={memos}
         id={selectedId}
         hide={hide}
       />
