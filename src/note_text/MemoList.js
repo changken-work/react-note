@@ -71,11 +71,12 @@ export default function MemoList() {
 
   function update(id) {
     console.log("update index:" + id);
+    const docRefId = notes[id].id;
     setMemos({
       title: notes[id].title,
       content: notes[id].content,
     });
-    setSelectedId(id);
+    setSelectedId(docRefId);
     setModalVisible(true);
   }
 

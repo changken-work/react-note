@@ -17,7 +17,7 @@ import firestore from 'firebase/firestore';
 import * as FirebaseCore from 'expo-firebase-core';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { addMemoAsync, updateMemoAsync } from '../store/actions/memoAction';
+import { addMemoAsync, updateMemoAsync, deleteMemoAsync } from '../store/actions/memoAction';
 
 export default function MemoAddEdit(props) {
   const [title, setTitle] = useState("");
@@ -59,23 +59,17 @@ export default function MemoAddEdit(props) {
     setContent("");
   }
 
-  async function update(id) {
+  async function update(id) { //有一個小bug，有時候要第二次才能新增成功
     // console.log("success!" + id);
-    const docRefId = notes[id].id;
-    console.log("doc.id: " + docRefId);
-    dispatch(updateMemoAsync(uid, docRefId, title, content));
+    dispatch(updateMemoAsync(uid, id, title, content));
   }
 
   async function deleteMemo(id){
-    // console.log(id + " delete");
-    await db.collection("users").doc(uid).collection("notes").doc(id).delete()
-    .then(function() {
-      props.hide();
-      console.log("delete success!");
-    })
-    .catch(function(error) {
-        console.error("Error removing document: ", error);
-    });
+    console.log(id + " delete");
+    await dispatch(deleteMemoAsync(uid, id));
+    setTitle("");
+    setContent("");
+    props.hide();
   }
 
   function cancel(){
