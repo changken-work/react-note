@@ -10,10 +10,12 @@ const noteReducer = (state = initState, action) => {
     switch (action.type) {
         // label新增
         case READ_NOTES: {
-            console.log("now", action.payload.notes)
+            let Temp = [...state.notes];
+            Temp = action.payload.notes;
+            // console.log("now", action.payload.notes)
             return {
-                // ...state,
-                notes: action.payload.notes,
+                ...state,
+                notes: Temp,
             };
         }
         default:
