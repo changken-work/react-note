@@ -2,6 +2,8 @@ import { READ_MEMO, ADD_MEMO } from '../actions/memoAction';
 
 const initState = {
   notes: [],
+  title: '', 
+  content: ''
 };
 
 const memoReducer = (state = initState, action) => {
@@ -13,6 +15,14 @@ const memoReducer = (state = initState, action) => {
       return {
           ...state,
           notes: Temp,
+      };
+    }
+    case ADD_MEMO: {
+      const Temp = [...state.notes];
+      Temp = action.payload.notes;
+      return {
+        ...state,
+        notes: Temp,
       };
     }
     default:

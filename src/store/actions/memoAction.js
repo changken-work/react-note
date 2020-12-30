@@ -13,7 +13,7 @@ export const readMemo = (notes) => {
 };
 
 // 新增
-export const addMemo = (notes) => {
+export const addMemo = (title, content) => {
   return {
     type: ADD_MEMO,
     payload: {
@@ -28,7 +28,6 @@ export const readMemoAsync = (uid) => async dispatch => {
   try {
         const notes = [];
         const db = firebase.firestore();
-        // "MeRcqDluKIWS1jjvmiN8"之後改成current user uid
         const querySnapshot = await db.collection("users").doc(uid).collection("notes").get();
         await querySnapshot.forEach((doc) => {
             const newMemo = {
@@ -45,8 +44,9 @@ export const readMemoAsync = (uid) => async dispatch => {
     catch (e) { console.log(e); }
 };
 
-export const addMemoAsync = () => async dispatch => {
+export const addMemoAsync = (uid, title, content) => async dispatch => {
   try {
+    const db = firebase.firestore();
     const docRef = await db.collection("users").doc(uid).collection("notes").add({
       title: title,
       content: content

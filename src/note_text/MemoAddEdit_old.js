@@ -17,14 +17,12 @@ import firestore from 'firebase/firestore';
 import * as FirebaseCore from 'expo-firebase-core';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { addMemoAsync } from '../store/actions/memoAction';
 
 export default function MemoAddEdit(props) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
   const uid = useSelector(state => state.auth.uid);
-  const dispatch = useDispatch();
 
   useEffect(()=>{
     // console.log(props.memo);
@@ -52,10 +50,17 @@ export default function MemoAddEdit(props) {
     sendData();
   }
 
-  function add() {
-    dispatch(addMemoAsync(uid, title, content));
-    setTitle("");
-    setContent("");
+  async function add() {
+    try {
+      const docRef = await db.collection("users").doc(uid).collection("notes").add({
+        title: title,
+        content: content
+      });
+      console.log(docRef.id);
+    }
+    catch(error) {
+      console.error("Error adding document: ", error);
+    }
   }
 
   async function update(id) {

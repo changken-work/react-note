@@ -101,9 +101,7 @@ export default function MemoList() {
           .get();
 
         const docRefId = ref.docs[index].id;
-
         setSelectedId(docRefId);
-
         setModalVisible(true);
       } catch (e) {
         console.log(e);

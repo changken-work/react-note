@@ -18,11 +18,11 @@ import * as FirebaseCore from "expo-firebase-core";
 
 import { useSelector, useDispatch } from 'react-redux';
 import { readMemoAsync } from '../store/actions/memoAction';
-import { readNoteAsync } from '../store/actions/noteAction';
 
-// import MemoAdd from "./MemoAddEdit";
+import MemoAdd from "./MemoAddEdit";
 
 export default function MemoList() {
+  const [selectedId, setSelectedId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -41,9 +41,9 @@ export default function MemoList() {
     async function readData() {
         try {
             // "MeRcqDluKIWS1jjvmiN8"之後改成current user uid
-            console.log('uid', uid);
+            // console.log('uid', uid);
             dispatch(readMemoAsync(uid));
-            console.log("note", notes);
+            // console.log("note", notes);
             setIsLoading(false);
         }//try
         catch (e) { console.log(e); }
@@ -55,13 +55,22 @@ export default function MemoList() {
     setModalVisible(false);
   }
 
-  
+  function add() {
+    console.log("add");
+    setSelectedId("");
+    setModalVisible(true);
+  }
 
-  const renderItem = ({ item }) => {
+  function update(id) {
+    console.log("update index:" + id);
+    setModalVisible(true);
+  }
+
+  const renderItem = ({ item, index }) => {
     return (
       <ListItem bottomDivider>
         <ListItem.Content>
-          <TouchableOpacity onPress={() => update()}>
+          <TouchableOpacity onPress={() => update(index)}>
             <ListItem.Title style={styles.titlefont}>
               {item.title}
             </ListItem.Title>
@@ -93,7 +102,12 @@ export default function MemoList() {
       <Fab onPress={() => add()}>
         <Icon name="add" color="#fff" />
       </Fab>
-      
+      <MemoAdd
+        modalVisible={modalVisible}
+        memo={notes}
+        id={selectedId}
+        hide={hide}
+      />
     </SafeAreaView>
   );
 }
