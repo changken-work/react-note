@@ -21,6 +21,7 @@ export default function SignOut() {
   const signOut = async () => {
     try {
       dispatch(logoutAsync());
+      console.log('登出成功!');
     } catch (error) {
       setMessage(error);
     }

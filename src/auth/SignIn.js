@@ -27,6 +27,7 @@ export default function SignIn() {
       setEmail('');
       setPassword('');
       setMessage('');
+      console.log('登入成功! ' + state.uid);
     } catch (error) {
       setMessage(error);
     }
@@ -39,6 +40,7 @@ export default function SignIn() {
         setPassword(password);
       })
     );
+    console.log('登入成功! ' + state.uid);
   };
 
   /**
