@@ -8,12 +8,17 @@ import {
 } from "react-native";
 import { Button, Text, TextInput, View } from "react-native";
 import styles from "../styles";
+// redux
+import { useSelector } from "react-redux";
 // tag
 import TagInput from "react-native-tags-input";
 
 export default function ProductAdd(props) {
+  // redux
+
+  const label = useSelector((state) => state.label.label);
   // useState
-  const [desc, setDesc] = useState("");
+  // const [desc, setDesc] = useState("");
   const [show, setShow] = useState(false);
   const [color, setColor] = useState("#2196F3");
 
@@ -23,7 +28,24 @@ export default function ProductAdd(props) {
   const updateTagState = (state) => {
     setTags(state);
   };
+  // 更新此筆id之tagsArray
+  useEffect(() => {
+    if (props.modalVisible) {
+      const foundIndex = label.findIndex((x) => x.id == props.modelIndex);
+      let temp = [];
+      let finalTags = [];
+      let arr = label[foundIndex].tag;
+      // 轉為無id之Tags
+      arr.map((obj) => {
+        temp.push(obj.data);
+      });
+      finalTags = { tag: "", tagsArray: temp };
+      // console.log(finalTags);
+      setTags(finalTags);
+    }
+  }, [props.modalVisible]);
 
+  // 防呆
   useEffect(() => {
     if (tags.tagsArray.length === 0) {
       setColor("#cccccc");
@@ -34,12 +56,11 @@ export default function ProductAdd(props) {
     }
   }, [tags]);
 
-  // 按下確定後關閉用(更新)
-  const update = () => {
-    let tag = tags.tagsArray[0];
-    let index = props.modelIndex;
-
-    props.updateInAdd(index, tag);
+  // 按下確定後關閉(並更新)
+  const update = async () => {
+    let tag = tags.tagsArray;
+    let index = await props.modelIndex;
+    await props.updateInAdd(index, tag);
     props.setModalVisible(false);
   };
 
@@ -61,8 +82,8 @@ export default function ProductAdd(props) {
             /> */}
             <View style={modal.input}>
               <TagInput
-                placeholder="新增標籤..."
-                label="Enter以新增標籤"
+                placeholder="修改..."
+                label="完成後Enter"
                 labelStyle={{ color: "#000", fontSize: 12 }}
                 updateState={updateTagState}
                 tags={tags}

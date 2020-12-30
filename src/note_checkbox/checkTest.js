@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import { Header, ListItem, Icon,  CheckBox} from "react-native-elements";
+import { Header, ListItem, Icon, CheckBox } from "react-native-elements";
 
 import { Item, Input } from "native-base";
 
@@ -24,8 +24,9 @@ import {
   addTodoList,
   deleteTodo,
   finishTodo,
-} from "../store/actions/labelAction";
-import { readList, changeModalVisible } from "../store/actions/checkListAction";
+  deleteFinish,
+} from "../store/actions/checkListAction";
+import { readList, changeModalVisible } from "../store/actions/checkboxAction";
 import * as firebase from "firebase";
 import firestore from "firebase/firestore";
 import * as FirebaseCore from "expo-firebase-core";
@@ -33,14 +34,17 @@ import * as FirebaseCore from "expo-firebase-core";
 function checkTest(props) {
   const [todoDec, setTodoDec] = useState("");
   // useSelector 來抓取(select)reducer裡的state
-  const todoList = useSelector((state) => state.label.todoList);
-  const finishList = useSelector((state) => state.label.finishList);
+  const todoList = useSelector((state) => state.checkList.todoList);
+  const finishList = useSelector((state) => state.checkList.finishList);
   const checkList = useSelector((state) => state.checkbox.checkList);
   const modalVisible = useSelector((state) => state.checkbox.modalVisible);
+  const uid = useSelector((state) => state.auth.uid);
 
   //
   const [title, setTitle] = useState("");
-  const [list, setList] = useState("");
+  const [todolist, settodolList] = useState("");
+  const [finishlist, setfinishlist] = useState("");
+
   const [id, setId] = useState("");
   const [check, setCheck] = useState(false);
 
@@ -48,7 +52,8 @@ function checkTest(props) {
     // console.log(props.memo);
     setId(props.id);
     setTitle(props.checkbox.title);
-    setList(props.checkbox.list);
+    settodolList(props.checkbox.todoList);
+    setfinishlist(props.checkbox.finishList);
   }, [props.id]);
   // useDispatch 可以幫將我們想要做的action傳遞到reducer
   const dispatch = useDispatch();
@@ -59,10 +64,8 @@ function checkTest(props) {
   function renew() {
     async function sendData() {
       try {
-        const result = props.id
-          ? // console.log(result);
-            update(props.id)
-          : add();
+        const result = props.id ? update(props.id) : add();
+        console.log("result:", result);
         props.hide();
       } catch (e) {
         console.log("error:" + e);
@@ -73,31 +76,56 @@ function checkTest(props) {
 
   async function add() {
     try {
+      const eachTodoList = [];
+      const eachFinishList = [];
+
+      todoList.forEach((item) => {
+        console.log("item.todoDec:", item.todoDec);
+        eachTodoList.push(item.todoDec);
+      });
+      finishList.forEach((item) => {
+        console.log("item.finishDec:", item.finishDec);
+        eachFinishList.push(item.finishDec);
+      });
+      // console.log("add()-todoList:", todoList);
       const docRef = await db
         .collection("users")
-        .doc("MeRcqDluKIWS1jjvmiN8")
+        .doc(uid)
         .collection("checkboxes")
         .add({
           title: title,
-          list: todoList,
+          todoList: eachTodoList,
+          finishList: eachFinishList,
         });
       console.log(docRef.id);
     } catch (error) {
       console.error("Error adding document: ", error);
     }
     dispatch(changeModalVisible(false));
-    console.log("todoList", todoList);
+    // console.log("todoList", todoList);
   }
   async function update(id) {
+    const eachTodoList = [];
+    const eachFinishList = [];
+
+    todoList.forEach((item) => {
+      console.log("item.todoDec:", item.todoDec);
+      eachTodoList.push(item.todoDec);
+    });
+    finishList.forEach((item) => {
+      console.log("item.finishDec:", item.finishDec);
+      eachFinishList.push(item.finishDec);
+    });
     // console.log("success!" + id);
     const docRef = await db
       .collection("users")
-      .doc("MeRcqDluKIWS1jjvmiN8")
+      .doc(uid)
       .collection("checkboxes")
       .doc(id)
       .set({
         title: title,
-        list: list,
+        todoList: eachTodoList,
+        finishList: eachFinishList,
       })
       .then(function () {
         console.log("update success!");
@@ -106,9 +134,35 @@ function checkTest(props) {
         console.error("Error writing document: ", error);
       });
   }
+  async function deleteCheckList(index) {
+    await db
+      .collection("users")
+      .doc(uid)
+      .collection("checkboxes")
+      .doc(index)
+      .delete()
+      .then(function () {
+        // setModalVisible(false);
+        dispatch(changeModalVisible(false));
+        console.log("delete success!");
+      })
+      .catch(function (error) {
+        console.error("Error removing document: ", error);
+      });
+  }
   // 判斷是否已經完成
   function isFinish(id) {
-    return finishList.includes(id);
+    // console.log("isFinish:", id);
+    // const flag = false;
+    finishList.forEach((item) => {
+      // console.log("finishList:", finishList);
+      if (item.id == id) {
+        // console.log("id == item.id", item.id);
+        // flag = true;
+        return true;
+      }
+    });
+    return false;
   }
 
   // 新增
@@ -118,15 +172,28 @@ function checkTest(props) {
     console.log("dispatch todoDec:", todoDec);
   }
 
-  // 刪除
+  // 刪除Todo
   function handleDeleteTodo(todoIndex) {
+    console.log("handleDeleteTodo:", todoIndex);
+
     dispatch(deleteTodo(todoIndex));
+  }
+  // 刪除finishList
+  function handleDeleteFinish(finishIndex) {
+    console.log("handleDeleteFinish:", finishIndex);
+    dispatch(deleteFinish(finishIndex));
   }
 
   // 完成
-  function handleFinishTodo(id) {
-    console.log("handleFinishTodo-id:", id);
-    dispatch(finishTodo(id));
+  function handleFinishTodo(todoDec, toIndex) {
+    console.log("handleFinishTodo-id:", todoDec + toIndex);
+    dispatch(deleteTodo(toIndex));
+    dispatch(finishTodo(todoDec));
+  }
+  function cancelFinishTodo(finishDec, finishIndex) {
+    console.log("handleFinishTodo-id:", finishDec + finishIndex);
+    dispatch(deleteFinish(finishIndex));
+    dispatch(addTodoList(finishDec));
   }
   function cancel() {
     dispatch(changeModalVisible(false));
@@ -181,7 +248,7 @@ function checkTest(props) {
   function fsetCheck(id) {
     setCheck(!check);
     console.log(check);
-    handleFinishTodo(id)
+    handleFinishTodo(id);
   }
 
   return (
@@ -215,10 +282,10 @@ function checkTest(props) {
             rightComponent={
               <TouchableOpacity
                 onPress={() => {
-                  console.log("Open menu");
+                  deleteCheckList(id);
                 }}
               >
-                <Icon name="more-vert" color="#fff" />
+                <Icon name="delete" color="#fff" />
               </TouchableOpacity>
             }
           />
@@ -229,7 +296,7 @@ function checkTest(props) {
                 return (
                   <View key={`todo-${index}`} style={styles.todoItem}>
                     {/* 如果這條todo是完成的(回傳true)，那就套用styles.finishText */}
-                    {/* <Text style={isFinish(index) && styles.finishText}> */}
+                    {/* <Text style={isFinish(index) && styles.finishText} /> */}
                     {/* <Text>
                       {index + 1} / {todo}/{todo.id}
                     </Text> */}
@@ -240,17 +307,48 @@ function checkTest(props) {
                         color="red"
                       />
                       {/* <Button
-                        onPress={() => handleFinishTodo(index)}
+                        onPress={() => handleFinishTodo(todo.id, index)}
                         title="FINISH"
                         color="green"
-                        disabled={isFinish(index)}
+                        disabled={isFinish(todo.id)}
                       /> */}
                       <CheckBox
-                      onPress={() => fsetCheck(index)}
-                      title={todo}
-                      color="green"
-                      checked={check}
-
+                        onPress={() => handleFinishTodo(todo.todoDec, index)}
+                        title={todo.todoDec + "/" + todo.id}
+                        color="green"
+                        checked={false}
+                      />
+                    </View>
+                  </View>
+                );
+              })}
+              {finishList.map((finish, index) => {
+                return (
+                  <View key={`finish-${index}`} style={styles.todoItem}>
+                    {/* 如果這條todo是完成的(回傳true)，那就套用styles.finishText */}
+                    {/* <Text style={isFinish(index) && styles.finishText} /> */}
+                    {/* <Text>
+                      {index + 1} / {todo}/{todo.id}
+                    </Text> */}
+                    <View style={{ flexDirection: "row" }}>
+                      <Button
+                        onPress={() => handleDeleteFinish(index)}
+                        title="DELETE"
+                        color="red"
+                      />
+                      {/* <Button
+                        onPress={() => handleFinishTodo(finish.id)}
+                        title="FINISH"
+                        color="green"
+                        disabled={isFinish(finish.id)}
+                      /> */}
+                      <CheckBox
+                        onPress={() =>
+                          cancelFinishTodo(finish.finishDec, index)
+                        }
+                        title={finish.finishDec + "/" + finish.id}
+                        color="green"
+                        checked={true}
                       />
                     </View>
                   </View>
@@ -264,7 +362,7 @@ function checkTest(props) {
             behavior={Platform.OS == "ios" ? "padding" : "height"}
           >
             <View style={styles.footer}>
-              <Button onPress={() => add()} title="save" color="red" />
+              <Button onPress={() => renew()} title="save" color="red" />
 
               <Item regular>
                 <Input
