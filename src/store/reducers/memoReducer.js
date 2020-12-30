@@ -1,15 +1,18 @@
 import { READ_MEMO, ADD_MEMO } from '../actions/memoAction';
 
 const initState = {
-  memos: [],
+  notes: [],
 };
 
 const memoReducer = (state = initState, action) => {
   switch (action.type) {
     case READ_MEMO: {
-      console.log(action.payload.memos);
+      let Temp = [...state.notes];
+      Temp = action.payload.notes;
+      // console.log("now", action.payload.notes)
       return {
-          memos: action.payload.memos,
+          ...state,
+          notes: Temp,
       };
     }
     default:

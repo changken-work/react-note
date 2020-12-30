@@ -17,18 +17,20 @@ import firestore from "firebase/firestore";
 import * as FirebaseCore from "expo-firebase-core";
 
 import { useSelector, useDispatch } from 'react-redux';
-import { readMemoAsync } from '../store/actions/memoAction';
-import { readNoteAsync } from '../store/actions/noteAction';
+import { readMemoAsync } from '../store/actions/authAction';
 
-// import MemoAdd from "./MemoAddEdit";
+import MemoAdd from "./MemoAddEdit";
 
 export default function MemoList() {
+  const [selectedId, setSelectedId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [memos, setMemos] = useState({
+    title: "",
+    content: "",
+  });
 
   const uid = useSelector(state => state.auth.uid);
-  const dispatch = useDispatch();
-  const notes = useSelector(state => state.memo.notes);
 
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseCore.DEFAULT_WEB_APP_OPTIONS);
@@ -37,31 +39,84 @@ export default function MemoList() {
   const db = firebase.firestore();
 
   useEffect(() => {
-    //讀取資料
     async function readData() {
-        try {
-            // "MeRcqDluKIWS1jjvmiN8"之後改成current user uid
-            console.log('uid', uid);
-            dispatch(readMemoAsync(uid));
-            console.log("note", notes);
-            setIsLoading(false);
-        }//try
-        catch (e) { console.log(e); }
-    }//readData
+      const newMemos = [];
+      try {
+        // "MeRcqDluKIWS1jjvmiN8"之後改成current user uid
+        const querySnapshot = await db
+          .collection("users")
+          .doc(uid)
+          .collection("notes")
+          .get();
+        querySnapshot.forEach((doc) => {
+          // console.log(doc.data().title);
+          const newMemo = {
+            title: doc.data().title,
+            content: doc.data().content,
+          };
+          newMemos.push(newMemo);
+        }); //foreach
+        setMemos(newMemos);
+        setIsLoading(false);
+      } catch (e) {
+        //try
+        console.log(e);
+      }
+    } //readData
+
     readData();
   }, [modalVisible]);
 
   function hide() {
+    setSelectedId("");
     setModalVisible(false);
   }
 
-  
+  function add() {
+    console.log("add");
+    // setMemos({
+    //   title: "",
+    //   content: ""
+    // });
+    setSelectedId("");
+    setModalVisible(true);
+  }
 
-  const renderItem = ({ item }) => {
+  function update(id) {
+    console.log("update index:" + id);
+
+    async function getMemoId(index) {
+      // console.log(memos[index]); // object
+
+      setMemos({
+        title: memos[index].title,
+        content: memos[index].content,
+      });
+
+      try {
+        const ref = await db
+          .collection("users")
+          .doc(uid)
+          .collection("notes")
+          .get();
+
+        const docRefId = ref.docs[index].id;
+
+        setSelectedId(docRefId);
+
+        setModalVisible(true);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    getMemoId(id);
+  }
+
+  const renderItem = ({ item, index }) => {
     return (
       <ListItem bottomDivider>
         <ListItem.Content>
-          <TouchableOpacity onPress={() => update()}>
+          <TouchableOpacity onPress={() => update(index)}>
             <ListItem.Title style={styles.titlefont}>
               {item.title}
             </ListItem.Title>
@@ -80,7 +135,7 @@ export default function MemoList() {
     <SafeAreaView style={styles.memocontainer}>
       {!isLoading ? (
         <FlatList
-          data={notes}
+          data={memos}
           renderItem={renderItem}
           keyExtractor={(item, index) => "" + index}
         />
@@ -93,7 +148,12 @@ export default function MemoList() {
       <Fab onPress={() => add()}>
         <Icon name="add" color="#fff" />
       </Fab>
-      
+      <MemoAdd
+        modalVisible={modalVisible}
+        memo={memos}
+        id={selectedId}
+        hide={hide}
+      />
     </SafeAreaView>
   );
 }

@@ -3,17 +3,17 @@ import * as firebase from 'firebase';
 export const READ_MEMO = 'READ_MEMO';
 export const ADD_MEMO = 'ADD_MEMO';
 
-export const readMemo = (memos) => {
+export const readMemo = (notes) => {
   return {
     type: READ_MEMO,
     payload: {
-      memos
+      notes
     },
   };
 };
 
 // 新增
-export const addMemo = (memos) => {
+export const addMemo = (notes) => {
   return {
     type: ADD_MEMO,
     payload: {
@@ -24,21 +24,22 @@ export const addMemo = (memos) => {
 };
 
 // redux-thunk
-export const readMemoAsync = () => async dispatch => {
+export const readMemoAsync = (uid) => async dispatch => {
   try {
         const notes = [];
         const db = firebase.firestore();
         // "MeRcqDluKIWS1jjvmiN8"之後改成current user uid
         const querySnapshot = await db.collection("users").doc(uid).collection("notes").get();
-        querySnapshot.forEach((doc) => {
-            const newMemos = {
+        await querySnapshot.forEach((doc) => {
+            const newMemo = {
+                id: doc.id,
                 title: doc.data().title,
                 content: doc.data().content,
             }
-            // console.log("redux", newMemos);
-            notes.push(newMemos)
+            // console.log("redux", newMemo);
+            notes.push(newMemo)
         });//foreach
-        console.log("fetching",notes);
+        // console.log("fetching",notes);
         dispatch(readMemo(notes));
     }//try
     catch (e) { console.log(e); }
