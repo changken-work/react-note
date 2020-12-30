@@ -24,8 +24,6 @@ export default function PressMenu(props) {
         <SafeAreaView>
             <Modal animationType="fade" visible={props.modalVisible} transparent={true} style={styles.modalContainer}>
                 <View style={styles.modalView}>
-                    <View style={styles.MemoContainer}>
-                    <Divider style={styles.Divider} />
                     <View style={styles.TitleContainer}>
                         <Text style={styles.titleText}>新增&修改</Text>
                     </View>
@@ -36,8 +34,7 @@ export default function PressMenu(props) {
                                 <Text style={styles.contentText}>flex-start: 以開始線來對齊，例如從右至左的排列方向，最右邊即是開始線。{"\n"}flex-end: 以結束線來對齊，和上面的屬性顛倒。{"\n"}center: 以中線來對齊。{"\n"}space-between: 項目會平均分散對齊，第一個項目會位於開始線，最後一個項目位於結束線。{"\n"}space-around: 項目會平均分散對齊，每個項目之間約有二個單位的空格，第一個項目會與開始線之間有一個單位的空格，最後一個項目與結束線之間也有一個單位的空格。{"\n"}stretch (預設值): 伸展填好填滿容器(注意仍然會受到 {"\n"}min-width/max-width 的限制，也就是項目的高度或寬度限制)</Text>
                         </ScrollView>
                         </View>
-                    </View>
-                    <Button title="關閉" onPress={() => props.hide()} color='#a5b1c2' />
+                    <Button title="關閉" onPress={() => props.hide()} color='#cf6a87' />
                 </View>
             </Modal>
         </SafeAreaView>
@@ -53,15 +50,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     modalView: {
-        backgroundColor:"#e17055",
-        marginTop: 100,
-        marginBottom: 100,
-        marginLeft: 10,
-        marginRight: 10,
+        backgroundColor:"#ced6e0",
+        marginTop: 110,
+        marginBottom: 110,
+        marginLeft: 15,
+        marginRight: 15,
         justifyContent: 'center',
-        paddingTop: 20,
-        paddingLeft:20,
-        paddingRight:20,
+        paddingTop: 10,
+        paddingLeft:10,
+        paddingRight:10,
         paddingBottom:10,
         flex: 1,
         shadowColor: "#000",
@@ -73,12 +70,8 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
         borderRadius: 5,
-    },
-    MemoContainer: {
-        backgroundColor: "#fab1a0",
-        flex: 1,
-        marginBottom:10,
-        borderRadius: 5,
+        borderWidth: 3,
+        borderColor:'#7f8fa6',
     },
     TitleContainer: {
         alignItems: 'center',
@@ -89,32 +82,24 @@ const styles = StyleSheet.create({
     ContentContainer: {
         flex: 6,
         marginTop:5,
-        marginLeft: 10,
-        marginRight: 10,
+        marginLeft: 2,
+        marginRight: 2,
         marginBottom: 10,
         paddingTop:15,
-        paddingRight:30,
-        paddingLeft:30,
+        paddingRight:20,
+        paddingLeft:20,
         paddingBottom: 15,
-        borderColor:'#e17055',
-        borderWidth:3,
-        borderRadius: 10,
+        borderLeftWidth:2,
+        borderRightWidth:2,
+        borderColor: '#7f8fa6',
+        // borderWidth:3,
+        // borderRadius: 10,
 
     },
-    memoTitle:{
-        height:40,
-        fontSize: 18,
-        color: '#000',
-    },
     titleText: {
-        height: 40,
-        fontSize: 26,
+        height: 30,
+        fontSize: 20,
         color: '#000',
-    },
-    memoContent: {
-        fontSize: 24,
-        color: '#000',
-        marginLeft: 20,
     },
     contentText: {
         color: '#000',
@@ -123,8 +108,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     Divider: {
-        backgroundColor: '#e17055',
-        margin:10,
+        backgroundColor: '#7f8fa6',
+        margin:5,
         height:3,
         borderRadius:10,
     }

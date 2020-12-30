@@ -4,10 +4,12 @@ import authReducer from "./authReducer";
 import labelReducer from "./labelReducer";
 import checkboxReducer from "./checkboxReducer";
 import checkListReducer from "./checkListReducer";
+import noteReducer from "./noteReducer";
 
 export default combineReducers({
   auth: authReducer,
   label: labelReducer,
   checkbox: checkboxReducer,
   checkList: checkListReducer,
+  note: noteReducer,
 });
