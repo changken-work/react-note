@@ -130,6 +130,9 @@ function checkTest(props) {
       .then(function () {
         console.log("update success!");
       })
+      .then(() => {
+        setTitle("");
+      })
       .catch(function (error) {
         console.error("Error writing document: ", error);
       });
@@ -270,15 +273,15 @@ function checkTest(props) {
                 <Icon name="arrow-back" color="#fff" />
               </TouchableOpacity>
             }
-            centerComponent={
-              <TextInput
-                placeholder="標題"
-                style={styles.topicInput}
-                value={title}
-                color="white"
-                onChangeText={(text) => setTitle(text)}
-              />
-            }
+            // centerComponent={
+            //   <TextInput
+            //     placeholder="標題"
+            //     style={styles.topicInput}
+            //     value={title}
+            //     color="white"
+            //     onChangeText={(text) => setTitle(text)}
+            //   />
+            // }
             rightComponent={
               <TouchableOpacity
                 onPress={() => {
@@ -292,6 +295,13 @@ function checkTest(props) {
 
           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={styles.container}>
+              <TextInput
+                placeholder="標題"
+                style={styles.topicInput}
+                value={title}
+                color="black"
+                onChangeText={(text) => setTitle(text)}
+              />
               {todoList.map((todo, index) => {
                 return (
                   <View key={`todo-${index}`} style={styles.todoItem}>
@@ -301,10 +311,17 @@ function checkTest(props) {
                       {index + 1} / {todo}/{todo.id}
                     </Text> */}
                     <View style={{ flexDirection: "row" }}>
-                      <Button
+                      {/* <Button
                         onPress={() => handleDeleteTodo(index)}
                         title="DELETE"
                         color="red"
+                      /> */}
+                      <Icon
+                        raised
+                        name="close"
+                        color="#f50"
+                        reverse
+                        onPress={() => handleDeleteTodo(index)}
                       />
                       {/* <Button
                         onPress={() => handleFinishTodo(todo.id, index)}
@@ -314,7 +331,7 @@ function checkTest(props) {
                       /> */}
                       <CheckBox
                         onPress={() => handleFinishTodo(todo.todoDec, index)}
-                        title={todo.todoDec + "/" + todo.id}
+                        title={todo.todoDec}
                         color="green"
                         checked={false}
                       />
@@ -331,22 +348,23 @@ function checkTest(props) {
                       {index + 1} / {todo}/{todo.id}
                     </Text> */}
                     <View style={{ flexDirection: "row" }}>
-                      <Button
+                      {/* <Button
                         onPress={() => handleDeleteFinish(index)}
                         title="DELETE"
                         color="red"
-                      />
-                      {/* <Button
-                        onPress={() => handleFinishTodo(finish.id)}
-                        title="FINISH"
-                        color="green"
-                        disabled={isFinish(finish.id)}
                       /> */}
+                      <Icon
+                        raised
+                        name="close"
+                        color="#f50"
+                        reverse
+                        onPress={() => handleDeleteFinish(index)}
+                      />
                       <CheckBox
                         onPress={() =>
                           cancelFinishTodo(finish.finishDec, index)
                         }
-                        title={finish.finishDec + "/" + finish.id}
+                        title={finish.finishDec}
                         color="green"
                         checked={true}
                       />
@@ -362,9 +380,7 @@ function checkTest(props) {
             behavior={Platform.OS == "ios" ? "padding" : "height"}
           >
             <View style={styles.footer}>
-              <Button onPress={() => renew()} title="save" color="red" />
-
-              <Item regular>
+              <Item>
                 <Input
                   placeholder="請輸入事項"
                   value={todoDec}
@@ -372,6 +388,7 @@ function checkTest(props) {
                   onSubmitEditing={handleAddTodo} //按下鍵盤右下鍵 執行submit(新增)
                   onChangeText={(val) => setTodoDec(val)}
                 />
+                <Button onPress={() => renew()} title="save" color="red" />
               </Item>
             </View>
           </KeyboardAvoidingView>
@@ -384,8 +401,14 @@ function checkTest(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 15,
-    marginTop: 48,
+    marginTop: 20,
     paddingHorizontal: 16,
+  },
+  topicInput: {
+    marginTop: 0,
+    fontWeight: "bold",
+    fontSize: 20,
+    alignSelf: "center",
   },
 
   todoItem: {
@@ -404,6 +427,10 @@ const styles = StyleSheet.create({
 
   footer: {
     marginBottom: 36,
+    // flexDirection: "row",
+    justifyContent: "space-between",
+    alignContent: "stretch",
+
     paddingHorizontal: 16,
   },
 });
