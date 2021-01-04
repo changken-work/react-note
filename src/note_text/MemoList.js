@@ -17,11 +17,12 @@ import firestore from "firebase/firestore";
 import * as FirebaseCore from "expo-firebase-core";
 
 import { useSelector, useDispatch } from 'react-redux';
-import { readMemoAsync } from '../store/actions/memoAction';
+import { readMemoAsync, getDocId } from '../store/actions/memoAction';
 
 import MemoAdd from "./MemoAddEdit";
 
 export default function MemoList() {
+  LogBox.ignoreLogs(['Possible Unhandled']);
   const [selectedId, setSelectedId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,7 +46,7 @@ export default function MemoList() {
     async function readData() {
         try {
             // console.log('uid', uid);
-            dispatch(readMemoAsync(uid));
+            await dispatch(readMemoAsync(uid));
             // console.log("note", notes);
             setIsLoading(false);
         }//try
@@ -119,8 +120,8 @@ export default function MemoList() {
       <MemoAdd
         modalVisible={modalVisible}
         memo={memos}
-        id={selectedId}
         hide={hide}
+        id={selectedId}
       />
     </SafeAreaView>
   );

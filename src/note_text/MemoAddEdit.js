@@ -25,7 +25,7 @@ export default function MemoAddEdit(props) {
 
   const uid = useSelector(state => state.auth.uid);
   const dispatch = useDispatch();
-  const notes = useSelector(state => state.memo.notes);
+  const docRefId = useSelector(state => state.memo.docID);
 
   useEffect(()=>{
     // console.log(notes[props.id]);
@@ -59,14 +59,14 @@ export default function MemoAddEdit(props) {
     setContent("");
   }
 
-  async function update(id) { //有一個小bug，有時候要第二次才能新增成功
+  async function update(id) { //有一個小bug(新增顯示)，應該是沒有同步的問題
     // console.log("success!" + id);
     dispatch(updateMemoAsync(uid, id, title, content));
   }
 
   async function deleteMemo(id){
     console.log(id + " delete");
-    await dispatch(deleteMemoAsync(uid, id));
+    dispatch(deleteMemoAsync(uid, id));
     setTitle("");
     setContent("");
     props.hide();
