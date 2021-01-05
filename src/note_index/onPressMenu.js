@@ -6,13 +6,27 @@ import { StyleSheet, SafeAreaView, TextInput, View, Button, Modal, LogBox, Text,
 import * as firebase from 'firebase';
 import firestore from 'firebase/firestore';
 import * as FirebaseCore from 'expo-firebase-core';
-// import console = require('console');
 
 export default function PressMenu(props) {
     LogBox.ignoreLogs(['Setting a timer']);
-
+    
+    const [id, setId] = useState("");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+
+    useEffect(() => {
+        try{
+            if(props.id >= 0){
+                const index = props.id;
+                const selectedNote = props.memo[index];
+                // console.log("selectedNote~", selectedNote);
+                setId(selectedNote.id);
+                setTitle(selectedNote.title);
+                setContent(selectedNote.content);
+            }  
+        }
+        catch (e) { console.log(e); }
+    }, [props.id]);
 
 
     if (!firebase.apps.length) {
@@ -25,13 +39,13 @@ export default function PressMenu(props) {
             <Modal animationType="fade" visible={props.modalVisible} transparent={true} style={styles.modalContainer}>
                 <View style={styles.modalView}>
                     <View style={styles.TitleContainer}>
-                        <Text style={styles.titleText}>新增&修改</Text>
+                        <Text style={styles.titleText}>{title}</Text>
                     </View>
                     <Divider style={styles.Divider} />
                         <View style={{flex:12}}>
                         {/* <Text style={styles.memoContent}>內容</Text> */}
                         <ScrollView style={styles.ContentContainer}>
-                                <Text style={styles.contentText}>flex-start: 以開始線來對齊，例如從右至左的排列方向，最右邊即是開始線。{"\n"}flex-end: 以結束線來對齊，和上面的屬性顛倒。{"\n"}center: 以中線來對齊。{"\n"}space-between: 項目會平均分散對齊，第一個項目會位於開始線，最後一個項目位於結束線。{"\n"}space-around: 項目會平均分散對齊，每個項目之間約有二個單位的空格，第一個項目會與開始線之間有一個單位的空格，最後一個項目與結束線之間也有一個單位的空格。{"\n"}stretch (預設值): 伸展填好填滿容器(注意仍然會受到 {"\n"}min-width/max-width 的限制，也就是項目的高度或寬度限制)</Text>
+                            <Text style={styles.contentText}>{content}</Text>
                         </ScrollView>
                         </View>
                     <Button title="關閉" onPress={() => props.hide()} color='#cf6a87' />

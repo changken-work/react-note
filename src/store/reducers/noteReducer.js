@@ -12,7 +12,7 @@ const noteReducer = (state = initState, action) => {
         case READ_NOTES: {
             let Temp = [...state.notes];
             Temp = action.payload.notes;
-            // console.log("now", action.payload.notes)
+            // console.log("data", action.payload.notes)
             return {
                 ...state,
                 notes: Temp,
