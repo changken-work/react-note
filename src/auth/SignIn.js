@@ -17,6 +17,7 @@ export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [canLogin, setCanLogin] = useState(true);
 
   const state = useSelector(state => state.auth);
   const dispatch = useDispatch();
@@ -87,6 +88,10 @@ export default function SignIn() {
     );
   }, []);
 
+  useEffect(() => {
+    setCanLogin(state.uid !== '');
+  }, [state.uid]);
+
   return (
     <View style={styles.form}>
       <Text style={styles.formTitle}>SignIn</Text>
@@ -103,7 +108,7 @@ export default function SignIn() {
         onChangeText={text => setPassword(text)}
         secureTextEntry={true}
       />
-      <Button onPress={signIn} title="登入" />
+      <Button onPress={signIn} title="登入" disabled={canLogin} />
       <Text>{message.toString()}</Text>
       {/* <Text>{state.uid}</Text>
       <Text>{state.email}</Text> */}
