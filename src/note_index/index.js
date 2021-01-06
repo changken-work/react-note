@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ListItem, Icon } from 'react-native-elements';
-import { StyleSheet, StatusBar, SafeAreaView, View, Text, TouchableHighlight, LogBox, ActivityIndicator, Button, Modal } from "react-native";
+import { StyleSheet, View, Text, TouchableHighlight, LogBox, ActivityIndicator, Button, Modal } from "react-native";
 import { Fab } from "native-base";
 import * as firebase from 'firebase';
 import firestore from 'firebase/firestore';
