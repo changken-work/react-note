@@ -17,12 +17,11 @@ import firestore from "firebase/firestore";
 import * as FirebaseCore from "expo-firebase-core";
 
 import { useSelector, useDispatch } from 'react-redux';
-import { readMemoAsync, getDocId } from '../store/actions/memoAction';
+import { readMemoAsync } from '../store/actions/authAction';
 
 import MemoAdd from "./MemoAddEdit";
 
 export default function MemoList() {
-  LogBox.ignoreLogs(['Possible Unhandled']);
   const [selectedId, setSelectedId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,8 +31,6 @@ export default function MemoList() {
   });
 
   const uid = useSelector(state => state.auth.uid);
-  const dispatch = useDispatch();
-  const notes = useSelector(state => state.memo.notes);
 
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseCore.DEFAULT_WEB_APP_OPTIONS);
@@ -42,43 +39,75 @@ export default function MemoList() {
   const db = firebase.firestore();
 
   useEffect(() => {
-    //讀取資料
     async function readData() {
-        try {
-            // console.log('uid', uid);
-            await dispatch(readMemoAsync(uid));
-            // console.log("note", notes);
-            setIsLoading(false);
-        }//try
-        catch (e) { console.log(e); }
-    }//readData
+      const newMemos = [];
+      try {
+        // "MeRcqDluKIWS1jjvmiN8"之後改成current user uid
+        const querySnapshot = await db
+          .collection("users")
+          .doc(uid)
+          .collection("notes")
+          .get();
+        querySnapshot.forEach((doc) => {
+          // console.log(doc.data().title);
+          const newMemo = {
+            title: doc.data().title,
+            content: doc.data().content,
+          };
+          newMemos.push(newMemo);
+        }); //foreach
+        setMemos(newMemos);
+        setIsLoading(false);
+      } catch (e) {
+        //try
+        console.log(e);
+      }
+    } //readData
+
     readData();
   }, [modalVisible]);
 
   function hide() {
     setSelectedId("");
-    setMemos({
-      title: "",
-      content: "",
-    });
     setModalVisible(false);
   }
 
   function add() {
     console.log("add");
+    // setMemos({
+    //   title: "",
+    //   content: ""
+    // });
     setSelectedId("");
     setModalVisible(true);
   }
 
   function update(id) {
     console.log("update index:" + id);
-    const docRefId = notes[id].id;
-    setMemos({
-      title: notes[id].title,
-      content: notes[id].content,
-    });
-    setSelectedId(docRefId);
-    setModalVisible(true);
+
+    async function getMemoId(index) {
+      // console.log(memos[index]); // object
+
+      setMemos({
+        title: memos[index].title,
+        content: memos[index].content,
+      });
+
+      try {
+        const ref = await db
+          .collection("users")
+          .doc(uid)
+          .collection("notes")
+          .get();
+
+        const docRefId = ref.docs[index].id;
+        setSelectedId(docRefId);
+        setModalVisible(true);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    getMemoId(id);
   }
 
   const renderItem = ({ item, index }) => {
@@ -104,7 +133,7 @@ export default function MemoList() {
     <SafeAreaView style={styles.memocontainer}>
       {!isLoading ? (
         <FlatList
-          data={notes}
+          data={memos}
           renderItem={renderItem}
           keyExtractor={(item, index) => "" + index}
         />
@@ -120,8 +149,8 @@ export default function MemoList() {
       <MemoAdd
         modalVisible={modalVisible}
         memo={memos}
-        hide={hide}
         id={selectedId}
+        hide={hide}
       />
     </SafeAreaView>
   );

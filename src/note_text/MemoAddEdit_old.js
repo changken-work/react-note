@@ -17,18 +17,15 @@ import firestore from 'firebase/firestore';
 import * as FirebaseCore from 'expo-firebase-core';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { addMemoAsync, updateMemoAsync, deleteMemoAsync } from '../store/actions/memoAction';
 
 export default function MemoAddEdit(props) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
   const uid = useSelector(state => state.auth.uid);
-  const dispatch = useDispatch();
-  const docRefId = useSelector(state => state.memo.docID);
 
   useEffect(()=>{
-    // console.log(notes[props.id]);
+    // console.log(props.memo);
     setTitle(props.memo.title);
     setContent(props.memo.content);
   },[props.id]);
@@ -53,23 +50,43 @@ export default function MemoAddEdit(props) {
     sendData();
   }
 
-  function add() {
-    dispatch(addMemoAsync(uid, title, content));
-    setTitle("");
-    setContent("");
+  async function add() {
+    try {
+      const docRef = await db.collection("users").doc(uid).collection("notes").add({
+        title: title,
+        content: content
+      });
+      console.log(docRef.id);
+    }
+    catch(error) {
+      console.error("Error adding document: ", error);
+    }
   }
 
-  async function update(id) { //有一個小bug(新增顯示)，應該是沒有同步的問題
+  async function update(id) {
     // console.log("success!" + id);
-    dispatch(updateMemoAsync(uid, id, title, content));
+    const docRef = await db.collection("users").doc(uid).collection("notes").doc(id).set({
+      title: title,
+      content: content
+    })
+    .then(function() {
+        console.log("update success!");
+    })
+    .catch(function(error) {
+        console.error("Error writing document: ", error);
+    });
   }
 
   async function deleteMemo(id){
-    console.log(id + " delete");
-    dispatch(deleteMemoAsync(uid, id));
-    setTitle("");
-    setContent("");
-    props.hide();
+    // console.log(id + " delete");
+    await db.collection("users").doc(uid).collection("notes").doc(id).delete()
+    .then(function() {
+      props.hide();
+      console.log("delete success!");
+    })
+    .catch(function(error) {
+        console.error("Error removing document: ", error);
+    });
   }
 
   function cancel(){
