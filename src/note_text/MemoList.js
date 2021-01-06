@@ -43,16 +43,22 @@ export default function MemoList() {
 
   useEffect(() => {
     //讀取資料
+    if(!modalVisible){
+      readData();
+    }
+
     async function readData() {
         try {
             // console.log('uid', uid);
             await dispatch(readMemoAsync(uid));
-            // console.log("note", notes);
+            // console.log("note:" + notes.map((obj) => {
+            //   obj.content
+            // } ));
+            console.log(notes);
             setIsLoading(false);
         }//try
         catch (e) { console.log(e); }
-    }//readData
-    readData();
+    }
   }, [modalVisible]);
 
   function hide() {

@@ -41,11 +41,11 @@ export default function MemoAddEdit(props) {
   function renew() {
     async function sendData () {
       try {    
-        const result = props.id
+        const result = await props.id
         // console.log(result);
           ? update(props.id)
           : add()
-        props.hide();}
+        await props.hide();}
       catch (e){
         console.log("error:"+e);
       }
@@ -116,7 +116,7 @@ export default function MemoAddEdit(props) {
           }
         />
 
-        <View style={{flex: 2}}>
+        <View>
           <TextInput
             placeholder="標題"
             style={styles.topicInput}
@@ -131,7 +131,7 @@ export default function MemoAddEdit(props) {
             onChangeText={text=>setContent(text)}
           />
         </View>
-        <Button style={{flex: 1}} onPress={renew} title="確定"/>
+        <Button onPress={renew} title="確定"/>
       </Modal>
     </SafeAreaView>
 

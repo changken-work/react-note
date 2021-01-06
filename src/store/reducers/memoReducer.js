@@ -25,11 +25,11 @@ const memoReducer = (state = initState, action) => {
       };
     }
     case UPDATE_MEMO: {
-      const Temp = [...state.notes];
-      Temp = action.payload.notes;
+      const notes = [...state.notes];
+      state.notes = action.payload.notes;
       return {
         ...state,
-        notes: Temp,
+        notes,
       };
     }
     case DELETE_MEMO: {

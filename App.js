@@ -127,8 +127,8 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Drawer.Navigator initialRouteName="SignIn">
-          <Drawer.Screen name="Home" component={HomeScreen} />
-          <Drawer.Screen name="Notifications" component={NotificationsScreen} />
+          {/* <Drawer.Screen name="Home" component={HomeScreen} />
+          <Drawer.Screen name="Notifications" component={NotificationsScreen} /> */}
           <Drawer.Screen name="NoteText" component={NoteText} />
           <Drawer.Screen name="NoteCheckbox" component={NoteCheckbox} />
           <Drawer.Screen name="SignIn" component={SIGNIN} />
