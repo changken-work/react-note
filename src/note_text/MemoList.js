@@ -87,8 +87,6 @@ export default function MemoList() {
     //     console.log(notes);
     //   });
     // }
-
-    console.log(notes);
   }, [modalVisible]);
 
   function hide() {

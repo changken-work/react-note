@@ -41,11 +41,18 @@ export default function MemoAddEdit(props) {
   };
 
   useEffect(() => {
-    // console.log(notes[props.id]);
-    setTitle(props.memo.title);
-    setContent(props.memo.content);
-    let tagsArray = props.memo.tag;
-    setTags({ tag: "", tagsArray: tagsArray });
+    if (props.id) {
+      // console.log(notes[props.id]);
+      setTitle(props.memo.title);
+      setContent(props.memo.content);
+      // tag
+      let tagsArray = props.memo.tag;
+      setTags({ tag: "", tagsArray: tagsArray });
+    } else {
+      setTags({ tag: "", tagsArray: [] });
+      setTitle("");
+      setContent("");
+    }
   }, [props.id]);
 
   if (!firebase.apps.length) {
@@ -56,7 +63,7 @@ export default function MemoAddEdit(props) {
   async function renew() {
     const sendData = async () => {
       try {
-        const result = (await props.id)
+        props.id
           ? // console.log(result);
             update(props.id)
           : add();
@@ -66,7 +73,6 @@ export default function MemoAddEdit(props) {
       }
     };
     const clean = async () => {
-      setTags({ tag: "", tagsArray: ["範例標籤"] });
       props.hide();
     };
     await sendData();
@@ -76,8 +82,6 @@ export default function MemoAddEdit(props) {
   function add() {
     let tag = tags.tagsArray;
     dispatch(addMemoAsync(uid, title, content, tag));
-    setTitle("");
-    setContent("");
   }
 
   async function update(id) {
@@ -90,14 +94,10 @@ export default function MemoAddEdit(props) {
   async function deleteMemo(id) {
     console.log(id + " delete");
     dispatch(deleteMemoAsync(uid, id));
-    setTitle("");
-    setContent("");
     props.hide();
   }
 
   function cancel() {
-    setTitle("");
-    setContent("");
     props.hide();
   }
 
