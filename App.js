@@ -136,7 +136,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Drawer.Navigator initialRouteName="SignIn">
+        <Drawer.Navigator initialRouteName="animate">
           {/* <Drawer.Screen name="Home" component={HomeScreen} />
           <Drawer.Screen name="Notifications" component={NotificationsScreen} /> */}
           <Drawer.Screen name="NoteText" component={NoteText} />
@@ -148,7 +148,15 @@ export default function App() {
           <Drawer.Screen name="Home2" component={TabsScreen} />
           {/* <Drawer.Screen name="Label" component={TodoList} /> */}
           <Drawer.Screen name="LabelDemo" component={LabelDemo} />
-          <Drawer.Screen name="動畫" component={animated} />
+          <Drawer.Screen
+            name="animate"
+            options={{
+              drawerLabel: () => null,
+              title: null,
+              drawerIcon: () => null,
+            }}
+            component={animated}
+          />
         </Drawer.Navigator>
       </NavigationContainer>
     </Provider>
