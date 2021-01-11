@@ -22,6 +22,7 @@ export default function App() {
     const [isLoading, setIsLoading] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisible_pop, setModalVisible_pop] = useState(false);
+    const [selectedId, setSelectedId] = useState(-1);
     // const [memos, setMemos] = useState([]);
 
 
@@ -29,22 +30,28 @@ export default function App() {
 
     function show() {
         setModalVisible(true);
-        console.log(modalVisible)
+        // console.log(modalVisible)
     }
 
     function hide() {
         setModalVisible(false);
-        console.log(modalVisible)
+        // console.log(modalVisible)
     }
 
-    function show_pop() {
+    function show_pop(index) {
+        setSelectedId(index);
         setModalVisible_pop(true);
-        console.log("pop",modalVisible_pop)
+        // console.log("index", selectedId)
+        // console.log("pop",modalVisible_pop)
     }
+
 
     function hide_pop() {
+        console.log("index", selectedId)
         setModalVisible_pop(false);
-        console.log("pop",modalVisible_pop)
+        setSelectedId(-1);
+        // // console.log("index", selectedId)
+        // console.log("pop",modalVisible_pop)
     }
 
 
@@ -73,9 +80,9 @@ export default function App() {
     );
 
 
-    const renderItem = ({ item}) => {
+    const renderItem = ({ item,index}) => {
         return (
-            <TouchableHighlight onPress={() => show_pop()} onLongPress={() => show()}>
+            <TouchableHighlight onPress={() => show_pop(index)} onLongPress={() => show()}>
                 <View style={[styles.itemContainer, { backgroundColor: '#7f8fa6' }]}>
                     <Text style={styles.itemName}>{item.title}</Text>
                     <Text style={styles.itemCode}>{item.content}</Text>
@@ -96,11 +103,12 @@ export default function App() {
                 style={styles.gridView}
                 // staticDimension={300}
                 // fixed
+                keyExtractor={(item, index) => "" + index}
                 spacing={10}
                 renderItem={renderItem}
             />
             <LongPressMenu modalVisible={modalVisible} hide={hide} />
-            <PressMenu modalVisible={modalVisible_pop} hide={hide_pop} memo={notes}/>
+            <PressMenu modalVisible={modalVisible_pop} hide={hide_pop} memo={notes} id={selectedId}/>
         </>
         :
         <>

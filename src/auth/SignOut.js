@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Button } from 'react-native';
 import * as firebase from 'firebase';
 import * as FirebaseCore from 'expo-firebase-core';
@@ -15,6 +15,7 @@ export default function SignOut() {
   }
 
   const [message, setMessage] = useState('');
+  const [canLogout, setCanLogout] = useState(false);
   const state = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
@@ -27,10 +28,14 @@ export default function SignOut() {
     }
   };
 
+  useEffect(() => {
+    setCanLogout(state.uid === '');
+  }, [state.uid]);
+
   return (
     <View style={styles.form}>
       <Text style={styles.formTitle}>SignOut</Text>
-      <Button onPress={signOut} title="登出" />
+      <Button onPress={signOut} title="登出" disabled={canLogout} />
       <Text>{message.toString()}</Text>
       {/* <Text>{state.uid}</Text>
       <Text>{state.email}</Text> */}
