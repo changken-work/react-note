@@ -1,3 +1,4 @@
+import { useIsFocused } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
 import { ListItem, Icon } from "react-native-elements";
 import {
@@ -16,48 +17,69 @@ import * as firebase from "firebase";
 import firestore from "firebase/firestore";
 import * as FirebaseCore from "expo-firebase-core";
 
-import { useSelector, useDispatch } from 'react-redux';
-import { readMemoAsync, getDocId } from '../store/actions/memoAction';
+import { useSelector, useDispatch } from "react-redux";
+import { readMemoAsync, getDocId } from "../store/actions/memoAction";
 
 import MemoAdd from "./MemoAddEdit";
 
 export default function MemoList() {
-  LogBox.ignoreLogs(['Possible Unhandled']);
+  LogBox.ignoreLogs(["Possible Unhandled"]);
+
+  // 此頁是否被選取
+  const isFocused = useIsFocused();
+
   const [selectedId, setSelectedId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [memos, setMemos] = useState({
     title: "",
     content: "",
+    tag: [],
   });
 
-  const uid = useSelector(state => state.auth.uid);
+  const uid = useSelector((state) => state.auth.uid);
   const dispatch = useDispatch();
-  const notes = useSelector(state => state.memo.notes);
+  const notes = useSelector((state) => state.memo.notes);
 
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseCore.DEFAULT_WEB_APP_OPTIONS);
   }
 
-  const db = firebase.firestore();
+  useEffect(() => {
+    const loading = async () => {
+      if (!uid.length && isFocused) {
+        alert("請先登入");
+      }
+      setIsLoading(true);
+    };
+    const readData = async () => {
+      dispatch(readMemoAsync(uid));
+    };
+    const way = async () => {
+      await loading();
+      await readData();
+      console.log("===============");
+      // console.log(
+      //   "note:" +
+      //     notes.map((obj) => {
+      //       obj.content;
+      //     })
+      // );
+      console.log(notes);
+      setIsLoading(false);
+    };
+    way();
+  }, [isFocused]);
 
   useEffect(() => {
     //讀取資料
-    if(!modalVisible){
-      readData();
-    }
-
+    readData();
     async function readData() {
-        try {
-            // console.log('uid', uid);
-            await dispatch(readMemoAsync(uid));
-            // console.log("note:" + notes.map((obj) => {
-            //   obj.content
-            // } ));
-            console.log(notes);
-            setIsLoading(false);
-        }//try
-        catch (e) { console.log(e); }
+      try {
+        dispatch(readMemoAsync(uid));
+      } catch (e) {
+        console.log(e);
+      }
     }
   }, [modalVisible]);
 
@@ -66,22 +88,24 @@ export default function MemoList() {
     setMemos({
       title: "",
       content: "",
+      tag: [],
     });
     setModalVisible(false);
   }
-
+  // 新增按鈕
   function add() {
     console.log("add");
     setSelectedId("");
     setModalVisible(true);
   }
-
+  // 點紀事更新用
   function update(id) {
     console.log("update index:" + id);
     const docRefId = notes[id].id;
     setMemos({
       title: notes[id].title,
       content: notes[id].content,
+      tag: notes[id].tag,
     });
     setSelectedId(docRefId);
     setModalVisible(true);

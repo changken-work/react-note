@@ -12,8 +12,6 @@ if (!firebase.apps.length) {
   firebase.initializeApp(FirebaseCore.DEFAULT_WEB_APP_OPTIONS);
 }
 const db = firebase.firestore();
-const usersDb = db.collection("users").doc("5M0z9HKOTghNOGxEDl8CKrWuQh43");
-const checkboxes = usersDb.collection("label");
 
 function ID() {
   return "_" + Math.random().toString(36).substr(2, 9);
@@ -62,18 +60,37 @@ export const editTag = (index, finalTags) => {
     },
   };
 };
-export const getAsync = () => async (dispatch) => {
-  const newLabel = [];
-  await checkboxes.get().then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-      // console.log(`${doc.id} => ${doc.data()}`);
-      newLabel.push(doc.data());
-    });
-  });
-  dispatch(get(newLabel));
+export const getAsync = (user_id) => async (dispatch) => {
+  try {
+    const newLabel = [];
+    const usersDb = db.collection("users").doc(user_id);
+    const checkboxes = usersDb.collection("label");
+    await checkboxes
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          // console.log(`${doc.id} => ${doc.data()}`);
+          newLabel.push(doc.data());
+        });
+      })
+      .catch(function (error) {
+        console.log("Error getting document:", error);
+      });
+    dispatch(get(newLabel));
+  } catch (e) {
+    // console.log(e);
+    const label = [
+      {
+        id: "001",
+        label: "您尚未登入",
+        tag: [{ id: "t01", data: "" }],
+      },
+    ];
+    dispatch(get(label));
+  }
 };
 
-export const addAsync = (label, TagsArray) => async (dispatch) => {
+export const addAsync = (user_id, label, TagsArray) => async (dispatch) => {
   // 修改格式
   let finalTags = [];
   TagsArray.map((obj) => {
@@ -82,6 +99,8 @@ export const addAsync = (label, TagsArray) => async (dispatch) => {
 
   // set()
   const id = ID();
+  const usersDb = db.collection("users").doc(user_id);
+  const checkboxes = usersDb.collection("label");
   var docRef = checkboxes.doc(id);
   await docRef.set({ id: id, label, tag: finalTags }).catch((error) => {
     console.log("Error in set():", error);
@@ -89,13 +108,15 @@ export const addAsync = (label, TagsArray) => async (dispatch) => {
   dispatch(add(id, label, finalTags));
 };
 
-export const editTagAsync = (index, TagsArray) => async (dispatch) => {
+export const editTagAsync = (user_id, index, TagsArray) => async (dispatch) => {
   // 修改格式
   let finalTags = [];
   TagsArray.map((obj) => {
     finalTags.push({ id: ID(), data: obj });
   });
   // update()
+  const usersDb = db.collection("users").doc(user_id);
+  const checkboxes = usersDb.collection("label");
   var docRef = checkboxes.doc(index);
   await docRef
     .update({
@@ -107,8 +128,10 @@ export const editTagAsync = (index, TagsArray) => async (dispatch) => {
   dispatch(editTag(index, finalTags));
 };
 
-export const deleteAsync = (index, uid) => async (dispatch) => {
+export const deleteAsync = (user_id, index, uid) => async (dispatch) => {
   // delete doc by index
+  const usersDb = db.collection("users").doc(user_id);
+  const checkboxes = usersDb.collection("label");
   var docRef = checkboxes.doc(uid);
   await docRef.delete().catch((error) => {
     console.log("Error in Delete():", error);

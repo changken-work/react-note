@@ -1,4 +1,10 @@
-import { READ_MEMO, ADD_MEMO, UPDATE_MEMO, DELETE_MEMO, GET_DOC_ID} from '../actions/memoAction';
+import {
+  READ_MEMO,
+  ADD_MEMO,
+  UPDATE_MEMO,
+  DELETE_MEMO,
+  GET_DOC_ID,
+} from "../actions/memoAction";
 
 const initState = {
   notes: [],
@@ -12,24 +18,22 @@ const memoReducer = (state = initState, action) => {
       Temp = action.payload.notes;
       // console.log("now", action.payload.notes)
       return {
-          ...state,
-          notes: Temp,
+        ...state,
+        notes: Temp,
       };
     }
     case ADD_MEMO: {
       const Temp = [...state.notes];
-      Temp.push(action.payload.notes);
       return {
         ...state,
         notes: Temp,
       };
     }
     case UPDATE_MEMO: {
-      const notes = [...state.notes];
-      state.notes = action.payload.notes;
+      const Temp = [...state.notes];
       return {
         ...state,
-        notes,
+        notes: Temp,
       };
     }
     case DELETE_MEMO: {
@@ -47,7 +51,7 @@ const memoReducer = (state = initState, action) => {
     }
 
     default:
-        return state;
+      return state;
   }
 };
 

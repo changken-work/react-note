@@ -1,3 +1,4 @@
+import { useIsFocused } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
 import { View, Text, Button, TextInput, StyleSheet } from "react-native";
 // redux
@@ -15,6 +16,9 @@ import Model from "./model";
 import TagInput from "react-native-tags-input";
 
 export default function label_demo() {
+  // 此頁是否被選取
+  const isFocused = useIsFocused();
+
   // 空值
   const [ldata, setLdata] = useState("");
   // 輸入一
@@ -53,24 +57,23 @@ export default function label_demo() {
         )
     );
     console.log("==========");
-    // dispatch(addAsync());
   }, [label]);
+
+  useEffect(() => {
+    dispatch(getAsync(user_id));
+  }, [isFocused]);
 
   // useEffect(() => {
   //   console.log(tags);
   // }, [tags]);
 
-  useEffect(() => {
-    dispatch(getAsync());
-  }, []);
-
   const addTodo = () => {
     let TagsArray = tags.tagsArray;
-    dispatch(addAsync(inputtxt, TagsArray));
+    dispatch(addAsync(user_id, inputtxt, TagsArray));
   };
 
   const delTodo = (id, uid) => {
-    dispatch(deleteAsync(id, uid));
+    dispatch(deleteAsync(user_id, id, uid));
   };
 
   const delAllTodo = () => {
@@ -79,7 +82,7 @@ export default function label_demo() {
 
   // model接資料
   const updatedata = (index, modaltagsArray) => {
-    dispatch(editTagAsync(index, modaltagsArray));
+    dispatch(editTagAsync(user_id, index, modaltagsArray));
   };
   // model開啟
   const visable = () => {
