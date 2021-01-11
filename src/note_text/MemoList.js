@@ -46,6 +46,7 @@ export default function MemoList() {
   }
 
   useEffect(() => {
+    // 進出此頁時作動
     const loading = async () => {
       if (!uid.length && isFocused) {
         alert("請先登入");
@@ -58,29 +59,36 @@ export default function MemoList() {
     const way = async () => {
       await loading();
       await readData();
-      console.log("===============");
+      // console.log("===============");
       // console.log(
       //   "note:" +
       //     notes.map((obj) => {
       //       obj.content;
       //     })
       // );
-      console.log(notes);
+      // console.log(notes);
       setIsLoading(false);
     };
     way();
   }, [isFocused]);
 
   useEffect(() => {
-    //讀取資料
-    readData();
-    async function readData() {
-      try {
-        dispatch(readMemoAsync(uid));
-      } catch (e) {
-        console.log(e);
-      }
-    }
+    // 關閉時作動
+    // if (!modalVisible) {
+    //   //讀取資料
+    //   const readData = async () => {
+    //     try {
+    //       dispatch(readMemoAsync(uid));
+    //     } catch (e) {
+    //       console.log(e);
+    //     }
+    //   };
+    //   readData().then(() => {
+    //     console.log(notes);
+    //   });
+    // }
+
+    console.log(notes);
   }, [modalVisible]);
 
   function hide() {
@@ -101,6 +109,7 @@ export default function MemoList() {
   // 點紀事更新用
   function update(id) {
     console.log("update index:" + id);
+    // console.log("update docRefId:" + docRefId);
     const docRefId = notes[id].id;
     setMemos({
       title: notes[id].title,

@@ -1,8 +1,7 @@
 import * as firebase from "firebase";
 
 export const READ_MEMO = "READ_MEMO";
-export const ADD_MEMO = "ADD_MEMO";
-export const UPDATE_MEMO = "UPDATE_MEMO";
+
 export const GET_DOC_ID = "GET_DOC_ID";
 
 export const readMemo = (notes) => {
@@ -13,29 +12,7 @@ export const readMemo = (notes) => {
     },
   };
 };
-// 新增
-export const addMemo = () => {
-  return {
-    type: ADD_MEMO,
-    payload: {},
-  };
-};
-// 修改
-export const updateMemo = () => {
-  return {
-    type: UPDATE_MEMO,
-    payload: {},
-  };
-};
-// 刪除
-export const deleteMemo = (notes) => {
-  return {
-    type: DELETE_MEMO,
-    payload: {
-      notes,
-    },
-  };
-};
+
 export const getDocId = (DocRefId) => {
   return {
     type: GET_DOC_ID,
@@ -55,7 +32,7 @@ export const readMemoAsync = (uid) => async (dispatch) => {
       .doc(uid)
       .collection("notes")
       .orderBy("datetime")
-      .get();
+      .get({ source: "server" });
     querySnapshot.forEach((doc) => {
       const newMemo = {
         id: doc.id,
@@ -87,12 +64,12 @@ export const addMemoAsync = (uid, title, content, tag) => async (dispatch) => {
         tag,
         datetime: new Date(),
       });
-    console.log(docRef.id);
+    //該筆新增之隨機產生doc_id
+    // let doc_id = docRef.id;
   } catch (error) {
     console.error("Error adding document: ", error);
   }
-  // dispatch(addMemo());
-  dispatch(readMemo(notes));
+  dispatch(readMemoAsync(uid));
 };
 
 export const updateMemoAsync = (uid, id, title, content, tag) => async (
@@ -100,38 +77,26 @@ export const updateMemoAsync = (uid, id, title, content, tag) => async (
 ) => {
   try {
     const db = firebase.firestore();
-    const docRef = await db
-      .collection("users")
-      .doc(uid)
-      .collection("notes")
-      .doc(id)
-      .set({
-        title: title,
-        content: content,
-        tag,
-        datetime: new Date(),
-      });
-    console.log("update success!");
+    await db.collection("users").doc(uid).collection("notes").doc(id).update({
+      title: title,
+      content: content,
+      tag,
+      datetime: new Date(),
+    });
+    console.log("update success!(updateMemoAsync)");
   } catch (error) {
     console.error("Error writing document: ", error);
   }
-  // dispatch(updateMemo());
-  dispatch(readMemo(notes));
+  dispatch(readMemoAsync(uid));
 };
 
 export const deleteMemoAsync = (uid, id) => async (dispatch) => {
   try {
     const db = firebase.firestore();
-    const docRef = await db
-      .collection("users")
-      .doc(uid)
-      .collection("notes")
-      .doc(id)
-      .delete();
-    console.log("delete success!");
+    await db.collection("users").doc(uid).collection("notes").doc(id).delete();
+    console.log("delete success!(deleteMemoAsync)");
   } catch (error) {
     console.error("Error removing document: ", error);
   }
-  // dispatch(deleteMemo(notes));
-  dispatch(readMemo(notes));
+  dispatch(readMemoAsync(uid));
 };
