@@ -3,17 +3,23 @@ import React, { useRef, useState, useEffect } from "react";
 import {
   Animated,
   Text,
+  TextInput,
   View,
   StyleSheet,
   Button,
   TouchableHighlight,
 } from "react-native";
+
+import styles from "../styles";
 // modal套件
 import Modal from "react-native-modal";
 
 const App = ({ navigation }) => {
   // 此頁是否被選取
   const isFocused = useIsFocused();
+
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
 
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
@@ -47,10 +53,33 @@ const App = ({ navigation }) => {
           onSwipeComplete={() => setModalVisible(false)}
           onBackdropPress={() => setModalVisible(false)}
           swipeDirection={["up", "down"]}
-          coverScreen={true}
+          avoidKeyboard={true}
         >
           <View style={modal.centeredView}>
             <View style={modal.modalView}>
+              <View
+                style={{
+                  alignSelf: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <TextInput
+                  placeholder="標題"
+                  style={styles.topicInput}
+                  value={title}
+                  onChangeText={(text) => setTitle(text)}
+                  onSubmitEditing={() => {
+                    () => secondTextInput.focus();
+                  }}
+                />
+                <TextInput
+                  placeholder="請輸入記事內容..."
+                  style={styles.noteInput}
+                  multiline={true}
+                  value={content}
+                  onChangeText={(text) => setContent(text)}
+                />
+              </View>
               <View style={{ flexDirection: "row" }}>
                 <TouchableHighlight
                   style={{
@@ -97,25 +126,24 @@ const modal = StyleSheet.create({
 
   centeredView: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-end",
+    // justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    marginTop: 20,
   },
 
   modalView: {
-    margin: 20,
+    margin: 2,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 50,
+    paddingHorizontal: 100,
+    paddingVertical: 70,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   openButton: {
     backgroundColor: "#F194FF",
