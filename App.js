@@ -15,6 +15,7 @@ import NoteText from "./src/note_text/MemoList";
 import TodoList from "./src/note_label/TodoList";
 import LabelDemo from "./src/note_label/label_demo";
 import animated from "./src/note_label/animated";
+import testModal from "./src/note_label/testModal";
 // redux
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
@@ -148,6 +149,7 @@ export default function App() {
           <Drawer.Screen name="Home2" component={TabsScreen} />
           {/* <Drawer.Screen name="Label" component={TodoList} /> */}
           <Drawer.Screen name="LabelDemo" component={LabelDemo} />
+          <Drawer.Screen name="testModal" component={testModal} />
           <Drawer.Screen
             name="animate"
             options={{

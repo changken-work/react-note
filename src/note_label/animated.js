@@ -1,6 +1,7 @@
 import { useIsFocused } from "@react-navigation/native";
 import React, { useRef, useState, useEffect } from "react";
 import { Animated, Text, View, StyleSheet, Button } from "react-native";
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 const App = ({ navigation }) => {
@@ -22,7 +23,7 @@ const App = ({ navigation }) => {
   const fadeIn = () => {
     // Will change fadeAnim value to 1 in 5 seconds
     Animated.timing(fadeAnim, {
-      useNativeDriver: true,
+      useNativeDriver: false,
       toValue: 1,
       duration: 500,
     }).start(({ finished }) => {
@@ -35,7 +36,7 @@ const App = ({ navigation }) => {
 
     springAnim.setValue(0.1);
     Animated.spring(springAnim, {
-      useNativeDriver: true,
+      useNativeDriver: false,
       toValue: 1,
       friction: 2, //弹跳系数
       tension: 10, // 控制速度
