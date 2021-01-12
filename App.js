@@ -11,7 +11,7 @@ const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 //
 
 export default function App() {
-  LogBox.ignoreLogs(['Setting a timer']);
+  LogBox.ignoreLogs(["Setting a timer"]);
 
   return (
     <Provider store={store}>
