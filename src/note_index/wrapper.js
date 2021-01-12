@@ -15,7 +15,6 @@ import NoteCheckbox from '../note_checkbox/checkbox';
 import NoteText from '../note_text/MemoList';
 import LabelDemo from '../note_label/label_demo';
 import animated from "../note_label/animated";
-
 export default function Wrapper() {
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -166,18 +165,16 @@ function SIGNIN(navigation) {
     }
     return (
         <NavigationContainer>
-                <Drawer.Navigator initialRouteName="animate">
-            {/* <Drawer.Navigator initialRouteName="SignIn"> */}
+            <Drawer.Navigator initialRouteName="animate">
                 {/* <Drawer.Screen name="Home" component={HomeScreen} />
-                <Drawer.Screen name="Notifications" component={NotificationsScreen} /> */}
-                <Drawer.Screen name="NoteText" component={NOTELIST} />
-                <Drawer.Screen name="NoteCheckbox" component={CHECKBOX} />
+          <Drawer.Screen name="Notifications" component={NotificationsScreen} /> */}
+                <Drawer.Screen name="Index" component={TabsScreen} />
+                <Drawer.Screen name="NoteText" component={NoteText} />
+                <Drawer.Screen name="NoteCheckbox" component={NoteCheckbox} />
                 <Drawer.Screen name="SignIn" component={SIGNIN} />
                 <Drawer.Screen name="SignUp" component={SignUp} />
                 <Drawer.Screen name="SignOut" component={SignOut} />
-                <Drawer.Screen name="Index" component={TabsScreen} />
                 {/* <Drawer.Screen name="Label" component={TodoList} /> */}
-                <Drawer.Screen name="LabelDemo" component={LabelDemo} />
                 <Drawer.Screen
                     name="animate"
                     options={{
