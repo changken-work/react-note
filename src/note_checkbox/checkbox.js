@@ -13,6 +13,7 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
+  TouchableHighlight,
   LogBox,
   ActivityIndicator,
   Button,
@@ -26,7 +27,7 @@ import * as firebase from "firebase";
 import firestore from "firebase/firestore";
 import * as FirebaseCore from "expo-firebase-core";
 import { useSelector, useDispatch } from "react-redux";
-import {changeModalVisible } from "../store/actions/checkboxAction";
+import { changeModalVisible } from "../store/actions/checkboxAction";
 import {
   addTodoList,
   finishTodo,
@@ -34,6 +35,8 @@ import {
   refreshTodo,
 } from "../store/actions/checkListAction";
 import CheckTest from "./checkTest";
+import { FlatGrid } from 'react-native-super-grid';
+import indexStyles from "../styles/indexStyle";
 
 export default function checkbox() {
   const checkbox = useSelector((state) => state.checkbox);
@@ -93,10 +96,10 @@ export default function checkbox() {
     } //readData
     readData();
   }, [modalVisible]);
- 
+
   function update(id) {
     console.log("update index:" + id);
-    checkboxes.forEach((doc) => {});
+    checkboxes.forEach((doc) => { });
     // console.log("checkboxes:", checkboxes);
     async function getCheckListId(index) {
       dispatch(refreshTodo());
@@ -167,37 +170,95 @@ export default function checkbox() {
 
   const renderItem = ({ item, index }) => {
     return (
-      <ListItem key={index} bottomDivider>
+      < ListItem key={index} bottomDivider containerStyle={{ backgroundColor: '#A7767C', borderRadius: 5, justifyContent: 'center'}
+  }>
         {/* <Avatar source={{ uri: l.avatar_url }} /> */}
+        <View>
         <ListItem.Content>
           <TouchableOpacity onPress={() => update(index)}>
-            <ListItem.Title>{item.title}</ListItem.Title>
+            {/* <ListItem.Title>{item.title}</ListItem.Title> */}
+            <Text style={indexStyles.itemName}>{item.title}</Text>
+            <View>
             {/* <ListItem.Subtitle>{item.list}</ListItem.Subtitle> */}
 
             {item.finishList.map((item, i) => (
-              <CheckBox center title={item} onPress={() => fsetCheck()} />
+              <CheckBox center title={item} checked={true} size={35} onPress={() => fsetCheck()} />
             ))}
             {item.todoList.map((item, i) => (
-              <CheckBox center title={item} onPress={() => fsetCheck()} />
+              <CheckBox center title={item} size={30} onPress={() => fsetCheck()} />
             ))}
+            </View>
           </TouchableOpacity>
         </ListItem.Content>
+        </View>
       </ListItem>
+
+      // <ListItem key={index} bottomDivider>
+      //   {/* <Avatar source={{ uri: l.avatar_url }} /> */}
+      //   <ListItem.Content>
+      //     <TouchableOpacity onPress={() => update(index)}>
+      //       <View style={[indexStyles.itemContainer, { backgroundColor: '#7f8fa6' }]}>
+      //       <ListItem.Title>{item.title}</ListItem.Title>
+      //       {/* <ListItem.Subtitle>{item.list}</ListItem.Subtitle> */}
+
+      //       {item.finishList.map((item, i) => (
+      //         <CheckBox center title={item} checked={true} size={10} onPress={() => fsetCheck()} />
+      //       ))}
+      //       {item.todoList.map((item, i) => (
+      //         <CheckBox center title={item} size={10} onPress={() => fsetCheck()} />
+      //       ))}
+      //       </View>
+      //     </TouchableOpacity>
+      //   </ListItem.Content>
+      // </ListItem>
     );
   };
   return (
-    <SafeAreaView style={styles.memocontainer}>
-        {!isLoading ?(
-      <FlatList
-        data={checkboxes}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => "" + index}
-      />
-  ): (
-    <View style={styles.loading}>
-      <ActivityIndicator color="red" size="large" animating={isLoading} />
-    </View>
-  )}
+    // <SafeAreaView style={styles.memocontainer}>
+    //   {!isLoading ? (
+    //     <FlatList
+    //       data={checkboxes}
+    //       renderItem={renderItem}
+    //       keyExtractor={(item, index) => "" + index}
+    //     />
+    //   ) : (
+    //       <View style={styles.loading}>
+    //         <ActivityIndicator color="red" size="large" animating={isLoading} />
+    //       </View>
+    //     )}
+    //   <Fab onPress={() => add()}>
+    //     <Icon name="add" color="#fff" />
+    //   </Fab>
+    //   {/* <Button onPress={() => refresh()} title="test" color="green" /> */}
+    //   <CheckTest
+    //     modalVisible={checkbox.modalVisible}
+    //     checkbox={updateBox}
+    //     id={selectedId}
+    //     hide={hide}
+    //   />
+    // </SafeAreaView>
+
+    <View style={indexStyles.memocontainer}>
+      {!isLoading ?
+        <>
+          <FlatGrid
+            itemDimension={130}
+            data={checkboxes}
+            style={indexStyles.gridView}
+            // staticDimension={300}
+            // fixed
+            keyExtractor={(item, index) => "" + index}
+            spacing={10}
+            renderItem={renderItem}
+          />
+        </>
+        :
+        <>
+          <View style={styles.loading}>
+            <ActivityIndicator color="red" size="large" animating={isLoading} />
+          </View>
+        </>
+      }
       <Fab onPress={() => add()}>
         <Icon name="add" color="#fff" />
       </Fab>
@@ -208,6 +269,7 @@ export default function checkbox() {
         id={selectedId}
         hide={hide}
       />
-    </SafeAreaView>
+    </View>
+
   );
 }

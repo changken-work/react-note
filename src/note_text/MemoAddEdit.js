@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Header, ListItem, Icon, Button } from "react-native-elements";
 import {
+  StyleSheet,
   SafeAreaView,
   TextInput,
   View,
@@ -119,9 +120,9 @@ export default function MemoAddEdit(props) {
 
   return (
     <SafeAreaView>
-      <Modal animationType="slide" visible={props.modalVisible}>
+      <Modal animationType="slide" visible={props.modalVisible} style={mStyle.modalContainer}>
         <Header
-          style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 }}
+          style={{ flex: 1}}
           containerStyle={{ height: 90 }}
           leftComponent={
             <TouchableOpacity
@@ -139,33 +140,96 @@ export default function MemoAddEdit(props) {
           }}
           rightComponent={showDeleteButton()}
         />
-
-        <View>
-          <TextInput
-            placeholder="標題"
-            style={styles.topicInput}
-            value={title}
-            onChangeText={(text) => setTitle(text)}
-          />
-          <TextInput
-            placeholder="請輸入記事內容..."
-            style={styles.noteInput}
-            multiline={true}
-            value={content}
-            onChangeText={(text) => setContent(text)}
-          />
+        <View style={mStyle.modalView}>
+          <View>
+            <TextInput
+              placeholder="標題"
+              style={mStyle.topicInput}
+              value={title}
+              onChangeText={(text) => setTitle(text)}
+            />
+            <TextInput
+              placeholder="請輸入記事內容..."
+              style={mStyle.noteInput}
+              multiline={true}
+              value={content}
+              onChangeText={(text) => setContent(text)}
+            />
+            <View style={mStyle.tagInput}>
+              <TagInput
+                placeholder="新增/修改標籤..."
+                label="使用 SPACE 新增標籤"
+                labelStyle={{ color: "#000", fontSize: 20 }}
+                tagStyle={{ backgroundColor:"#f0932b"}}
+                updateState={updateTagState}
+                tags={tags}
+              />
+            </View>
+          </View>
+          <View style={{
+            alignSelf: 'flex-end', position: 'absolute',
+            bottom: 10, left: 0,right: 0,padding:5}}>
+          <Button onPress={renew} title="確定" color='#cf6a87' />
+          </View>
         </View>
-        <View>
-          <TagInput
-            placeholder="新增/修改標籤..."
-            label="使用space新增標籤"
-            labelStyle={{ color: "#000", fontSize: 12 }}
-            updateState={updateTagState}
-            tags={tags}
-          />
-        </View>
-        <Button onPress={renew} title="確定" />
       </Modal>
     </SafeAreaView>
   );
 }
+
+const mStyle = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalView: {
+    backgroundColor: "#f5f6fa",
+    // marginTop: 5,
+    // marginBottom: 110,
+    // marginLeft: 15,
+    // marginRight: 15,
+    justifyContent: 'flex-start',
+    paddingTop: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
+    flex: 1,
+  },
+  topicInput: {
+    width: '100%',
+    paddingTop:15,
+    paddingLeft:15,
+    marginBottom: 15,
+    paddingBottom: 15,
+    alignSelf: 'center',
+    fontSize: 30,
+    borderWidth:2,
+    borderRadius:10,
+    borderColor:'#7f8fa6',
+  },
+  noteInput: {
+    width: '100%',
+    height:'35%',
+    paddingLeft: 15,
+    paddingBottom: 15,
+    alignSelf: 'center',
+    fontSize: 20,
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: '#7f8fa6',
+  },
+  tagInput: {
+    marginTop:20,
+    padding:5,
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: '#7f8fa6',
+  },
+  Divider: {
+    backgroundColor: '#7f8fa6',
+    margin: 5,
+    height: 3,
+    borderRadius: 10,
+  }
+});

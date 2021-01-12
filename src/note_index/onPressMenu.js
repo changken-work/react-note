@@ -48,7 +48,7 @@ export default function PressMenu(props) {
                             <Text style={styles.contentText}>{content}</Text>
                         </ScrollView>
                         </View>
-                    <Button title="關閉" onPress={() => props.hide()} color='#cf6a87' />
+                        <Button title="關閉" onPress={() => props.hide()} color='#cf6a87' />
                 </View>
             </Modal>
         </SafeAreaView>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     modalView: {
-        backgroundColor:"#ced6e0",
+        backgroundColor: "#f5f6fa",
         marginTop: 110,
         marginBottom: 110,
         marginLeft: 15,

@@ -109,6 +109,7 @@ export default function MemoList() {
     console.log("update index:" + id);
     // console.log("update docRefId:" + docRefId);
     const docRefId = notes[id].id;
+    console.log(notes[id].tag)
     setMemos({
       title: notes[id].title,
       content: notes[id].content,
