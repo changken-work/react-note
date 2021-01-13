@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   ListItem,
   CheckBox,
@@ -6,7 +6,7 @@ import {
   Avatar,
   Badge,
   Image,
-} from "react-native-elements";
+} from 'react-native-elements';
 
 import {
   SafeAreaView,
@@ -18,45 +18,45 @@ import {
   ActivityIndicator,
   Button,
   View,
-} from "react-native";
-import { Fab } from "native-base";
+} from 'react-native';
+import { Fab } from 'native-base';
 
-import styles from "../styles";
+import styles from '../styles';
 
-import * as firebase from "firebase";
-import firestore from "firebase/firestore";
-import * as FirebaseCore from "expo-firebase-core";
-import { useSelector, useDispatch } from "react-redux";
-import { changeModalVisible } from "../store/actions/checkboxAction";
+import * as firebase from 'firebase';
+import firestore from 'firebase/firestore';
+import * as FirebaseCore from 'expo-firebase-core';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeModalVisible } from '../store/actions/checkboxAction';
 import {
   addTodoList,
   finishTodo,
   refreshFinish,
   refreshTodo,
-} from "../store/actions/checkListAction";
-import CheckTest from "./checkTest";
-import { FlatGrid } from "react-native-super-grid";
-import indexStyles from "../styles/indexStyle";
+} from '../store/actions/checkListAction';
+import CheckTest from './checkTest';
+import { FlatGrid } from 'react-native-super-grid';
+import indexStyles from '../styles/indexStyle';
 
 export default function checkbox() {
-  const checkbox = useSelector((state) => state.checkbox);
-  const uid = useSelector((state) => state.auth.uid);
+  const checkbox = useSelector(state => state.checkbox);
+  const uid = useSelector(state => state.auth.uid);
   const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
   const [selectedId, setSelectedId] = useState(null);
-  const modalVisible = useSelector((state) => state.checkbox.modalVisible);
+  const modalVisible = useSelector(state => state.checkbox.modalVisible);
 
   const [check, setCheck] = useState(false);
   const [checkboxes, setCheckboxes] = useState({
-    title: "",
-    finishList: [""],
-    todoList: [""],
+    title: '',
+    finishList: [''],
+    todoList: [''],
   });
   const [updateBox, setUpdateBox] = useState({
-    title: "",
-    finishList: [""],
-    todoList: [""],
+    title: '',
+    finishList: [''],
+    todoList: [''],
   });
 
   if (!firebase.apps.length) {
@@ -68,12 +68,12 @@ export default function checkbox() {
       const newCheckbox1 = [];
       try {
         const querySnapshot = await db
-          .collection("users")
+          .collection('users')
           .doc(uid)
-          .collection("checkboxes")
+          .collection('checkboxes')
           .get();
 
-        querySnapshot.forEach((doc) => {
+        querySnapshot.forEach(doc => {
           // console.log("finshList:", doc.data().finishList[0]);
 
           const newCheckbox = {
@@ -97,8 +97,8 @@ export default function checkbox() {
   }, [modalVisible]);
 
   function update(id) {
-    console.log("update index:" + id);
-    checkboxes.forEach((doc) => {});
+    console.log('update index:' + id);
+    checkboxes.forEach(doc => {});
     // console.log("checkboxes:", checkboxes);
     async function getCheckListId(index) {
       dispatch(refreshTodo());
@@ -118,14 +118,14 @@ export default function checkbox() {
 
       try {
         const ref = await db
-          .collection("users")
+          .collection('users')
           .doc(uid)
-          .collection("checkboxes")
+          .collection('checkboxes')
           .get();
         // 每筆list的ID
         const docRefId = ref.docs[index].id;
         setSelectedId(docRefId);
-        console.log("selectID:", docRefId);
+        console.log('selectID:', docRefId);
         // setModalVisible(!modalVisible);
         dispatch(changeModalVisible(true));
       } catch (e) {
@@ -142,18 +142,18 @@ export default function checkbox() {
 
     // console.log("add");
     setUpdateBox({
-      title: "",
-      finishList: [""],
-      todoList: [""],
+      title: '',
+      finishList: [''],
+      todoList: [''],
     });
-    setSelectedId("");
+    setSelectedId('');
 
-    console.log("modal", modalVisible);
+    console.log('modal', modalVisible);
     dispatch(changeModalVisible(true));
   };
 
   function hide() {
-    setSelectedId("");
+    setSelectedId('');
     dispatch(changeModalVisible(false));
   }
   // checkbox布林值
@@ -162,20 +162,20 @@ export default function checkbox() {
     // console.log(check);
   }
   function hide() {
-    setSelectedId("");
+    setSelectedId('');
     dispatch(changeModalVisible(false));
   }
 
   const renderItem = ({ item, index }) => {
-    console.log("item,index:", item, index);
+    console.log('item,index:', item, index);
     return (
       <ListItem
         key={item.id}
         bottomDivider
         containerStyle={{
-          backgroundColor: "#A7767C",
+          backgroundColor: '#A7767C',
           borderRadius: 5,
-          justifyContent: "center",
+          justifyContent: 'center',
         }}
       >
         {/* <Avatar source={{ uri: l.avatar_url }} /> */}
@@ -189,6 +189,7 @@ export default function checkbox() {
 
                 {item.finishList.map((item, i) => (
                   <CheckBox
+                    key={i}
                     center
                     title={item}
                     checked={true}
@@ -198,6 +199,7 @@ export default function checkbox() {
                 ))}
                 {item.todoList.map((item, i) => (
                   <CheckBox
+                    key={i}
                     center
                     title={item}
                     size={30}
@@ -264,7 +266,7 @@ export default function checkbox() {
             style={indexStyles.gridView}
             // staticDimension={300}
             // fixed
-            keyExtractor={(item, index) => "" + index}
+            keyExtractor={(item, index) => '' + index}
             spacing={10}
             renderItem={renderItem}
           />
