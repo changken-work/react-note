@@ -162,7 +162,7 @@ export default function MemoAddEdit(props) {
                 style={mStyle.noteInput}
                 multiline={true}
                 //使returm按鍵關閉鍵盤
-                blurOnSubmit={true}
+                // blurOnSubmit={true}
                 value={content}
                 onChangeText={text => setContent(text)}
               />
