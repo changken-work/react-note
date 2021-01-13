@@ -13,6 +13,7 @@ const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 export default function App() {
   LogBox.ignoreLogs(["Setting a timer"]);
   LogBox.ignoreLogs(["Encountered two children"]);
+  LogBox.ignoreLogs(["Each child in a list"]);
 
   return (
     <Provider store={store}>

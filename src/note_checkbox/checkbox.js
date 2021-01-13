@@ -170,7 +170,7 @@ export default function checkbox() {
     console.log('item,index:', item, index);
     return (
       <ListItem
-        key={item.id}
+        key={index}
         bottomDivider
         containerStyle={{
           backgroundColor: '#A7767C',
@@ -189,7 +189,7 @@ export default function checkbox() {
 
                 {item.finishList.map((item, i) => (
                   <CheckBox
-                    key={i}
+                    // key={i}
                     center
                     title={item}
                     checked={true}
@@ -199,7 +199,7 @@ export default function checkbox() {
                 ))}
                 {item.todoList.map((item, i) => (
                   <CheckBox
-                    key={i}
+                    // key={i}
                     center
                     title={item}
                     size={30}
