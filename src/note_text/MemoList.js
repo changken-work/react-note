@@ -22,7 +22,7 @@ import { readMemoAsync, getDocId } from "../store/actions/memoAction";
 
 import MemoAdd from "./MemoAddEdit";
 
-export default function MemoList() {
+export default function MemoList({ navigation }) {
   LogBox.ignoreLogs(["Possible Unhandled"]);
 
   // 此頁是否被選取
@@ -50,6 +50,10 @@ export default function MemoList() {
     const loading = async () => {
       if (!uid.length && isFocused) {
         alert("請先登入");
+        setTimeout(() => {
+          navigation.navigate("SignIn");
+        }, 1500);
+
       }
       setIsLoading(true);
     };

@@ -32,7 +32,7 @@ export const readMemoAsync = (uid) => async (dispatch) => {
       .doc(uid)
       .collection("notes")
       .orderBy("datetime")
-      .get({ source: "server" });
+      .get();
     querySnapshot.forEach((doc) => {
       const newMemo = {
         id: doc.id,

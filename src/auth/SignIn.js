@@ -94,7 +94,7 @@ export default function SignIn() {
 
   return (
     <View style={styles.form}>
-      <Text style={styles.formTitle}>觀迎使用</Text>
+      <Text style={styles.formTitle}>歡迎使用</Text>
       <TextInput
         style={styles.textInput}
         placeholder="請輸入Email"
