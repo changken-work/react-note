@@ -3,10 +3,13 @@ import { Header, ListItem, Icon, Button } from "react-native-elements";
 import {
   StyleSheet,
   SafeAreaView,
+  ScrollView,
   TextInput,
   View,
   TouchableOpacity,
+  TouchableHighlight,
   Modal,
+  Text,
   LogBox,
   StatusBar,
 } from "react-native";
@@ -120,59 +123,95 @@ export default function MemoAddEdit(props) {
 
   return (
     <SafeAreaView>
-      <Modal animationType="slide" visible={props.modalVisible} style={mStyle.modalContainer}>
-        <Header
-          style={{ flex: 1}}
-          containerStyle={{ height: 90 }}
-          leftComponent={
-            <TouchableOpacity
-              onPress={() => {
-                console.log("Cancelled");
-                cancel();
+      <ScrollView>
+        <Modal
+          animationType="slide"
+          visible={props.modalVisible}
+          style={mStyle.modalContainer}
+        >
+          <Header
+            style={{ flex: 1 }}
+            containerStyle={{ height: 90 }}
+            leftComponent={
+              <TouchableOpacity
+                onPress={() => {
+                  console.log("Cancelled");
+                  cancel();
+                }}
+              >
+                <Icon name="arrow-back" color="#fff" />
+              </TouchableOpacity>
+            }
+            centerComponent={{
+              text: "Memo記事",
+              style: { color: "#fff", fontSize: 20 },
+            }}
+            rightComponent={showDeleteButton()}
+          />
+          <View style={mStyle.modalView}>
+            <View>
+              <TextInput
+                placeholder="標題"
+                style={mStyle.topicInput}
+                value={title}
+                autoFocus={true}
+                onChangeText={(text) => setTitle(text)}
+              />
+              <TextInput
+                placeholder="請輸入記事內容..."
+                style={mStyle.noteInput}
+                multiline={true}
+                //使returm按鍵關閉鍵盤
+                blurOnSubmit={true}
+                value={content}
+                onChangeText={(text) => setContent(text)}
+              />
+              <View style={mStyle.tagInput}>
+                <TagInput
+                  blurOnSubmit={true}
+                  placeholder="新增/修改標籤..."
+                  label="使用 SPACE 新增標籤"
+                  labelStyle={{ color: "#000", fontSize: 20 }}
+                  tagStyle={{ backgroundColor: "#f0932b" }}
+                  updateState={updateTagState}
+                  tags={tags}
+                />
+              </View>
+            </View>
+            <View
+              style={{
+                alignSelf: "flex-end",
+                // position: "absolute",
+                alignSelf: "stretch",
+                bottom: 10,
+                left: 0,
+                right: 0,
+                padding: 5,
               }}
             >
-              <Icon name="arrow-back" color="#fff" />
-            </TouchableOpacity>
-          }
-          centerComponent={{
-            text: "Memo記事",
-            style: { color: "#fff", fontSize: 20 },
-          }}
-          rightComponent={showDeleteButton()}
-        />
-        <View style={mStyle.modalView}>
-          <View>
-            <TextInput
-              placeholder="標題"
-              style={mStyle.topicInput}
-              value={title}
-              onChangeText={(text) => setTitle(text)}
-            />
-            <TextInput
-              placeholder="請輸入記事內容..."
-              style={mStyle.noteInput}
-              multiline={true}
-              value={content}
-              onChangeText={(text) => setContent(text)}
-            />
-            <View style={mStyle.tagInput}>
-              <TagInput
-                placeholder="新增/修改標籤..."
-                label="使用 SPACE 新增標籤"
-                labelStyle={{ color: "#000", fontSize: 20 }}
-                tagStyle={{ backgroundColor:"#f0932b"}}
-                updateState={updateTagState}
-                tags={tags}
-              />
+              <TouchableHighlight
+                style={{
+                  ...mStyle.openButton,
+                  backgroundColor: "#2196F3",
+                  flexDirection: "row",
+                  margin: 10,
+                }}
+                onPress={renew}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                  }}
+                >
+                  確定
+                </Text>
+              </TouchableHighlight>
             </View>
           </View>
-          <View style={{
-            alignSelf: 'flex-end', position: 'absolute',
-            bottom: 10, left: 0,right: 0,padding:5}}>
-          <Button onPress={renew} title="確定" color='#cf6a87' />
-          </View>
-        </View>
-      </Modal>
+        </Modal>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -180,8 +219,8 @@ export default function MemoAddEdit(props) {
 const mStyle = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   modalView: {
     backgroundColor: "#f5f6fa",
@@ -189,7 +228,7 @@ const mStyle = StyleSheet.create({
     // marginBottom: 110,
     // marginLeft: 15,
     // marginRight: 15,
-    justifyContent: 'flex-start',
+    justifyContent: "flex-start",
     paddingTop: 10,
     paddingLeft: 10,
     paddingRight: 10,
@@ -197,39 +236,45 @@ const mStyle = StyleSheet.create({
     flex: 1,
   },
   topicInput: {
-    width: '100%',
-    paddingTop:15,
-    paddingLeft:15,
+    width: "100%",
+    paddingTop: 15,
+    paddingLeft: 15,
     marginBottom: 15,
     paddingBottom: 15,
-    alignSelf: 'center',
+    alignSelf: "center",
     fontSize: 30,
-    borderWidth:2,
-    borderRadius:10,
-    borderColor:'#7f8fa6',
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: "#7f8fa6",
   },
   noteInput: {
-    width: '100%',
-    height:'35%',
+    width: "100%",
+    height: "35%",
     paddingLeft: 15,
     paddingBottom: 15,
-    alignSelf: 'center',
+    alignSelf: "center",
     fontSize: 20,
     borderWidth: 2,
     borderRadius: 10,
-    borderColor: '#7f8fa6',
+    borderColor: "#7f8fa6",
   },
   tagInput: {
-    marginTop:20,
-    padding:5,
+    marginTop: 20,
+    padding: 5,
     borderWidth: 2,
     borderRadius: 10,
-    borderColor: '#7f8fa6',
+    borderColor: "#7f8fa6",
   },
   Divider: {
-    backgroundColor: '#7f8fa6',
+    backgroundColor: "#7f8fa6",
     margin: 5,
     height: 3,
     borderRadius: 10,
-  }
+  },
+  openButton: {
+    backgroundColor: "#cf6a87",
+    borderRadius: 20,
+    padding: 15,
+    elevation: 2,
+  },
 });

@@ -1,34 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
-import * as firebase from 'firebase';
-import * as FirebaseCore from 'expo-firebase-core';
-import * as SecureStore from 'expo-secure-store';
-import * as LocalAuthentication from 'expo-local-authentication';
+import React, { useState, useEffect } from "react";
+import { View, Text, TextInput, Button } from "react-native";
+import * as firebase from "firebase";
+import * as FirebaseCore from "expo-firebase-core";
+import * as SecureStore from "expo-secure-store";
+import * as LocalAuthentication from "expo-local-authentication";
 
-import styles from '../styles';
+import styles from "../styles";
 
-import { useSelector, useDispatch } from 'react-redux';
-import { login, loginAsync, loginAutoAsync } from '../store/actions/authAction';
-import useFirebase from '../hooks/useFirebase';
+import { useSelector, useDispatch } from "react-redux";
+import { login, loginAsync, loginAutoAsync } from "../store/actions/authAction";
+import useFirebase from "../hooks/useFirebase";
 
 export default function SignIn() {
   const db = useFirebase();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
   const [canLogin, setCanLogin] = useState(true);
 
-  const state = useSelector(state => state.auth);
+  const state = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const signIn = async () => {
     try {
       dispatch(loginAsync(email, password));
-      setEmail('');
-      setPassword('');
-      setMessage('');
-      console.log('登入成功! ' + state.uid);
+      setEmail("");
+      setPassword("");
+      setMessage("");
+      console.log("登入成功! " + state.uid);
     } catch (error) {
       setMessage(error);
     }
@@ -41,7 +41,7 @@ export default function SignIn() {
         setPassword(password);
       })
     );
-    console.log('登入成功! ' + state.uid);
+    console.log("登入成功! " + state.uid);
   };
 
   /**
@@ -61,9 +61,9 @@ export default function SignIn() {
 
     if (types.length > 0 && hasHardWare && biometricRecords) {
       const res = await LocalAuthentication.authenticateAsync({
-        promptMessage: '請做生物辨識認證',
-        cancelLabel: '取消生物辨識',
-        fallbackLabel: '生物辨識失敗!',
+        promptMessage: "請做生物辨識認證",
+        cancelLabel: "取消生物辨識",
+        fallbackLabel: "生物辨識失敗!",
         disableDeviceFallback: false,
       });
 
@@ -82,30 +82,30 @@ export default function SignIn() {
     handleBiometric(
       retrieveAccount,
       () => {
-        alert('有些地方有問題!');
+        alert("有些地方有問題!");
       },
       retrieveAccount
     );
   }, []);
 
   useEffect(() => {
-    setCanLogin(state.uid !== '');
+    setCanLogin(state.uid !== "");
   }, [state.uid]);
 
   return (
     <View style={styles.form}>
-      <Text style={styles.formTitle}>SignIn</Text>
+      <Text style={styles.formTitle}>觀迎使用</Text>
       <TextInput
         style={styles.textInput}
         placeholder="請輸入Email"
         value={email}
-        onChangeText={text => setEmail(text)}
+        onChangeText={(text) => setEmail(text)}
       />
       <TextInput
         style={styles.textInput}
         placeholder="請輸入密碼"
         value={password}
-        onChangeText={text => setPassword(text)}
+        onChangeText={(text) => setPassword(text)}
         secureTextEntry={true}
       />
       <Button onPress={signIn} title="登入" disabled={canLogin} />
