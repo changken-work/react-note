@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Header, ListItem, Icon, Button } from "react-native-elements";
+import React, { useState, useEffect } from 'react';
+import { Header, ListItem, Icon, Button } from 'react-native-elements';
 import {
   StyleSheet,
   SafeAreaView,
@@ -12,35 +12,35 @@ import {
   Text,
   LogBox,
   StatusBar,
-} from "react-native";
+} from 'react-native';
 
-import styles from "../styles";
+import styles from '../styles';
 
-import * as firebase from "firebase";
-import firestore from "firebase/firestore";
-import * as FirebaseCore from "expo-firebase-core";
+import * as firebase from 'firebase';
+import firestore from 'firebase/firestore';
+import * as FirebaseCore from 'expo-firebase-core';
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from 'react-redux';
 import {
   addMemoAsync,
   updateMemoAsync,
   deleteMemoAsync,
-} from "../store/actions/memoAction";
+} from '../store/actions/memoAction';
 // tag
-import TagInput from "react-native-tags-input";
+import TagInput from 'react-native-tags-input';
 
 export default function MemoAddEdit(props) {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
 
-  const uid = useSelector((state) => state.auth.uid);
+  const uid = useSelector(state => state.auth.uid);
   const dispatch = useDispatch();
-  const docRefId = useSelector((state) => state.memo.docID);
+  const docRefId = useSelector(state => state.memo.docID);
 
   // tag data
-  const [tags, setTags] = useState({ tag: "", tagsArray: [] });
+  const [tags, setTags] = useState({ tag: '', tagsArray: [] });
   // tags更新
-  const updateTagState = (state) => {
+  const updateTagState = state => {
     setTags(state);
   };
 
@@ -51,11 +51,11 @@ export default function MemoAddEdit(props) {
       setContent(props.memo.content);
       // tag
       let tagsArray = props.memo.tag;
-      setTags({ tag: "", tagsArray: tagsArray });
+      setTags({ tag: '', tagsArray: tagsArray });
     } else {
-      setTags({ tag: "", tagsArray: [] });
-      setTitle("");
-      setContent("");
+      setTags({ tag: '', tagsArray: [] });
+      setTitle('');
+      setContent('');
     }
   }, [props.id]);
 
@@ -73,7 +73,7 @@ export default function MemoAddEdit(props) {
           : add();
         // await props.hide();
       } catch (e) {
-        console.log("error:" + e);
+        console.log('error:' + e);
       }
     };
     const clean = async () => {
@@ -96,7 +96,7 @@ export default function MemoAddEdit(props) {
   }
 
   async function deleteMemo(id) {
-    console.log(id + " delete");
+    console.log(id + ' delete');
     dispatch(deleteMemoAsync(uid, id));
     props.hide();
   }
@@ -135,7 +135,7 @@ export default function MemoAddEdit(props) {
             leftComponent={
               <TouchableOpacity
                 onPress={() => {
-                  console.log("Cancelled");
+                  console.log('Cancelled');
                   cancel();
                 }}
               >
@@ -143,8 +143,8 @@ export default function MemoAddEdit(props) {
               </TouchableOpacity>
             }
             centerComponent={{
-              text: "Memo記事",
-              style: { color: "#fff", fontSize: 20 },
+              text: 'Memo記事',
+              style: { color: '#fff', fontSize: 20 },
             }}
             rightComponent={showDeleteButton()}
           />
@@ -155,7 +155,7 @@ export default function MemoAddEdit(props) {
                 style={mStyle.topicInput}
                 value={title}
                 autoFocus={true}
-                onChangeText={(text) => setTitle(text)}
+                onChangeText={text => setTitle(text)}
               />
               <TextInput
                 placeholder="請輸入記事內容..."
@@ -164,15 +164,15 @@ export default function MemoAddEdit(props) {
                 //使returm按鍵關閉鍵盤
                 blurOnSubmit={true}
                 value={content}
-                onChangeText={(text) => setContent(text)}
+                onChangeText={text => setContent(text)}
               />
               <View style={mStyle.tagInput}>
                 <TagInput
                   blurOnSubmit={true}
                   placeholder="新增/修改標籤..."
                   label="使用 SPACE 新增標籤"
-                  labelStyle={{ color: "#000", fontSize: 20 }}
-                  tagStyle={{ backgroundColor: "#f0932b" }}
+                  labelStyle={{ color: '#000', fontSize: 20 }}
+                  tagStyle={{ backgroundColor: '#f0932b' }}
                   updateState={updateTagState}
                   tags={tags}
                 />
@@ -180,9 +180,9 @@ export default function MemoAddEdit(props) {
             </View>
             <View
               style={{
-                alignSelf: "flex-end",
+                alignSelf: 'flex-end',
                 // position: "absolute",
-                alignSelf: "stretch",
+                alignSelf: 'stretch',
                 bottom: 10,
                 left: 0,
                 right: 0,
@@ -192,17 +192,17 @@ export default function MemoAddEdit(props) {
               <TouchableHighlight
                 style={{
                   ...mStyle.openButton,
-                  backgroundColor: "#2196F3",
-                  flexDirection: "row",
+                  backgroundColor: '#2196F3',
+                  flexDirection: 'row',
                   margin: 10,
                 }}
                 onPress={renew}
               >
                 <Text
                   style={{
-                    color: "white",
-                    fontWeight: "bold",
-                    textAlign: "center",
+                    color: 'white',
+                    fontWeight: 'bold',
+                    textAlign: 'center',
                   }}
                 >
                   確定
@@ -219,16 +219,16 @@ export default function MemoAddEdit(props) {
 const mStyle = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   modalView: {
-    backgroundColor: "#f5f6fa",
+    backgroundColor: '#f5f6fa',
     // marginTop: 5,
     // marginBottom: 110,
     // marginLeft: 15,
     // marginRight: 15,
-    justifyContent: "flex-start",
+    justifyContent: 'flex-start',
     paddingTop: 10,
     paddingLeft: 10,
     paddingRight: 10,
@@ -236,43 +236,46 @@ const mStyle = StyleSheet.create({
     flex: 1,
   },
   topicInput: {
-    width: "100%",
+    width: '100%',
     paddingTop: 15,
     paddingLeft: 15,
     marginBottom: 15,
     paddingBottom: 15,
-    alignSelf: "center",
+    alignSelf: 'center',
     fontSize: 30,
     borderWidth: 2,
     borderRadius: 10,
-    borderColor: "#7f8fa6",
+    borderColor: '#7f8fa6',
+    flexShrink: 1,
   },
   noteInput: {
-    width: "100%",
-    height: "35%",
+    width: '100%',
+    height: '35%',
     paddingLeft: 15,
     paddingBottom: 15,
-    alignSelf: "center",
+    alignSelf: 'center',
     fontSize: 20,
     borderWidth: 2,
     borderRadius: 10,
-    borderColor: "#7f8fa6",
+    borderColor: '#7f8fa6',
+    flexShrink: 0.5,
   },
   tagInput: {
     marginTop: 20,
     padding: 5,
     borderWidth: 2,
     borderRadius: 10,
-    borderColor: "#7f8fa6",
+    borderColor: '#7f8fa6',
+    flexShrink: 1,
   },
   Divider: {
-    backgroundColor: "#7f8fa6",
+    backgroundColor: '#7f8fa6',
     margin: 5,
     height: 3,
     borderRadius: 10,
   },
   openButton: {
-    backgroundColor: "#cf6a87",
+    backgroundColor: '#cf6a87',
     borderRadius: 20,
     padding: 15,
     elevation: 2,
