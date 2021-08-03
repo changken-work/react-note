@@ -32,6 +32,7 @@ $ cd react-note
 $ npm install
 $ npm start
 ```
+now you open Expo client app (Android/IOS) and scan the qrcode 
 
 ### Tech
 
